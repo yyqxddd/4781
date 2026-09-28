@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一周的日记｜诗情画奕备忘录</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}
+body{max-width:900px;margin:30px auto;padding:0 16px;background:#f3eef9;}
+.back-home {
+  display: inline-block;
+  text-decoration: none;
+  color: #8b5cf6;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+/* 顶部标签栏 */
+.tab-bar{
+  display:flex;
+  border-bottom:1px solid #ddd4ee;
+  margin-bottom:30px;
+  gap:0;
+  overflow-x:auto;
+}
+.tab-item{
+  padding:10px 20px;
+  cursor:pointer;
+  border-bottom:3px solid transparent;
+  font-size:16px;
+  white-space:nowrap;
+  border-right:1px solid #cccccc;
+}
+.tab-item:last-child{
+  border-right:none;
+}
+.tab-item.active{
+  border-bottom-color:#a864c7;
+  color:#a864c7;
+  font-weight:bold;
+}
+
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
+/* 选集按钮 放到播放器下方，加宽适配EP01文字 */
+.select-wrap{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:23px;
+}
+.select-btn{
+  min-width:64px;
+  height:36px;
+  padding:0 6px;
+  border:1px solid #a78bfa;
+  background:#e9e1f8;
+  color:#8b5cf6;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+  transition:0.15s;
+}
+.select-btn.active{
+  background:#a864c7;
+  color:#fff;
+}
+.select-btn:hover{
+  background:#ddd4ee;
+}
+
+/* 播放器容器 */
+.iframe-wrap{
+  width:100%;
+  position: relative;
+  margin-bottom:0;
+}
+.bili-player{
+  width:100%;
+  height:320px;
+  border-radius:8px;
+  border:0;
+  display:block;
+}
+.bili-player iframe{
+  width:100%;
+  height:100%;
+  border-radius:8px;
+  border:0;
+}
+
+/* ========== 移动端适配 ========== */
+@media (max-width: 600px) {
+  body {
+    margin: 16px auto;
+    padding: 0 12px;
+  }
+  .tab-item {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+  .bili-player{
+    height:220px;
+  }
+  .select-btn{
+    min-width:56px;
+    height:32px;
+    font-size:13px;
+  }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <a class="back-home" href="index.html">← 返回主页导航</a>
+<div class="tab-bar">
+  <div class="tab-item active" data-tab="tab-zongyi">📺｜正片</div>
+  <div class="tab-item" data-tab="tab-xd">✨｜先导片</div>
+  <div class="tab-item" data-tab="tab-cf">🎙️｜采访</div>
+  <div class="tab-item" data-tab="tab-hx">🎞️｜花絮</div>
+</div>
+
+<!-- Tab1 正片 -->
+<div class="tab-content active" id="tab-zongyi">
+  <div class="iframe-wrap">
+    <div class="bili-player">
+      <iframe id="iframe-zongyi" data-ep="" src="" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+    </div>
+  </div>
+  <div class="select-wrap" id="sel-zongyi"></div>
+</div>
+
+<!-- Tab2 先导片 -->
+<div class="tab-content" id="tab-xd">
+  <div class="iframe-wrap">
+    <div class="bili-player">
+      <iframe id="iframe-xd" data-ep="" src="" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+    </div>
+  </div>
+  <div class="select-wrap" id="sel-xd"></div>
+</div>
+
+<!-- Tab3 采访 -->
+<div class="tab-content" id="tab-cf">
+  <div class="iframe-wrap">
+    <div class="bili-player">
+      <iframe id="iframe-cf" data-ep="" src="" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+    </div>
+  </div>
+  <div class="select-wrap" id="sel-cf"></div>
+</div>
+
+<!-- Tab4 花絮 -->
+<div class="tab-content" id="tab-hx">
+  <div class="iframe-wrap">
+    <div class="bili-player">
+      <iframe id="iframe-hx" data-ep="" src="" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+    </div>
+  </div>
+  <div class="select-wrap" id="sel-hx"></div>
+</div>
+
+<script>
+// ========= 配置区域 =========
+const data = {
+  "zongyi": {
+    eps: [
+      {ep:"BV1jj421o7KD", num:"EP01"},
+      {ep:"BV1yf421Z7Jn", num:"EP02"},
+      {ep:"BV1eM4m1X7VE", num:"EP03"},
+      {ep:"BV1FC41157Zf", num:"EP04"},
+      {ep:"BV1TF4m1P7uq", num:"EP05"},
+      {ep:"BV1oC411n796", num:"EP06"},
+      {ep:"BV1mt421c7NR", num:"EP07"},
+      {ep:"BV1s7421f73y", num:"EP08"},
+      {ep:"BV18f42127tA", num:"加更"},
+    ]
+  },
+  "xd": {
+    eps: [
+      {ep:"BV1VK421x7h6", num:"EP01"},
+      {ep:"BV1vQ4y157CS", num:"EP02"},
+    ]
+  },
+  "cf": {
+    eps: [
+      {ep:"BV1ZC411h72M", num:"EP01"},
+      {ep:"BV1Mj421o766", num:"EP02"},
+      {ep:"BV1Dx4y1S7hw", num:"EP03"},
+      {ep:"BV1MZ421t7dT", num:"EP04"},
+    ]
+  },
+  "hx": {
+    eps: [
+      {ep:"BV1FD421j79Q", num:"EP01"},
+      {ep:"BV1Kx421X7ei", num:"EP02"},
+      {ep:"BV1vE421g7Fp", num:"EP03"},
+      {ep:"BV1jr421x7J1", num:"EP04"},
+      {ep:"BV14E421M7n6", num:"EP05"},
+      {ep:"BV1CH4y1A7Dr", num:"EP06"},
+      {ep:"BV1Zb421Y7p7", num:"EP07"},
+      {ep:"BV1GH4y137yA", num:"EP08"},
+    ]
+  }
+}
+
+// 渲染选集按钮
+function renderSelect(type, selWrapId, iframeId){
+  const wrapDom = document.getElementById(selWrapId);
+  const iframeDom = document.getElementById(iframeId);
+  const list = data[type].eps;
+  wrapDom.innerHTML = "";
+
+  list.forEach((item, idx)=>{
+    const btn = document.createElement('button');
+    btn.className = "select-btn" + (idx===0 ? " active":"");
+    btn.innerText = item.num;
+    btn.dataset.ep = item.ep;
+    btn.onclick = function(){
+      wrapDom.querySelectorAll('.select-btn').forEach(b=>b.classList.remove('active'));
+      this.classList.add('active');
+      iframeDom.src = `https://player.bilibili.com/player.html?bvid=${item.ep}&autoplay=0&poster=1`;
+    }
+    wrapDom.appendChild(btn);
+  })
+  // 默认加载第一集
+  const firstEp = list[0].ep;
+  iframeDom.src = `https://player.bilibili.com/player.html?bvid=${firstEp}&autoplay=0&poster=1`;
+}
+
+// tab切换
+const tabList = document.querySelectorAll('.tab-item');
+tabList.forEach(tab=>{
+  tab.onclick = function(){
+    tabList.forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    this.classList.add('active');
+    const tabId = this.dataset.tab;
+    document.getElementById(tabId).classList.add('active');
+    if(tabId === "tab-zongyi") renderSelect("zongyi","sel-zongyi","iframe-zongyi");
+    if(tabId === "tab-xd") renderSelect("xd","sel-xd","iframe-xd");
+    if(tabId === "tab-cf") renderSelect("cf","sel-cf","iframe-cf");
+    if(tabId === "tab-hx") renderSelect("hx","sel-hx","iframe-hx");
+  }
+})
+
+// 页面初始化加载第一个tab
+renderSelect("zongyi","sel-zongyi","iframe-zongyi");
+</script>
+</body>
+</html>

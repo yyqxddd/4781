@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>王奕 资料卡</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        body {
+            background-color: #f3eef9;
+            padding: 20px;
+        }
+.back-home {
+  display: inline-block;
+  text-decoration: none;
+  color: #8b5cf6;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+        .card {
+            width: 100%;
+            max-width: 600px;
+            background: #f8f5fe;
+            border:1px solid #e2d9f3;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin: 0 auto;
+        }
+        .top-img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .content {
+            padding: 16px 24px 28px;
+        }
+        h1 {
+    font-size: 42px;
+    font-weight: 700;
+    color: #8b5cf6;
+    margin-bottom: 24px;
+}
+        .info-line {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 14px;
+            line-height: 1.6;
+        }
+        .label {
+            color: #666;
+        }
+
+        /* ========== 下拉三角 折叠链接区域 ========== */
+        .link-group {
+            margin-top:16px;
+        }
+        .link-group details {
+            font-size:18px;
+        }
+        .link-group summary {
+            list-style: none;
+            cursor: pointer;
+            display:flex;
+            align-items:center;
+            color:#9d77e0; /*平台标题浅紫*/
+        }
+        /* 原生三角隐藏 */
+        .link-group summary::-webkit-details-marker {
+            display:none;
+        }
+        /* 自定义三角改成浅紫色 */
+        .link-group summary::before {
+            content:"▶";
+            font-size:14px;
+            margin-right:8px;
+            color:#9d77e0;
+        }
+        /* 打开后三角向下，保持浅紫 */
+        .link-group details[open] summary::before {
+            content:"▼";
+            color:#9d77e0;
+        }
+        .link-list {
+            padding-left:22px;
+            margin-top:10px;
+        }
+        .link-item {
+            margin:10px 0;
+        }
+        .link-item .prefix{
+            color:#666; /*前缀文字黑色*/
+        }
+        .link-item .arrow{
+            color:#666; /*➜箭头灰色*/
+        }
+        .link-item a {
+            color:#333;
+            text-decoration:none;
+        }
+        .link-item a:hover {
+            color:#9472c2;
+            text-decoration:underline;
+        }
+
+        /* 手机端适配，缩小字号 */
+        @media (max-width: 480px) {
+            body {
+                padding:12px;
+            }
+            h1 {
+                font-size:32px;
+                margin-bottom:16px;
+            }
+            .info-line,
+            .link-group details {
+                font-size:16px;
+            }
+            .content {
+                padding:12px 18px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<a class="back-home" href="a.html">← 返回上一页</a>
+    <div class="card">
+        <!-- 图片，和html放同一文件夹命名wangyi.jpg -->
+        <img class="top-img" src="a.3.jpeg" alt="王奕">
+        <div class="content">
+            <h1>王奕</h1>
+
+            <div class="info-line"><span class="label">昵称：</span>一一、oneone、丸丸、小龙</div>
+            <div class="info-line"><span class="label">生日：</span>2001-06-06</div>
+            <div class="info-line"><span class="label">星座：</span>双子座</div>
+            <div class="info-line"><span class="label">籍贯：</span>江苏苏州</div>
+            <div class="info-line"><span class="label">应援色：</span>红色</div>
+            <div class="info-line"><span class="label">身高：</span>172cm</div>
+            <div class="info-line"><span class="label">CP：</span>诗情画奕</div>
+            <div class="info-line"><span class="label">粉丝昵称：</span>柠檬汽水</div>
+            <div class="info-line"><span class="label">宠物：</span>不丢，不呆，沫莉，money，小叽</div>
+
+
+            <div class="link-group">
+                <details>
+                    <summary>平台账号（点击展开）</summary>
+                    <div class="link-list">
+                        <div class="link-item"><span class="prefix">微博</span><span class="arrow">➜</span><a href="https://weibo.com/u/6359405623" target="_blank">王奕_</a></div>
+                        <div class="link-item"><span class="prefix">微博超话</span><span class="arrow">➜</span><a href="https://m.weibo.cn/p/100808b718eb396b7f1ae8fe6f146988f55237" target="_blank">王奕</a></div>
+                        <div class="link-item"><span class="prefix">微博小号</span><span class="arrow">➜</span><a href="https://weibo.com/u/7645181209" target="_blank">一个优雅的挑水人</a></div>
+                        <div class="link-item"><span class="prefix">微博超话</span><span class="arrow">➜</span><a href="https://m.weibo.cn/p/10080834f6e767fa1cfc6aeefb33a7c5006f0c" target="_blank">一个优雅的挑水人</a></div>
+                        <div class="link-item"><span class="prefix">抖音</span><span class="arrow">➜</span><a href="https://v.douyin.com/6nJEYtecDG0/" target="_blank">王奕本人</a></div>
+                        <div class="link-item"><span class="prefix">抖音小号</span><span class="arrow">➜</span><a href="https://v.douyin.com/OK662_xCknE/" target="_blank">花心小豆子</a></div>
+                        <div class="link-item"><span class="prefix">快手</span><span class="arrow">➜</span><a href="https://v.kuaishou.com/nkMxFqW1" target="_blank">王奕吃ks</a></div>
+                        <div class="link-item"><span class="prefix">小红书</span><span class="arrow">➜</span><a href="https://www.xiaohongshu.com/user/profile/5af1e788e8ac2b52d1bea6d4?xsec_token=YBWslotMD6oARtXSzuR4p8RE9ctHWAL0FWhCOUiyFT_SM%3D&xsec_source=app_share&xhsshare=CopyLink&appuid=5ec7cd9c00000000010069ab&apptime=1753389591&share_id=26625417428d4dabad0429011e177e50&share_channel=copy_link" target="_blank">王奕好朋友</a></div>
+                        <div class="link-item"><span class="prefix">B站</span><span class="arrow">➜</span><a href="https://b23.tv/cBG2FpN" target="_blank">肾虚子a</a></div>
+                        <div class="link-item"><span class="prefix">工作室</span><span class="arrow">➜</span><a href="https://weibo.com/u/4079832920" target="_blank">王奕工作室_Official</a></div>
+                        <div class="link-item"><span class="prefix">小助理微博</span><span class="arrow">➜</span><a href="https://weibo.com/u/8005212697" target="_blank">oneone记事本</a></div>
+                        <div class="link-item"><span class="prefix">小助理抖音</span><span class="arrow">➜</span><a href="https://v.douyin.com/55t2xf3zac4/" target="_blank">oneone记事本</a></div>
+                    </div>
+                </details>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

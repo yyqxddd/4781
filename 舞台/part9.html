@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>双人舞台｜诗情画奕的备忘录</title>
+<style>
+ * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+    background: #f3eef9;
+    color: #333;
+    line-height: 1.7;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px 16px 60px;
+  }
+
+  .back-home {
+    display: inline-block;
+    text-decoration: none;
+    color: #8b5cf6;
+    margin-bottom: 20px;
+    font-size: 15px;
+  }
+
+  .back-home:hover {
+    text-decoration: underline;
+  }
+
+ /* Tab栏修复：不再均分，内容自适应横向滚动 */
+ .tab-bar{
+  display:flex;
+  border-bottom:1px solid #ddd4ee;
+  margin-bottom:20px;
+  gap:0;
+  overflow-x:auto;
+}
+.tab-item{
+  flex:1; /* 核心：所有标签均分 */
+  padding:10px 20px;
+  cursor:pointer;
+  border-bottom:3px solid transparent;
+  font-size:16px;
+  white-space:nowrap;
+  border-right:1px solid #cccccc;
+  text-align:center; /* 文字居中，均分后更好看 */
+}
+.tab-item:last-child{
+  border-right:none;
+}
+.tab-item.active{
+  border-bottom-color:#a864c7;
+  color:#a864c7;
+  font-weight:bold;
+}
+  .content-box {
+    background: #f8f5fe;
+    border: 1px solid #e2d9f3;
+    border-radius: 12px;
+    padding: 28px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  }
+
+  .timeline-wrap{
+    display:none;
+  }
+  .timeline-wrap.active{
+    display:block;
+  }
+  .timeline {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .timeline th {
+    text-align: center;
+    font-weight: normal;
+    font-size:13px;
+    color: #888;
+    padding-bottom: 10px;
+    border-bottom:1px solid #e2d9f3;
+  }
+
+  .timeline td {
+    padding:14px 8px;
+    border-bottom:1px dashed #ddd4ee;
+    vertical-align: middle;
+    font-size:15px;
+    text-align:center;
+  }
+
+  .timeline tr:last-child td {
+    border-bottom: none;
+  }
+
+  .col-index {
+    width:12%;
+    color:#999;
+  }
+
+  .col-note {
+    width:12%;
+    color:#000;
+  }
+  .col-date {
+    width:22%;
+    color:#666;
+  }
+
+  .col-title {
+    width:22%;
+    color:#333;
+  }
+
+  .col-title a {
+    color:#222;
+    text-decoration:none;
+  }
+
+  .col-title a:hover {
+    color:#8b5cf6;
+    text-decoration:underline;
+  }
+
+  .col-link {
+    width:32%;
+  }
+  .col-link iframe{
+    width:100%;
+    height:180px;
+    border-radius:8px;
+  }
+  .col-link img {
+    width: 100%;
+    height: auto;
+    border-radius:8px;
+    cursor: zoom-in;
+  }
+
+.custom-video-wrap{
+  width:100%;
+  height:180px;
+  border-radius:8px;
+  overflow:hidden;
+  position:relative;
+  background:#000;
+}
+.custom-video{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+.video-topbar{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  padding:8px 12px;
+  background:linear-gradient(to bottom, rgba(0,0,0,0.65), transparent);
+  display:flex;
+  align-items:center;
+  color:#fff;
+  font-size:13px;
+  z-index:2;
+  overflow:hidden;
+}
+.avatar-img{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  object-fit:cover;
+}
+.video-top-info{
+  flex:1;
+  text-align:left;
+  white-space:nowrap;
+}
+.video-top-title{
+  font-weight:bold;
+  display:block;
+  margin-bottom:4px;
+}
+.video-top-bottom{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:12px;
+  opacity:0.85;
+}
+.video-jump-btn{
+  background:rgba(255,255,255,0.2);
+  border:none;
+  color:#fff;
+  padding:4px 8px;
+  border-radius:4px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.video-jump-btn:hover{
+  background:rgba(255,255,255,0.35);
+}
+.custom-video-wrap:not(:hover) .video-topbar{
+  opacity:0;
+  transition:0.25s;
+}
+.custom-video-wrap:hover .video-topbar{
+  opacity:1;
+}
+
+.back-top{
+    position:fixed;
+    bottom:18px;
+    right:18px;
+    width:33px;
+    height:33px;
+    border-radius:50%;
+    background:#8b5cf6;
+    color:#fff;
+    border:none;
+    font-size:18px;
+    cursor:pointer;
+    box-shadow:0 4px 12px rgba(139,92,246,0.25);
+    opacity:0;
+    visibility:hidden;
+    transition:0.25s;
+    z-index:98;
+  }
+  .back-top.show{
+    opacity:1;
+    visibility:visible;
+  }
+  .back-top:hover{
+    background:#7c3aed;
+  }
+
+/* =========移动端重写：改成整块卡片，不再拆分每个td单独一行！======= */
+  @media (max-width: 720px) {
+    .content-box {
+      padding: 20px 16px;
+    }
+    /* 隐藏表头 */
+    .timeline thead {
+      display: none;
+    }
+    /* tr 变成独立卡片，整一块，不拆分行 */
+    .timeline tr {
+      display:block;
+      background:#fff;
+      border-radius:10px;
+      padding:16px;
+      margin-bottom:16px;
+      border-bottom:none;
+      box-shadow:0 1px 6px rgba(0,0,0,0.04);
+    }
+    /* td不再单独一行，改成inline/块内排版 */
+    .timeline td {
+      display:inline-block;
+      width: auto !important;
+      padding: 3px 6px 3px 0;
+      border: none;
+      font-size: 14px;
+      text-align:left;
+    }
+    /* 文字信息行，横向排 */
+    .col-index,.col-note,.col-date,.col-title{
+      display:block !important;
+      padding:2px 0;
+    }
+    .col-index::before {content:"🫧：";font-weight:bold;color:#8b5cf6;}
+    .col-note::before {content:"✨：";font-weight:bold;color:#000;}
+    .col-date::before {content:"📆：";font-weight:bold;color:#666;}
+    .col-title::before {content:"🐕‍🦺🐈：";font-weight:bold;color:#333;}
+
+    .col-index {
+      color: #8b5cf6;
+    }
+    .col-note {
+      color:#000;
+    }
+    .col-date {
+      color: #000;
+    }
+
+    .col-title {
+      font-size: 16px;
+      margin: 4px 0;
+    }
+    /* 视频单独占整行，放下面 */
+    .col-link {
+      display:block !important;
+      width: 100%;
+      margin-top:10px;
+    }
+    .col-link iframe{
+      width:100%;
+      height:180px;
+    }
+    .col-link img {
+      width:100%;
+      height:auto;
+      border-radius:8px;
+    }
+    .custom-video-wrap{
+      height:180px;
+    }
+  }
+/* 图片预览弹窗 */
+.img-modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.85);
+  text-align:center;
+  padding-top: 30px;
+  box-sizing:border-box;
+}
+.img-modal img {
+  max-width: 90%;
+  max-height: 90vh;
+  object-fit:contain;
+}
+.img-modal span {
+  position:absolute;
+  top:15px;
+  right:30px;
+  color:white;
+  font-size:40px;
+  cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a class="back-home" href="../index.html">← 返回存档首页</a>
+
+  <!-- Tab栏移到content-box外面 -->
+  <div class="tab-bar">
+    <div class="tab-item active" data-tab="t1">2019-2021</div>
+    <div class="tab-item" data-tab="t2">2022</div>
+    <div class="tab-item" data-tab="t3">2023</div>
+    <div class="tab-item" data-tab="t4">2024</div>
+    <div class="tab-item" data-tab="t5">2025-2026</div>
+  </div>
+
+  <div class="content-box">
+
+<!-- 2019-2021 -->
+    <div class="timeline-wrap active" id="t1">
+      <table class="timeline">
+        <thead>
+          <tr>
+            <th class="col-index">🫧</th>
+            <th class="col-note">✨</th>
+           <th class="col-date">📆</th>
+            <th class="col-title">🐕‍🦺🐈</th>
+            <th class="col-link">🎬</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-index">1</td>
+            <td class="col-note">跨年公演</td>
+            <td class="col-date">2019年12月31日</td>
+            <td class="col-title"><a href="#">她和她</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1BG4y1u7o5&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">2</td>
+            <td class="col-note">🌧️生日公演</td>
+            <td class="col-date">2020年8月30日</td>
+            <td class="col-title"><a href="#">一体同心</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1hA411n7bP&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">3</td>
+            <td class="col-note">🌧️生日公演</td>
+            <td class="col-date">2020年8月30日</td>
+            <td class="col-title"><a href="#">Hold Me Tight</a></td>
+           <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1Qi4y1M7Lw&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">4</td>
+            <td class="col-note">1⃣️生日公演</td>
+            <td class="col-date">2020年11月15日</td>
+            <td class="col-title"><a href="#">低烧</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1uA411x7Nk&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">5</td>
+            <td class="col-note">1⃣️生日公演</td>
+            <td class="col-date">2020年11月15日</td>
+            <td class="col-title"><a href="#">做我的猫</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1dZ4y137Pt&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>        
+          </tr>
+          <tr>
+            <td class="col-index">6</td>
+            <td class="col-note">第七届金曲大赏</td>
+            <td class="col-date">2021年1月16日</td>
+            <td class="col-title"><a href="#">My Boy</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1zK4y1s7gD&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">7</td>
+            <td class="col-note">1⃣️生日公演</td>
+            <td class="col-date">2021年12月12日</td>
+            <td class="col-title"><a href="#">寒夜</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1C3411s7ys&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">8</td>
+            <td class="col-note">跨年公演</td>
+            <td class="col-date">2021年12月31日</td>
+            <td class="col-title"><a href="#">灵魂使者</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV14q4y117ok&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 2022 -->
+    <div class="timeline-wrap" id="t2">
+      <table class="timeline">
+        <thead>
+          <tr>
+            <th class="col-index">🫧</th>
+            <th class="col-note">✨</th>
+           <th class="col-date">📆</th>
+            <th class="col-title">🐕‍🦺🐈</th>
+            <th class="col-link">🎬</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-index">9</td>
+            <td class="col-note">第八届金曲大赏</td>
+            <td class="col-date">2022年1月8日</td>
+            <td class="col-title"><a href="#">美杜莎的温柔</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1PP4y1J718&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">10</td>
+            <td class="col-note">第二届最佳拍档第一轮</td>
+            <td class="col-date">2022年5月22日</td>
+            <td class="col-title"><a href="#">就差一点点</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1j5411X7QQ&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">11</td>
+            <td class="col-note">第二届最佳拍档第一阶段返场</td>
+            <td class="col-date">2022年6月12日</td>
+            <td class="col-title"><a href="#">就差一点点 2.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1634y1V7Gm&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">12</td>
+            <td class="col-note">第二届最佳拍档第二轮</td>
+            <td class="col-date">2022年8月11日</td>
+            <td class="col-title"><a href="#">Sweet Trap</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1s14y1b7uC&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">13</td>
+            <td class="col-note">第二届最佳拍档第二轮</td>
+            <td class="col-date">2022年8月11日</td>
+            <td class="col-title"><a href="#">月光下</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1v14y1b73w&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">14</td>
+            <td class="col-note">第二届最佳拍档巡演长沙站</td>
+           <td class="col-date">2022年9月15日</td>
+            <td class="col-title"><a href="#">爱未央</a></td>
+           <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1BG4y1N7iQ&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">15</td>
+            <td class="col-note">第二届最佳拍档巡演长沙站</td>
+           <td class="col-date">2022年9月15日</td>
+            <td class="col-title"><a href="#">零和游戏</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1De411T7sZ&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">16</td>
+            <td class="col-note">第二届最佳拍档巡演长沙站</td>
+            <td class="col-date">2022年9月16日</td>
+            <td class="col-title"><a href="#">Sweet Trap2.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1Wz421z7KV&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">17</td>
+            <td class="col-note">第二届最佳拍档巡演长沙站</td>
+            <td class="col-date">2022年9月16日</td>
+            <td class="col-title"><a href="#">她和他2.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1e8411a7z4&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+             <tr>
+            <td class="col-index">18</td>
+            <td class="col-note">第二届最佳拍档第三轮</td>
+            <td class="col-date">2022年10月5日</td>
+            <td class="col-title"><a href="#">爱未央2.0</a></td>
+            <td class="col-link"><img class="preview-img" src="爱未央2.0.png" data-big="爱未央2.0.png" alt="" ></td>
+          </tr>
+          <tr>
+            <td class="col-index">19</td>
+            <td class="col-note">第二届最佳拍档第三轮</td>
+            <td class="col-date">2022年10月5日</td>
+            <td class="col-title"><a href="#">零和游戏2.0</a></td>
+            <td class="col-link"><img class="preview-img" src="零和游戏2.0.png" data-big="零和游戏2.0.png" alt=""></td>
+          </tr>
+          <tr>
+            <td class="col-index">20</td>
+            <td class="col-note">第二届最佳拍档巡演上海站</td>
+            <td class="col-date">2022年11月5日</td>
+            <td class="col-title"><a href="#">就差一点点3.0</a></td>
+            <td class="col-link">
+              <div class="custom-video-wrap">
+                <video class="custom-video" preload="none" controls poster="9.20.jpeg">
+                  <source src="9.20.mp4" type="video/mp4">
+                </video>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 2023 -->
+    <div class="timeline-wrap" id="t3">
+      <table class="timeline">
+        <thead>
+          <tr>
+            <th class="col-index">🫧</th>
+            <th class="col-note">✨</th>
+           <th class="col-date">📆</th>
+            <th class="col-title">🐕‍🦺🐈</th>
+            <th class="col-link">🎬</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-index">21</td>
+            <td class="col-note">新春公演</td>
+            <td class="col-date">2023年1月15日</td>
+            <td class="col-title"><a href="#">狼与自尊</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1AY411R7Wo&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">22</td>
+            <td class="col-note">1⃣️生日公演</td>
+            <td class="col-date">2023年2月12日</td>
+            <td class="col-title"><a href="#">Like A Diamond</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1Uj411P7Pj&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">23</td>
+            <td class="col-note">第九届金曲大赏</td>
+            <td class="col-date">2023年2月25日</td>
+            <td class="col-title"><a href="#">失忆</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1MY411C7SQ&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">24</td>
+            <td class="col-note">🌧️生日公演</td>
+            <td class="col-date">2023年3月19日</td>
+            <td class="col-title"><a href="#">City Lights</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1dv4y1L7zX&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">25</td>
+            <td class="col-note">第三届最佳拍档第一轮</td>
+            <td class="col-date">2023年4月22日</td>
+            <td class="col-title"><a href="#">夏之回忆</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1xT411n71X&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">26</td>
+            <td class="col-note">第三届最佳拍档巡演郑州站</td>
+            <td class="col-date">2023年5月20日</td>
+            <td class="col-title"><a href="#">My Boy2.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV11s4y1K7pw&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">27</td>
+            <td class="col-note">第三届最佳拍档巡演郑州站</td>
+            <td class="col-date">2023年5月20日</td>
+            <td class="col-title"><a href="#">水蒸气</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1hX4y1y7Gr&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">28</td>
+            <td class="col-note">拍档大会</td>
+            <td class="col-date">2023年6月3日</td>
+            <td class="col-title"><a href="#">失忆2.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1eV4y1U7FT&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">29</td>
+            <td class="col-note">第三届最佳拍档巡演重庆站</td>
+            <td class="col-date">2023年6月30日</td>
+            <td class="col-title"><a href="#">女王殿下</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1PP411v7Tw&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">30</td>
+            <td class="col-note">第三届最佳拍档巡演重庆站</td>
+            <td class="col-date">2023年6月30日</td>
+            <td class="col-title"><a href="#">青涩的香蕉</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV17M4y1E7Nd&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">31</td>
+            <td class="col-note">第三届最佳拍档巡演成都站</td>
+            <td class="col-date">2023年7月2日</td>
+            <td class="col-title"><a href="#">女王殿下2.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV15F411o7tW&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">32</td>
+            <td class="col-note">第三届最佳拍档巡演成都站</td>
+            <td class="col-date">2023年7月2日</td>
+            <td class="col-title"><a href="#">木偶</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1va4y1F76s&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">33</td>
+            <td class="col-note">第十届年度青春盛典</td>
+            <td class="col-date">2023年8月5日</td>
+            <td class="col-title"><a href="#">初眠</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV17m4y1p7FJ&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">34</td>
+            <td class="col-note">第三届最佳拍档第二轮</td>
+            <td class="col-date">2023年9月23日</td>
+            <td class="col-title"><a href="#">U</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1m34y1A7HX&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">35</td>
+            <td class="col-note">第三届最佳拍档第二轮</td>
+            <td class="col-date">2023年9月23日</td>
+            <td class="col-title"><a href="#">单向镜面</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1Xp4y1F7H3&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">36</td>
+            <td class="col-note">第三届最佳拍档半决赛</td>
+            <td class="col-date">2023年10月4日</td>
+            <td class="col-title"><a href="#">最终回合</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1Ah4y1r7Nz&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">37</td>
+            <td class="col-note">第三届最佳拍档决赛</td>
+            <td class="col-date">2023年10月14日</td>
+            <td class="col-title"><a href="#">白昼街灯</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV13u4y1J7EN&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">38</td>
+            <td class="col-note">第三届最佳拍档决赛</td>
+            <td class="col-date">2023年10月14日</td>
+            <td class="col-title"><a href="#">花之岛</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1vN411G7JV&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">39</td>
+            <td class="col-note">第三届最佳拍档巡演青岛站</td>
+            <td class="col-date">2023年10月21日</td>
+            <td class="col-title"><a href="#">水蒸气2.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1eC4y177Fs&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">40</td>
+            <td class="col-note">第三届最佳拍档巡演青岛站</td>
+            <td class="col-date">2023年10月21日</td>
+            <td class="col-title"><a href="#">花之岛2.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV11C4y137Cv&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 2024 -->
+    <div class="timeline-wrap" id="t4">
+      <table class="timeline">
+        <thead>
+          <tr>
+            <th class="col-index">🫧</th>
+            <th class="col-note">✨</th>
+           <th class="col-date">📆</th>
+            <th class="col-title">🐕‍🦺🐈</th>
+            <th class="col-link">🎬</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-index">41</td>
+            <td class="col-note">第十届金曲大赏</td>
+            <td class="col-date">2024年1月13日</td>
+            <td class="col-title"><a href="#">双人舞</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV11C4y1C7oZ&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">42</td>
+            <td class="col-note">1⃣️生日会</td>
+            <td class="col-date">2024年3月24日</td>
+            <td class="col-title"><a href="#">否定句</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1zj421d7Hd&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">43</td>
+            <td class="col-note">予你巡演杭州站</td>
+            <td class="col-date">2024年4月19日</td>
+            <td class="col-title"><a href="#">Poison Kandy</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1Yt421P7cL&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">44</td>
+            <td class="col-note">予你巡演杭州站</td>
+            <td class="col-date">2024年4月19日</td>
+            <td class="col-title"><a href="#">预言</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1Zr421G7Bp&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">45</td>
+            <td class="col-note">予你巡演杭州站</td>
+            <td class="col-date">2024年4月19日</td>
+            <td class="col-title"><a href="#">Be My Cat</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1Pm41127JX&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">46</td>
+            <td class="col-note">予你巡演杭州站</td>
+            <td class="col-date">2024年4月19日</td>
+            <td class="col-title"><a href="#">失忆3.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1hC411H72j&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">47</td>
+            <td class="col-note">予你巡演杭州站</td>
+            <td class="col-date">2024年4月19日</td>
+            <td class="col-title"><a href="#">0.2s</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1ZZ421n7WW&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">48</td>
+            <td class="col-note">予你巡演杭州站</td>
+            <td class="col-date">2024年4月19日</td>
+            <td class="col-title"><a href="#">笔下之城</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1PJ4m1H7Xw&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+<!--49 自定义video-->
+          <tr>
+            <td class="col-index">49</td>
+            <td class="col-note">予你巡演上海站</td>
+            <td class="col-date">2024年4月27日</td>
+            <td class="col-title"><a href="#">Poison Kandy2.0</a></td>
+            <td class="col-link">
+              <div class="custom-video-wrap">
+                <div class="video-topbar" style="justify-content:flex-end;">
+                  <div class="video-top-info" style="text-align:right;">
+                    <div>GemAri·4781</div>
+                    <div style="margin-top:4px;">
+                      <button class="video-jump-btn" data-wb="http://t.cn/A6Td6bOQ">进入微博，查看更高清 ></button>
+                    </div>
+                  </div>
+                </div>
+                <video class="custom-video" preload="none" controls poster="9.49.jpeg">
+                  <source src="9.49.mp4" type="video/mp4">
+                </video>
+              </div>
+            </td>
+          </tr>
+<!--50-->
+          <tr>
+            <td class="col-index">50</td>
+            <td class="col-note">予你巡演上海站</td>
+            <td class="col-date">2024年4月27日</td>
+            <td class="col-title"><a href="#">预言2.0</a></td>
+            <td class="col-link">
+              <div class="custom-video-wrap">
+                <div class="video-topbar" style="justify-content:flex-end;">
+                  <div class="video-top-info" style="text-align:right;">
+                    <div>GemAri·4781</div>
+                    <div style="margin-top:4px;">
+                      <button class="video-jump-btn" data-wb="http://t.cn/A6TdXxBJ">进入微博，查看更高清 ></button>
+                    </div>
+                  </div>
+                </div>
+                <video class="custom-video" preload="none" controls poster="9.50.jpeg">
+                  <source src="9.50.mp4" type="video/mp4">
+                </video>
+              </div>
+            </td>
+          </tr>
+<!--51-->
+          <tr>
+            <td class="col-index">51</td>
+            <td class="col-note">予你巡演上海站</td>
+            <td class="col-date">2024年4月27日</td>
+            <td class="col-title"><a href="#">Be My Cat2.0</a></td>
+            <td class="col-link">
+              <div class="custom-video-wrap">
+                <div class="video-topbar" style="justify-content:flex-end;">
+                  <div class="video-top-info" style="text-align:right;">
+                    <div>GemAri·4781</div>
+                    <div style="margin-top:4px;">
+                      <button class="video-jump-btn" data-wb="http://t.cn/A6TdXrgJ">进入微博，查看更高清 ></button>
+                    </div>
+                  </div>
+                </div>
+                <video class="custom-video" preload="none" controls poster="9.51.jpeg">
+                  <source src="9.51.mp4" type="video/mp4">
+                </video>
+              </div>
+            </td>
+          </tr>
+<!--52-->
+          <tr>
+            <td class="col-index">52</td>
+            <td class="col-note">予你巡演上海站</td>
+            <td class="col-date">2024年4月27日</td>
+            <td class="col-title"><a href="#">双人舞2.0</a></td>
+            <td class="col-link">
+              <div class="custom-video-wrap">
+                <div class="video-topbar" style="justify-content:flex-end;">
+                  <div class="video-top-info" style="text-align:right;">
+                    <div>GemAri·4781</div>
+                    <div style="margin-top:4px;">
+                      <button class="video-jump-btn" data-wb="http://t.cn/A6TdaVrC">进入微博，查看更高清 ></button>
+                    </div>
+                  </div>
+                </div>
+                <video class="custom-video" preload="none" controls poster="9.52.jpeg">
+                  <source src="9.52.mp4" type="video/mp4">
+                </video>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="col-index">53</td>
+            <td class="col-note">予你巡演上海站</td>
+            <td class="col-date">2024年4月27日</td>
+            <td class="col-title"><a href="#">0.2s2.0</a></td>
+            <td class="col-link">
+              <div class="custom-video-wrap">
+                <div class="video-topbar" style="justify-content:flex-end;">
+                  <div class="video-top-info" style="text-align:right;">
+                    <div>GemAri·4781</div>
+                    <div style="margin-top:4px;">
+                      <button class="video-jump-btn" data-wb="http://t.cn/A6Tda9Pi">进入微博，查看更高清 ></button>
+                    </div>
+                  </div>
+                </div>
+                <video class="custom-video" preload="none" controls poster="9.53.jpeg">
+                  <source src="9.53.mp4" type="video/mp4">
+                </video>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="col-index">54</td>
+            <td class="col-note">予你巡演上海站</td>
+            <td class="col-date">2024年4月27日</td>
+            <td class="col-title"><a href="#">笔下之城2.0</a></td>
+            <td class="col-link">
+              <div class="custom-video-wrap">
+                <div class="video-topbar" style="justify-content:flex-end;">
+                  <div class="video-top-info" style="text-align:right;">
+                    <div>GemAri·4781</div>
+                    <div style="margin-top:4px;">
+                      <button class="video-jump-btn" data-wb="http://t.cn/A6Tdaeyu">进入微博，查看更高清 ></button>
+                    </div>
+                  </div>
+                </div>
+                <video class="custom-video" preload="none" controls poster="9.54.jpeg">
+                  <source src="9.54.mp4" type="video/mp4">
+                </video>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="col-index">55</td>
+            <td class="col-note">🌧️生日公演</td>
+            <td class="col-date">2024年6月2日</td>
+            <td class="col-title"><a href="#">粉红狙击手</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1zi421U7DG&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">56</td>
+            <td class="col-note">抖音仲夏毕业歌会</td>
+            <td class="col-date">2024年6月10日</td>
+            <td class="col-title"><a href="#">4U</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1Kz42187jv&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">57</td>
+            <td class="col-note">予你巡演成都站</td>
+            <td class="col-date">2024年7月12日</td>
+            <td class="col-title"><a href="#">Poison Kandy3.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1Ux4y1x7g8&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+   <td class="col-index">58</td>
+            <td class="col-note">予你巡演成都站</td>
+            <td class="col-date">2024年7月12日</td>
+            <td class="col-title"><a href="#">预言3.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1uH4y1A7H4&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">59</td>
+            <td class="col-note">予你巡演成都站</td>
+            <td class="col-date">2024年7月12日</td>
+            <td class="col-title"><a href="#">Be My Cat3.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1UJ4m1T7KS&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">60</td>
+            <td class="col-note">予你巡演成都站</td>
+            <td class="col-date">2024年7月12日</td>
+            <td class="col-title"><a href="#">粉红狙击手2.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1LM4m127Ce&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">61</td>
+            <td class="col-note">予你巡演成都站</td>
+            <td class="col-date">2024年7月12日</td>
+            <td class="col-title"><a href="#">0.2s3.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1hE421A7F5&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">62</td>
+            <td class="col-note">予你巡演成都站</td>
+            <td class="col-date">2024年7月12日</td>
+            <td class="col-title"><a href="#">蠢蠢</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1si421Y7ti&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+<!--63 无微博跳转-->
+          <tr>
+            <td class="col-index">63</td>
+            <td class="col-note">鹊梦千年七夕歌会</td>
+            <td class="col-date">2024年8月10日</td>
+            <td class="col-title"><a href="#">有你在</a></td>
+            <td class="col-link">
+              <div class="custom-video-wrap">
+                <video class="custom-video" preload="none" controls poster="9.63.jpeg">
+                  <source src="9.63.mp4" type="video/mp4">
+                </video>
+              </div>
+            </td>
+          </tr>
+<!--64 无微博跳转-->
+          <tr>
+            <td class="col-index">64</td>
+            <td class="col-note">鹊梦千年七夕歌会</td>
+            <td class="col-date">2024年8月10日</td>
+            <td class="col-title"><a href="#">失忆4.0</a></td>
+            <td class="col-link">
+              <div class="custom-video-wrap">
+                <video class="custom-video" preload="none" controls poster="9.64.jpeg">
+                  <source src="9.64.mp4" type="video/mp4">
+                </video>
+              </div>
+            </td>
+          </tr>
+<!--65-->
+          <tr>
+            <td class="col-index">65</td>
+            <td class="col-note">北京明潮千帆音乐节</td>
+            <td class="col-date">2024年9月16日</td>
+            <td class="col-title"><a href="#">Poison Kandy4.0</a></td>
+            <td class="col-link">
+              <div class="custom-video-wrap">
+                <div class="video-topbar" style="justify-content:flex-end;">
+                  <div class="video-top-info" style="text-align:right;">
+                    <div>八四两四大西瓜</div>
+                    <div style="margin-top:4px;">
+                      <button class="video-jump-btn" data-wb="http://t.cn/A6Rkd14X">进入微博，查看更高清 ></button>
+                    </div>
+                  </div>
+                </div>
+                <video class="custom-video" preload="none" controls poster="9.65.jpeg">
+                  <source src="9.65.mp4" type="video/mp4">
+                </video>
+              </div>
+            </td>
+          </tr>
+<!--66-->
+          <tr>
+            <td class="col-index">66</td>
+            <td class="col-note">北京明潮千帆音乐节</td>
+            <td class="col-date">2024年9月16日</td>
+            <td class="col-title"><a href="#">双人舞3.0</a></td>
+            <td class="col-link">
+              <div class="custom-video-wrap">
+                <div class="video-topbar" style="justify-content:flex-end;">
+                  <div class="video-top-info" style="text-align:right;">
+                    <div>八四两四大西瓜</div>
+                    <div style="margin-top:4px;">
+                      <button class="video-jump-btn" data-wb="http://t.cn/A6RkgCZ7">进入微博，查看更高清 ></button>
+                    </div>
+                  </div>
+                </div>
+                <video class="custom-video" preload="none" controls poster="9.66.jpeg">
+                  <source src="9.66.mp4" type="video/mp4">
+                </video>
+              </div>
+            </td>
+          </tr>
+<!--67-->
+          <tr>
+            <td class="col-index">67</td>
+            <td class="col-note">北京明潮千帆音乐节</td>
+            <td class="col-date">2024年9月16日</td>
+            <td class="col-title"><a href="#">失忆5.0</a></td>
+            <td class="col-link">
+              <div class="custom-video-wrap">
+                <div class="video-topbar" style="justify-content:flex-end;">
+                  <div class="video-top-info" style="text-align:right;">
+                    <div>八四两四大西瓜</div>
+                    <div style="margin-top:4px;">
+                      <button class="video-jump-btn" data-wb="http://t.cn/A6RFvZWI">进入微博，查看更高清 ></button>
+                    </div>
+                  </div>
+                </div>
+                <video class="custom-video" preload="none" controls poster="9.67.jpeg">
+                  <source src="9.67.mp4" type="video/mp4">
+                </video>
+              </div>
+            </td>
+          </tr>
+<!--68-->
+          <tr>
+            <td class="col-index">68</td>
+            <td class="col-note">北京明潮千帆音乐节</td>
+            <td class="col-date">2024年9月16日</td>
+            <td class="col-title"><a href="#">笔下之城3.0</a></td>
+            <td class="col-link">
+              <div class="custom-video-wrap">
+                <div class="video-topbar" style="justify-content:flex-end;">
+                  <div class="video-top-info" style="text-align:right;">
+                    <div>八四两四大西瓜</div>
+                    <div style="margin-top:4px;">
+                      <button class="video-jump-btn" data-wb="http://t.cn/A6RF7smF">进入微博，查看更高清 ></button>
+                    </div>
+                  </div>
+                </div>
+                <video class="custom-video" preload="none" controls poster="9.68.jpeg">
+                  <source src="9.68.mp4" type="video/mp4">
+                </video>
+              </div>
+            </td>
+          </tr>
+<!--69-->
+          <tr>
+            <td class="col-index">69</td>
+            <td class="col-note"> W2140世界WEB3博览会曼谷站 </td>
+            <td class="col-date">2024年11月12日</td>
+            <td class="col-title"><a href="#">失忆6.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1YFmvY2EYs&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">70</td>
+            <td class="col-note">“双人舞”音乐舞台分享会上海站</td>
+            <td class="col-date">2024年11月30日</td>
+            <td class="col-title"><a href="#">双人舞4.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1ozidYnEvT&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">71</td>
+            <td class="col-note">“双人舞”音乐舞台分享会上海站</td>
+            <td class="col-date">2024年11月30日</td>
+            <td class="col-title"><a href="#">Poison Kandy5.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1Fsi6Y1EJ3&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>  
+          <tr>
+            <td class="col-index">72</td>
+            <td class="col-note">“双人舞”音乐舞台分享会上海站</td>
+            <td class="col-date">2024年11月30日</td>
+            <td class="col-title"><a href="#">Be My Cat4.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1ciqnY8EZn&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">73</td>
+            <td class="col-note">“双人舞”音乐舞台分享会上海站</td>
+            <td class="col-date">2024年11月30日</td>
+            <td class="col-title"><a href="#">Obsessed(指尖游戏)</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1uNqWYEEua&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">74</td>
+            <td class="col-note">“双人舞”音乐舞台分享会上海站</td>
+            <td class="col-date">2024年11月30日</td>
+            <td class="col-title"><a href="#">梦与旅人</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1kCqPYSEZn&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">75</td>
+            <td class="col-note">“双人舞”音乐舞台分享会上海站</td>
+            <td class="col-date">2024年11月30日</td>
+            <td class="col-title"><a href="#">笔下之城4.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV112qkYwEYA&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">76</td>
+            <td class="col-note">1⃣️生日公演</td>
+            <td class="col-date">2024年12月14日</td>
+            <td class="col-title"><a href="#">Like I Do</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1iqBFYwE73&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">77</td>
+            <td class="col-note">予你巡演南昌站</td>
+            <td class="col-date">2024年12月28日</td>
+            <td class="col-title"><a href="#">双人舞5.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1oE6fYKEoX&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">78</td>
+            <td class="col-note">予你巡演南昌站</td>
+            <td class="col-date">2024年12月28日</td>
+            <td class="col-title"><a href="#">Poison Kandy6.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1NC6mYnEED&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>  
+          <tr>
+            <td class="col-index">79</td>
+            <td class="col-note">予你巡演南昌站</td>
+            <td class="col-date">2024年12月28日</td>
+            <td class="col-title"><a href="#">Be My Cat5.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV15wrCYdEvB&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">80</td>
+            <td class="col-note">予你巡演南昌站</td>
+            <td class="col-date">2024年12月28日</td>
+            <td class="col-title"><a href="#">Obsessed(指尖游戏)2.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1q8rDYSEqP&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">81</td>
+            <td class="col-note">予你巡演南昌站</td>
+            <td class="col-date">2024年12月28日</td>
+            <td class="col-title"><a href="#">梦与旅人2.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1eLcNewEw3&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">82</td>
+            <td class="col-note">予你巡演南昌站</td>
+            <td class="col-date">2024年12月28日</td>
+            <td class="col-title"><a href="#">笔下之城5.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1JEcVewEFy&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 2025-2026 -->
+    <div class="timeline-wrap" id="t5">
+      <table class="timeline">
+        <thead>
+          <tr>
+            <th class="col-index">🫧</th>
+            <th class="col-note">✨</th>
+           <th class="col-date">📆</th>
+            <th class="col-title">🐕‍🦺🐈</th>
+            <th class="col-link">🎬</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-index">83</td>
+            <td class="col-note">🌧️生日会</td>
+            <td class="col-date">2025年3月15日</td>
+            <td class="col-title"><a href="#">Hold Me Tight2.0</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1xiXGYHE1c&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+<!--84 无微博跳转-->
+          <tr>
+            <td class="col-index">84</td>
+            <td class="col-note">无限X巡回演唱会南宁站</td>
+            <td class="col-date">2025年3月29日</td>
+            <td class="col-title"><a href="#">失忆7.0</a></td>
+           <td class="col-link">
+              <div class="custom-video-wrap">
+                <div class="video-topbar" style="justify-content:flex-end;">
+                  <div class="video-top-info" style="text-align:right;">
+                    <div>GemAri·4781</div>
+                    <div style="margin-top:4px;">
+                      <button class="video-jump-btn" data-wb="http://t.cn/A6rhzrMM">进入微博，查看更高清 ></button>
+                    </div>
+                  </div>
+                </div>
+                <video class="custom-video" preload="none" controls poster="9.84.jpeg">
+                  <source src="9.84.mp4" type="video/mp4">
+                </video>
+              </div>
+            </td>
+          </tr>
+<!--85 无微博跳转-->
+          <tr>
+            <td class="col-index">85</td>
+            <td class="col-note">无限X巡回演唱会南宁站</td>
+            <td class="col-date">2025年3月29日</td>
+            <td class="col-title"><a href="#">Poison Kandy7.0</a></td>
+           <td class="col-link">
+              <div class="custom-video-wrap">
+                <div class="video-topbar" style="justify-content:flex-end;">
+                  <div class="video-top-info" style="text-align:right;">
+                    <div>GemAri·4781</div>
+                    <div style="margin-top:4px;">
+                      <button class="video-jump-btn" data-wb="http://t.cn/A6rhwQJp">进入微博，查看更高清 ></button>
+                    </div>
+                  </div>
+                </div>
+                <video class="custom-video" preload="none" controls poster="9.85.jpeg">
+                  <source src="9.85.mp4" type="video/mp4">
+                </video>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="col-index">86</td>
+            <td class="col-note">1⃣️生日会</td>
+            <td class="col-date">2025年4月26日</td>
+            <td class="col-title"><a href="#">下次旅行</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1kZGXzqEtw&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">87</td>
+            <td class="col-note">🌧️LUMEN生日会</td>
+            <td class="col-date">2026年4月11日</td>
+            <td class="col-title"><a href="#">Trouble Maker</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV1pXdVBSEe1&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">88</td>
+            <td class="col-note">1⃣️破夜生日会</td>
+            <td class="col-date">2026年6月6日</td>
+            <td class="col-title"><a href="#">神魂颠倒</a></td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=BV11QEd6SEgM&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+</div>
+</div>
+
+<script>
+// tab切换
+const tabItems = document.querySelectorAll('.tab-item');
+const timelineWraps = document.querySelectorAll('.timeline-wrap');
+tabItems.forEach(item=>{
+  item.addEventListener('click',()=>{
+    const targetId = item.dataset.tab;
+    tabItems.forEach(i=>i.classList.remove('active'));
+    timelineWraps.forEach(w=>w.classList.remove('active'));
+    item.classList.add('active');
+    document.getElementById(targetId).classList.add('active');
+  })
+})
+
+// 懒加载iframe
+const iframes = document.querySelectorAll('iframe[data-src]');
+const iframeObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const iframe = e.target;
+      iframe.src = iframe.dataset.src;
+      iframeObserver.unobserve(iframe);
+    }
+  })
+},{rootMargin:"100px"});
+iframes.forEach(iframe=>iframeObserver.observe(iframe));
+
+// 图片预览弹窗
+const previewImgs = document.querySelectorAll('.preview-img');
+const imgModal = document.createElement('div');
+imgModal.className = "img-modal";
+imgModal.innerHTML = `<span>&times;</span><img src="">`;
+document.body.appendChild(imgModal);
+const modalImg = imgModal.querySelector('img');
+const closeModal = imgModal.querySelector('span');
+
+previewImgs.forEach(img=>{
+  img.onclick = function(){
+    modalImg.src = this.dataset.big;
+    imgModal.style.display = "block";
+  }
+})
+closeModal.onclick = ()=> imgModal.style.display="none";
+imgModal.onclick = (e)=>{
+  if(e.target === imgModal) imgModal.style.display="none";
+}
+
+// 微博跳转按钮
+document.querySelectorAll('.video-jump-btn').forEach(btn=>{
+  btn.onclick = function(e){
+    e.stopPropagation();
+    const wbUrl = this.dataset.wb;
+    window.open(wbUrl,'_blank');
+  }
+})
+
+// 返回顶部
+const backTopBtn = document.querySelector('.back-top');
+window.addEventListener('scroll',()=>{
+  if(window.scrollY>220){
+    backTopBtn.classList.add('show');
+  }else{
+    backTopBtn.classList.remove('show');
+  }
+})
+backTopBtn.onclick = ()=>{
+  window.scrollTo({top:0,behavior:'smooth'})
+}
+</script>
+<button class="back-top">↑</button>
+</body>
+</html>

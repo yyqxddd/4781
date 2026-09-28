@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>真情实感小作文</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}
+/* 修改页面背景，和主页统一淡紫色 #f3eef9 */
+body{max-width:900px;margin:30px auto;padding:0 16px;background:#f3eef9;}
+.back-home {
+  display: inline-block;
+  text-decoration: none;
+  color: #8b5cf6;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+/* 顶部标签栏 */
+.tab-bar{
+  display:flex;
+  border-bottom:1px solid #ddd4ee;
+  margin-bottom:40px;
+  gap:0;
+  overflow-x:auto;
+}
+.tab-item{
+  padding:10px 20px;
+  cursor:pointer;
+  border-bottom:3px solid transparent;
+  font-size:16px;
+  white-space:nowrap;
+  border-right:1px solid #cccccc;
+}
+.tab-item:last-child{
+  border-right:none;
+}
+.tab-item.active{
+  border-bottom-color:#a864c7;
+  color:#a864c7;
+  font-weight:bold;
+}
+
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
+/* 播放器容器 修改：宽度100%，和按钮右对齐 */
+.iframe-wrap{
+  width:100%;
+  position: relative;
+  margin-bottom:20px;
+}
+.bili-player{
+  width:100%;
+  height:320px;
+  border-radius:8px;
+  border:0;
+  display:block;
+}
+.bili-player iframe{
+  width:100%;
+  height:100%;
+  border-radius:8px;
+  border:0;
+}
+.sub-gray-text{
+  font-size:15px;
+  color:#777777;
+  margin:6px 0 16px 0;
+  text-align:center;
+}
+.popup-btn-wrap {
+  position: relative;
+  text-align: right;
+  margin-top:10px;
+}
+.link-text{
+  display: inline-block;
+  margin: 60px 0;
+  font-size:17px;
+  color:#2563eb;
+}
+.popup-btn{
+  padding:8px 14px;
+  background:#a87edb;
+  color:white;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:16px;
+  margin:0;
+}
+.popup-btn:hover{
+  background:#9468c9;
+}
+
+.popup-mask{
+  display:none;
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,0.5);
+  z-index:999;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+/* 弹窗背景改为和页面配套浅紫色 */
+.popup-box{
+  background:#f3eef9;
+  color:#333;
+  max-width:700px;
+  width:100%;
+  max-height:80vh;
+  overflow-y:auto;
+  padding:24px;
+  border-radius:12px;
+  position:relative;
+}
+.popup-title{
+  font-size:18px;
+  color:#8b5cf6;
+  text-align:center;
+  margin-top:11px;
+  margin-bottom:18px;
+  font-weight:bold;
+}
+.close-btn{
+  position:absolute;
+  top:12px;right:16px;
+  font-size:24px;
+  cursor:pointer;
+  color:#666;
+}
+
+/* ========== 移动端适配 ========== */
+@media (max-width: 600px) {
+  body {
+    margin: 16px auto;
+    padding: 0 12px;
+  }
+  .tab-item {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+  .bili-player{
+    height:220px;
+  }
+  .popup-box {
+    padding: 16px;
+  }
+  .popup-btn {
+    width: auto;
+  }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <a class="back-home" href="index.html">← 返回主页导航</a>
+<div class="tab-bar">
+  <div class="tab-item active" data-tab="tab1">🌧️｜𝟐𝟎𝟎𝟖𝟑𝟎《时之卷》午场</div>
+  <div class="tab-item" data-tab="tab2">1️⃣｜𝟐𝟎𝟏𝟏𝟏𝟓《头号新闻》午场</div>
+  <div class="tab-item" data-tab="tab3">1️⃣｜𝟐𝟏𝟏𝟐𝟏𝟐《终极任务》午场</div>
+  <div class="tab-item" data-tab="tab4">1️⃣｜𝟐𝟑𝟎𝟐𝟏𝟐《熠》晚场</div>
+  <div class="tab-item" data-tab="tab5">🌧️｜𝟐𝟑𝟎𝟑𝟏𝟗《霁》晚场</div>
+  <div class="tab-item" data-tab="tab6">🌧️｜𝟐𝟒𝟎𝟔𝟎𝟐《雨爱》晚场</div>
+  <div class="tab-item" data-tab="tab7">1️⃣｜𝟐𝟒𝟏𝟐𝟏𝟒《活出怎样的人生》晚场</div>
+  <div class="tab-item" data-tab="tab8">🌧️｜𝟐𝟎𝟐𝟔𝟎𝟒𝟏𝟏《LUMEN》生日会</div>
+  <div class="tab-item" data-tab="tab9">1⃣️｜𝟐𝟎𝟐𝟔𝟎𝟔𝟎𝟔《破夜》生日会</div>
+</div>
+
+<!-- 标签1 -->
+<div class="tab-content active" id="tab1">
+  <div class="iframe-wrap">
+    <!-- B站iframe，player.html 替换成 embed -->
+<div class="bili-player">
+  <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1x1sDerEVp&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+</div>
+    <div class="sub-gray-text">“想要和你一起变好，所以我会努力的，等我哈”</div>
+    <div class="popup-btn-wrap">
+      <button class="popup-btn" onclick="openPopup(this)" data-title="1⃣️💌" data-text="
+&nbsp;&nbsp;&nbsp;&nbsp;生日快乐啊，周诗雨。第一次给你写信，内心有些紧张和纠结。每次打开手机备忘录，我都不知道该从何写起我们两个之间的点点滴滴，因为三百六十五天，除了公演我们大概每天都待在一起，但是当然现在除了公演也在一起。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;虽然我们很早就认识，但真正熟起来大概也是从去年开始。以前对你的印象就是刘海妹妹，长得很甜，但后来相处下来发现你跟我想象的有那么些偏差，因为你很搞笑也很可爱，也很单纯，笑起来会给人一种憨憨的感觉，和你在一起就会觉得很开心，很治愈。大概这就是我喜欢和你做朋友的其中一点吧。虽然你平时乐乐呵呵的。也会有不开心的时候，你总是会因为太相信别人，而最后自己却被伤害。每次看到这样的你，都会想要好好保护你，让你每天都是开开心心的。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;虽然我也没有多大的能力能够为你做一些什么实质性的事情，但是至少这里可以是你的依靠。我很少说肉麻的话，但是这些都是真心的。有时候和你呆在一起时间久了，会不自觉的在意你的每一个举动，和你每一句话。总选前我们聊了很多，让我觉得虽然在你身边，但却没有能力为你做什么，有种无能为力的感觉，这样的心情起起伏伏，直到总选当天听到你的名字，我忐忑的心情才平静下来。当时真的很为你开心，也很为你骄傲，产生了一种想要和你一起努力的心情，想要和你一起变好，所以我会努力哒！等我哈！<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;过几天就要你就要开学了，我不知道怎么表达告诉你我心里对你有多么的不舍，只是很直白的这么说出来，想到马上就要每天感受从一睁眼看到你变成一睁眼看到除夕的落差感，就觉得心里有点空落落的。当然也不是说除夕不好，就是只是每次想到这里都会觉得老天特别弄人：为什么自己不早点和你熟悉起来，早点和你成为朋友。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;在这段时间里，虽然我们吵过很多次架，每次吵架也是因为我的一些不成熟导致，并且最后也没有完全解决。但我们却会因为太在乎对方而淡化生气，对吧？我是一个没有什么观察力的人，可能你有时候再生气我也没有察觉到，所以你都会越来越气。但是打是亲，骂是爱，不管怎么样你还是爱我的，对吧？<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;说了这么多，希望二十二的你能够快乐成长，不要因为一些不必要的人和不必要的事情伤心了，也不要再自不自信，觉得自己不好看了，你很美的。可能之前你总是受到各种各样的误解，那是因为他们没有足够了解你，但在我看来，你只是一个不会表达自己心里话、很好的女孩。要自信哦！不管怎么样，我都会永远支持你。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;周诗雨，走花路吧！<br>
+<br><br>
+<div style='text-align:right'>王奕<br><br>2020年8月30日</div>
+">文字版</button>
+    </div>
+  </div>
+</div>
+<!-- 标签2 -->
+<div class="tab-content" id="tab2">
+  <div class="iframe-wrap">
+<div class="bili-player">
+  <iframe data-src="https://player.bilibili.com/player.html?bvid=BV14i4y1L7uA&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+</div>
+    <div class="sub-gray-text">"我是你除了亲人以外最重要的人，对吧？"</div>
+    <div class="popup-btn-wrap">
+      <button class="popup-btn" onclick="openPopup(this)" data-title="🌧️💌" data-text="
+&nbsp;&nbsp;&nbsp;&nbsp;生日快乐啊，这是我第一次给你写信。去年你过生日的时候，我们还只是朋友圈点赞的关系，没想到今年却变成了陪在身对方身边的人。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;说实话，给你写信真是从很久之前我就开始酝酿，但当你生日公演这天凌晨我才开始动笔。就是怎么说呢，有种想说说不出来的感觉。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;我们刚认识的时候你还不是现在这个样子，当时我们两个都比较青涩，我的性格比较大大咧咧，喜欢就会去想靠近。只是看到你就觉得这个小妹妹好可爱好萌，然后呢我就想时不时的去逗逗你，但是你的反应就非常迟钝，我就觉得你既可爱又搞笑。后来随着时间慢慢过去，发生了很多动荡吧，我们基本上就算是没有了交集，变成了陌生人，也有了各自的朋友圈。然后是在去年冬天的时候，当时好像我在中心也没有什么朋友，甜甜就带我去336做客。然后呢因为沈梦瑶很热情好客，就会叫我们经常过去做客，于是我就慢慢变成了336的常客。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;那个时候我住在中心二楼，睡的房间由于没有床垫，冬天非常湿冷，我也忘记是不是沈梦瑶邀请我，说可以在336睡觉。我睡觉喜欢挤人，就把沈梦瑶挤到了沙发上。然后不知道为什么就变成我和你一起睡。现在想想，你那个床又小又挤，床都还是斜的，我就睡在那个斜的坡坡上，一点儿也不舒适。不过对于那个时候的我来说，已经是一个非常温暖的小窝了。但是呢，现在你已经在我的床上安家了，也算是一报还一报。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;有时候不敢不得不感叹命运真的是很神奇。2020年，因为一场疫情，我被留在了中心上网课。因为剧场也无法营业，我的生活就变成了上网课、上网课开小差、上网课睡觉、上网课等王奕睡觉、上网课和王奕一起吃外卖、让王奕替我上网课。每天待在中心里，我们就越发地熟络起来。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;我们的关系是什么时候突飞猛进的呢？我记得有一天晚上就是感觉好像我们心情都不太好，于是就一起待在331聊天。那天不知道为什么聊到了很晚，互相说了很多从来没有说过的话，展现了从不为人知的一面和很多小秘密。也是从那天晚上开始，我们就变成了世界上唯一知道对方秘密和心事的人。我对你就越来越了解了。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;其实你很多方面和别人知道的很不一样。关系越来越熟之后，我们就开始容易吵架。我们两个很像的一点，就是不会和别人起争执，只会对对方暴露出自己最真实、最脆弱、最在乎的一面。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;我们两个的性格和想法完全不一样，甚至可以说是相反。我们俩昨天还在吵架。我平时大大咧咧什么都说，你就比较细腻谨慎，想得比较多。我不能理解你，你也不能理解我，于是我们再怎么吵都吵不出什么结果。但是呢，对于我们来说，没有什么事情能比对方更重要，所以每次最后我们都会选择先放下这件事，但是会存档重启。在我眼里你是一个想的很多、说得很少的人。有时候会觉得你想太多了，有时候又会觉得你有点缺根筋。我觉得在你眼里吧，我肯定就是一个极其冲动、不顾后果的人，也不知道从什么时候开始你变得很爱对我说教，我觉得什么都无所谓，你觉得我这样不好，要多想想。我不太会人情往来；有一天你花了很长时间来说我；我去上学了，你也教我怎么和同学相处。虽然我当时会听你说完，我也不怎么能做到。但是呢，我还是很感谢你，因为有一段时间心情非常崩，会特别激动，你就一直陪在我身边，然后听我说一些可能别人不会感同身受的事情。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;我们两个人的成长轨迹很不一样，有时候我会很羡慕你可以在爱和宽容中成长。我觉得我们两个还是生活的环境很不一样，但其实你也经历过很多难受的事情，也没有人知道。但我知道了，所以你是我最最在乎的朋友！不要总想太多而不去说，在我这里你什么都可以说。我是你除了亲人以外最重要的人，对吧？所以呢，你也不要怀疑自己在我心中的分量。希望你以后至少在我这里可以不用顾虑，想说什么想做什么，我都陪着你。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;之前你说想要好好加油，让我等着你；现在已经非常好的做到啦！我也很为你感到高兴，可能现在还要你在前面的路上等一等我了。不过不管是谁等谁，我们都要在同一条路上好好的走下去，即便未来是未知的，但我们此刻牵着对方的手；无论世界怎么变，你永远是可爱的你。只要我们一起一直向前走，天总会亮！<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;希望十九岁的你得偿所愿，希望你永远开心。<br>
+<br>
+<br>
+<div style='text-align:right'>周诗雨<br><br>2020年11月15日</div>
+">文字版</button>
+    </div>
+  </div>
+</div>
+<!-- 标签3 -->
+<div class="tab-content" id="tab3">
+  <div class="iframe-wrap">
+<div class="bili-player">
+  <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1wb4y1q71A&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+</div>
+    <div class="sub-gray-text">“幸亏我们都还没有忘记我们当初约定好要一起走的心情”</div>
+    <div class="popup-btn-wrap">
+<button class="popup-btn" onclick="openPopup(this)" data-title="🌧️💌" data-text="
+&nbsp;&nbsp;&nbsp;&nbsp;Hi,王奕,生日快乐。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;现在是12月12日的凌晨5点11分，距离你的生日公演只有几个小时了，我才开始提笔写这封信，此时我们刚刚结束排练你正在收拾东西洗澡准备睡觉，希望这时候还在焦躁不安的你，现在已经圆满的完成了生日节目哦，要对自己有信心。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;想来这一年的你多了很多的不自信和焦虑，去年我说只要我们牵着手向前走就一定可以走到光亮处，现在看不知道是不是完成了呢，可能这世界上的事就是有得必有失的，你再也不是那个为了想家就会大哭的你了，你这两天因为觉得自己太丑就是哇哇大哭。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;记得去年我们常去窗台看日出，去天台看日落，一起玩游戏，为一件小事开心，又会为了未来担忧，现在几乎没有这样的时刻了，我们经历了伤痛、争吵、压力与无数个泪流满面的日子吵架，我们总是被无数注视的目光而审视着，所以渐渐的小心翼翼，现在我们不是为未来担忧 ，而是为了当下的每一刻都在忧虑，害怕自己做的不够好，得到的越多害怕失去的也都越多，幸亏我们都还没有忘记我们当初约定好要一起走的心情，没有松开过彼此的手。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;去年我还以为自己才是总是生气记仇的人，直到今年才看出你的真面目，原来你才是那个记仇、记账本，每一件小事你都记得清清楚楚，所以要记得我的好。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;感觉今年的我们好像是换了个位置，你开始变的敏感脆弱了起来，总是想很多，让我摸不着头脑，所以我也变得格外注意起你的情绪，你的坏情绪变得越来越多，甚至于前几天你提出要不你去睡小房间，为了不想打扰我，影响到我的情绪，怕自己变的烦人，我不理解你为什么要想这么多，我的傻朋友，希望你不仅是不要怀疑自己，更加不要怀疑你在我心中的分量，这点事还用说吗，不过说到这里好像也不只是你敏感，我们前几天吵架的时候，我也是…我们吵过很多次架，但从来没有隔夜过。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;只有一件事是我现在空白大脑里记得最清晰的，我猜你知道是什么。就是有一次很晚了，我想吃妈妈做的那种面然后你说你给我做，就是我等了很晚很晚，饿的都要睡觉了然后你都没有给我做，我就特别难过，我觉得你一点也不在意我那是我印象中哭的最伤心的一次，毕竟我不像你，我可是很少哭的，除非你批评我。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;又说回我们两个吵架，你说我脑子里想太多，想什么呢，所以我就哭了。不是因为发生了什么事情而哭，只是..因为什么你应该懂的。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;所以在一起这么久，我也说不清为什么会和你熟悉，为什么会形影不离。我想你也没有想过和你相处是什么感觉，或许我们都只是爱待在对方的身边，就算什么也不做，也想呆在一起。所以我们要记住自己的这种心情哦，希望我和你可以长长久久的做室友哦。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;最后，我想和你约法六章。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;第一，不可以对我翻白眼！如果控制不住一周不可以超过三次，这是我最后的底线。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;第二，不可以有意冷漠装酷。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;第三，不可以说自己丑，要自信。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;第四，不可以在我不知道的时候偷偷抹眼泪。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;第五，不可以有事情掖着不说。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;第六，要开心。<br>
+<br>
+<br>
+<div style='text-align:right'>周诗雨<br><br>2021年12月12日</div>
+">文字版</button>
+    </div>
+  </div>
+</div>
+<!-- 标签4 -->
+<div class="tab-content" id="tab4">
+  <div class="iframe-wrap">
+<div class="bili-player">
+  <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1CA411m7em&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+</div>
+    <div class="sub-gray-text">“希望我们一直都可以很合拍”</div>
+    <div class="popup-btn-wrap">
+<button class="popup-btn" onclick="openPopup(this)" data-title="🌧️💌" data-text="
+&nbsp;&nbsp;&nbsp;&nbsp;你好，王奕。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;不知不觉我们已经当了三年的室友了吧，也是给你写的第三封信了，对吧。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;其实每一年我们两个的变化都挺大的，可能在别人眼里是越来越好，并且向着更好的方向在走。但偶尔我也会很想念，窝在中心小小沙发上的两个人，好像离她们越来越远了。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;小小的没有窗户的房间，我们竟然住了那么久，也很少觉得拥挤。我印象最深的一次是拍了一张照片，衣服和快递堆满了床以外的区域，只留下一条窄窄的小径可以让我们走进去。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;闷在这样的小房间里，时常会觉得恍惚，眼前的一切偶尔会觉得有些失真，让人看不清楚。快递堆在一起像一座假山，人待在暗无天日的房间里像活在另一个星球。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;还好，眼前的人是真实的，让我可以感知到。喜怒哀乐发生在我们彼此之间，不被知晓的渺小的种种情绪缠绕着我们。三年换了三个房间，每个房间都充满着我们的回忆。不过时间过得太快了，催促着我们赶快成熟长大，好像很多时候都还来不及感受生活，就被推着向前走了。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;我们目前为止大多数的青春都留在了这样的房间里，不知道你有时候会不会觉得有点可惜。如果我们在其他地方认识会是什么样呢？但是，不是这里的话我们也不可能认识了吧。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;在给你写这封信的时候，我翻了翻相册，因为我很喜欢记录一些有的没的，所以留下了很多奇奇怪怪的影像。不过里面都是让人看了非常开心的东西，好像只有感觉到开心的时候，才会想记录下来，当这些回忆被打开，就又可以收获到一次愉悦的心情。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;所以就是看到这些不管发生再多的不开心，希望记性比我好太多的你，都可以在脑子里删除掉它们，当你不开心的时候就打开我们快乐的小盒子吧~<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;感觉每一年都在跟你说，不要给自己太大压力，要开心。但是说出来，你听见了却没什么用，对吧。因为我翻了翻我去年也是这么和你说的。但是感觉这一年以来就是你的压力更多了，你有觉得吗？<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;所以今年我就希望你感到焦虑的时候，我们可以慢下来感受生活的美好吧，好好珍惜前几年失去的阳光。因为我们现在就是住了新家，有太阳啦~<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;不过，怀念终究是怀念，我们俩应该谁也不想回到过去吧。无论走到哪里，都比停留在原地要好，因为走到现在实在是不容易，无论哪个环节出了差错，都不会有此时此刻站在这里的我们了。那看来我们还是很合拍的，所以很谢谢你，一直陪着我走，当然你也要谢谢我也一直陪着你。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;天亮不亮不知道，但是希望你足够明亮，成为你想要的样子，希望我们一直都可以很合拍。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;生日快乐，我的搭档，我的最佳。<br>
+<br>
+<br>
+<div style='text-align:right'>周诗雨<br><br>2023年2月12日</div>
+">文字版</button>
+    </div>
+  </div>
+</div>
+<!-- 标签5 -->
+<div class="tab-content" id="tab5">
+  <div class="iframe-wrap">
+<div class="bili-player">
+  <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1o24y1u7WE&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+</div>
+    <div class="sub-gray-text">“你的可爱在我心里是独一无二的，最喜欢你私底下只属于我的可爱”</div>
+    <div class="popup-btn-wrap">
+<button class="popup-btn" onclick="openPopup(this)" data-title="1⃣️💌" data-text="
+&nbsp;&nbsp;&nbsp;&nbsp;嗨，粥宝。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;上次给你写信，好像已经是三年前的事情了。犹犹豫豫不知道如何起头，于是我打开了你三年前的生日公演。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;突然回看当初那两个稚嫩的我们，居然都觉得有些陌生。也确实，在这几年我们经历了太多，一切仿佛是八百倍速的成长，一步步走到了现在。但好在我们从来没有抛弃过对方，彼此陪伴到了现在。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;想对你说，很谢谢你，感谢你的出现，你是我生命中不可缺少的存在。所以，你也别再问我世界上最….的人是谁了吧，你现在知道了吧。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;你知道我是怎么看待你的吗，我觉得你是一个外表坚强、内心脆弱的宝宝。平时虽然看着比我沉稳，但是更多的你会放在心里默默难过。有时候你也会告诉我你现在心态变了，有很多事情已经觉得没那么重要了。当听到这句话的时候，我也会很心疼，因为被伤害过，最后总是只能选择接受或者不在意，越是在意只会伤得越深。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;想到去年你因为一些事伤心的流泪了，看到你难过的样子我也充满了自责，感受到你的压力让你喘不过气，同时又很心疼你本来就不是太好的小身体，背负着沉重的担子。如果现在能许个愿的话，我希望你能被这个世界多爱一点，能被这个世界多理解一点，然后开心快乐一点。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;其实随着我们的关注度越来越高，盯着一双双的眼睛也变得越来越多，我们不管做什么，说什么，都需要变得谨慎。不知道从什么时候开始，从经常会在口袋叫对方起床。到现在需要，提起对方的时候都要深思才能发。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;我是一个总是会想很多的人，之前你说我有分离焦虑症，但是其实是因为，我会担心你在我看不见的时候，觉得在别的地方生活的太好，就不会回来了。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;但是后来我也发现，是自己想的太多了，只是害怕失去你。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;时间总是在改变一些东西，我们都变得不一样了，也不愿意回到过去。说出这样的话也是对我们有信心，那些我们只会当成回忆。接下来，只会带着我们的丢丢宝宝走的更远对吧？<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;然后，前面说了太多沉重的话，那么最后我就夸夸你吧。你是我见过最好的女生，的，其中之一，因为整个48都是最好的女生。然后，但是你是这么多人里最能包容我，看到我内心最深处的人。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;然后，你经常问我，我喜欢你身上的什么点，我每次都会回答可爱，但是你每次都会撇着嘴，好像不是很满意这个答案。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;我现在对所有人告诉你，你，周诗雨，非常可爱，你的可爱在我心里是独一无二的，最喜欢你私底下只属于我的可爱。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;希望你在闪闪发光的同时，也要注意平平安安，身体健康，我的囡囡。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;然后，等一下，然后还有一个，我要悄悄的跟你说……<br>
+<br>
+<br>
+<div style='text-align:right'>王奕<br><br>2023年3月19日</div>
+">文字版</button>
+    </div>
+  </div>
+</div>
+<!-- 标签6 -->
+<div class="tab-content" id="tab6">
+  <div class="iframe-wrap">
+<div class="bili-player">
+  <iframe data-src="https://player.bilibili.com/player.html?bvid=BV12x4y1E7iH&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+</div>
+    <div class="sub-gray-text">“你每次撒娇的一面都特别可爱，请你多多这么对我，我很喜欢”</div>
+    <div class="popup-btn-wrap">
+<button class="popup-btn" onclick="openPopup(this)" data-title="1⃣️💌" data-text="
+&nbsp;&nbsp;&nbsp;&nbsp;粥宝，时隔半年我又给你写信了，每次到这个时候我都会紧张，担心自己词不达意，也担心你会觉得说了太多这样的话而习惯。
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;也许是我们相处了太久太久的时间，去年我还会说，会有很多担忧，但现在好像我永远都不会担心你哪一天会离开我或者是跟我疏远。因为对我来说，这样的事情是根本不可能发生的，我在想也许这就是我们给互相的一种安全感吧。
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;不知道从什么时候开始，我们两个性格像是互换了，你变得越来越冷静成熟，而我可能却变得越来越焦躁幼稚，也许你也是这么觉得的。我觉得外界的影响是最大的一个原因，很多时候很多事情你总是喜欢放在心里，可能遇到太多冷漠的人，让你也慢慢妥协了。但我知道你是一个内心特别温柔的女孩，只是它们脏了你的真心。
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;今年匆匆忙忙地过去，积攒了很多情绪，我们一起思考未来该面对的事情，也幻想无数个结果。但我想对你说，好的我们就一起享受，坏的我们就一起面对，只要你愿意，我会一直在。
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;接下来许个愿，希望真心喜欢你的人对你能够多一点包容，少一点责怪，多多想怎么和你一起变好，多多珍惜现在的你吧。
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;说到这里，最近你总是说，我不愿意跟你好，前天你说了，然后我想对你说，2024 年了，你还会问我自己可不可爱，你昨天也问我了，我想说可爱，当然可爱，你每次撒娇的一面都特别可爱，请你多多这么对我，我很喜欢。
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;我一直觉得人与人之间的缘分是早就安排好的，所以感谢老天把善良幽默美丽大方孝顺可爱魅惑有魅力的你安排在我身边。
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;好啦，写到这里已经是早上五点了，本来想观察你美丽的睡颜再夸你两句，没想到你比我还能熬，希望我的这封信能让你满意。
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;粥宝，今天你也很美丽，晚上能不能帮我个忙。
+<br><br>
+<br>
+<div style='text-align:right'>王奕<br><br>2024年6月2日</div>
+">文字版</button>
+    </div>
+  </div>
+</div>
+<!-- 标签7 -->
+<div class="tab-content" id="tab7">
+  <div class="iframe-wrap">
+<div class="bili-player">
+  <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1jmB7YEEQp&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+</div>
+    <div class="sub-gray-text">“你已经成为了我们生命里不可磨灭的印记，是我人生的一部分”</div>
+    <div class="popup-btn-wrap">
+<button class="popup-btn" onclick="openPopup(this)" data-title="🌧️💌" data-text="
+&nbsp;&nbsp;&nbsp;&nbsp;一一你好，又给你写信啦。这次给你写信的时候，我一直在回想这两年来我们发生的一切，感觉时间过得好快，一切都太匆忙了，还没来得及好好感受。
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;去年我们拥有了第二个小宝宝，想了很久的小狗终于实现愿望了，短短的一年时间，看着她从放在你背包里的大小，变成现在 duang 大一只，她的出现带给了我们很多情绪价值，尤其是你吧。虽然她也总是闯祸，但在我们不开心的时候也确确实实治愈过我们。
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;很开心和你一起养了丢丢和呆呆，因为她们我们两个对彼此的关系有了更进一步的变化。回想到丢丢生病的时候，丢丢不听话逃跑的时候，呆呆闯祸的时候，呆呆乱吃东西的时候，虽然主体是她们，但却能让我们看见另一面的你。这些一点一滴积累在我们之间，这些都是我们永远都不会忘记的瞬间。在这些时间里，我们之间的相处也变得越来越融洽，越来越有默契，有时候我自己都没意识到自己的下意识动作，都会被你发现，有时候你脑子里在想什么我也都清清楚楚。
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;我们不仅仅是室友，你已经成为了我们生命里不可磨灭的印记，是我人生的一部分，看到以前说过的话我突然发现，我们说的对方的那些缺点，好像不知不觉间都已经改变了很多，不知道你有没有发现。
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;因为我复盘了一下我以前给你写过的话，之前老是会说我们俩吵架有什么原因，我说了你什么，你说了我什么，然后这些缺点就不知不觉地改变了。
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;我们好像悄悄长成了更适合对方的样子，不得不承认你变成熟了很多。在很多事情上其实我都觉得你已经很游刃有余了，也有了很多自己的想法和主见，能够很清晰地去看待很多问题，不是那个像小孩子一样会露出自己的紧张和不安的你了。从前害怕的事情，现在会变得从容起来，你也会变得去捍卫自己，为一些不公发声。不再是任由别人欺负的自己了，但同时也意味着你有了更加焦虑的事情，也许这就是成长的代价吧。随着我们变得更成熟了，需要去面对的问题也就更大。
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;当然啦，只有我们两个的时候，你才会露出你小屁孩的样子。我喜欢那样快乐可爱的你，像一个一直在摇尾巴的小狗。希望你如果永远都这么开心快乐就好，如果没有那么多烦恼就好了。每次看到你落泪的样子，难受的样子，因为一些原因怀疑自己的时候，虽然我已经很熟练的知道该怎么应对这样的状况。但是这一切本不该是你承受的。
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;看着你一步步的怎样成长，怎样受伤，在不为人知的背后经历过的种种，很想抱抱那时候小小的你。怎么说呢，感觉是因为在这里，我们经历了一些东西吧。如果是原来的人生轨迹，不会去的一些地方。有些时候，只有彼此可以依靠，但我们已经习惯了这样彼此依靠，因为我知道，只要转身你都会在，你知道的吧，我也是。
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;还有最后一件事情，就是我们的五年之约。虽然时间在流逝，但我们有在好好守护彼此。曾经说下的不可思议的未来，在我们对彼此的坚定中就这样到来了。天时地利，刚好你就在这里，每一次拥抱都像我们第一次那样。
+<br>
+<br>
+<br>
+<div style='text-align:right'>周诗雨<br><br>2024年12月14日</div>
+">文字版</button>
+    </div>
+  </div>
+</div>
+<!-- 标签8 -->
+<div class="tab-content" id="tab8">
+  <div class="iframe-wrap">
+    <div class="bili-player">
+      <iframe class="bili-iframe" data-src="https://player.bilibili.com/player.html?bvid=BV1TsDmBuEs3&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+    </div>
+    <div class="sub-gray-text">“你的撒娇卖萌、假装生气，还是会让我觉得很可爱”</div>
+    <div class="popup-btn-wrap">
+<button class="popup-btn" onclick="openPopup(this)" data-title="1⃣️💌" data-text="
+亲爱的粥粥：<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;哇，这个环节真是久违了，一下子不知道怎么起头。闭上眼睛回忆这个每年被框死的固定环节，虽然那个时候我们总会有一些小嘀咕，但现在想来，它却在不知不觉中记录着我们的点点滴滴。难以想象，今年是我们认识的第八年了。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;我一直都是一个很没有安全感的人，还记得我以前总是问你，能坚持做朋友到5年吗？你说不知道，未来的事情谁知道呢。我不服气，于是拉着你跟你做了一个约定，虽然很幼稚，但是当时的我确实踏实一些。你记不记得？但现在想想，8年了，那个约定早就过期了，但我们还在。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;这一年，我们去了很多地方，一起带父母去旅游，一起跌进了没有工作的空档期，焦虑压力随之而来，但好在彼此陪伴。不知不觉中，我们建立了一种信念，仿佛就像人生最后一张底牌。之前总是听说时间会消耗新鲜，但在我们这，好像从来没有。你的撒娇卖萌、假装生气，还是会让我觉得很可爱，我们对对方，好像永远可以做一个长不大的小孩。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;你之前总是打趣说，没有你的生活大概会很无趣吧。其实对于这件事情，我从来没有想过。如果是真的，可能会需要很长时间才会去学会、去适应一个人。抛开私下，今年其实感受到你的一些变化，好像沉稳了一些，有了姐姐的实感，但又有一些心疼。人总是经历挫折才会成长，或许未来我们还会面对很多，希望我们永远可以做对方可以倾诉的对象。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;生日快乐！可能这次词不达意，但我心里想的什么，你应该都知道吧。好了，下一个8年，我们也多多指教。
+<br><br><br>
+<div style='text-align:right'>王奕<br><br>2026年4月11日</div>
+">文字版</button>
+    </div>
+  </div>
+</div>
+<!-- 标签9 -->
+<div class="tab-content" id="tab9">
+  <div class="iframe-wrap">
+    <div class="bili-player">
+      <iframe class="bili-iframe" data-src="https://player.bilibili.com/player.html?bvid=BV1VwEx6kEtX&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+    </div>
+    <div class="sub-gray-text">“然后就希望我们以后也好好地一块走下去。对吧？宝宝”</div>
+    <div class="popup-btn-wrap">
+<button class="popup-btn" onclick="openPopup(this)" data-title="🌧️💌" data-text="
+&nbsp;&nbsp;&nbsp;&nbsp;是这样的，王奕说不用给她写信，因为一些特殊的原因，我就简短地送上我的祝福。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;首先，我觉得你表现得很棒，你有时候太否定自己了。然后呢，这个演出你也纠结了很久，焦虑了很久。现在总算是差不多算好好地完成了，我觉得你已经很厉害了。而且你想想，我们就是说在这么困难的情况下，能办一场演出已经很不容易了，不要对自己太苛刻。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;而且我刚刚想了一下，其实因为我们天天在一块嘛，就意识不到对方的改变，但其实我们已经...（发现我已经25了）是的，当时认识你的时候才17岁，太可怕了。但是我感觉你和17岁其实也没差什么，就是长得还和17岁差不多，性格也和17岁差不多。但是比17岁多了一点点...嗯，成熟。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;然后我觉得看到你这些年的长大，流泪的是粥粥 。 就是觉得你很优秀很厉害，走到今天不容易。毕竟就是，虽然刚刚是开玩笑的，但其实在我心里，你走到今天经历了很多很难成长的事情，然后你都好好地挺过来了。如果从现在往前数一年的话，可以算是我们俩一起好好挺过来了。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;然后就希望我们以后也好好地一块走下去。对吧？宝宝。
+<br><br><br>
+<div style='text-align:right'>周诗雨<br><br>2026年6月6日</div>
+">文字版</button>
+    </div>
+  </div>
+</div>
+
+<!-- 弹窗 -->
+<div class="popup-mask" id="popupMask">
+  <div class="popup-box">
+    <span class="close-btn" onclick="closePopup()">×</span>
+    <div class="popup-title" id="popupTitle"></div>
+    <div id="popupText">
+    </div>
+  </div>
+</div>
+
+<script>
+// Tab切换逻辑
+const tabs = document.querySelectorAll('.tab-item');
+tabs.forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-item').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    tab.classList.add('active');
+    const targetId = tab.dataset.tab;
+    document.getElementById(targetId).classList.add('active');
+
+  })
+})
+
+// 弹窗控制
+function openPopup(btn){
+  const content = btn.getAttribute('data-text');
+  const title = btn.getAttribute('data-title');
+  document.getElementById('popupTitle').innerText = title;
+  document.getElementById('popupText').innerHTML = content;
+  document.getElementById('popupMask').style.display = 'flex';
+}
+function closePopup(){
+  document.getElementById('popupMask').style.display = 'none';
+}
+document.getElementById('popupMask').addEventListener('click', function(e){
+  if(e.target === this) closePopup();
+})
+
+document.addEventListener('DOMContentLoaded', function(){
+  const iframes = document.querySelectorAll('.bili-player iframe[data-src]');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const iframe = entry.target;
+        iframe.src = iframe.dataset.src;
+        observer.unobserve(iframe);
+      }
+    })
+  }, {rootMargin: "100px"});
+  iframes.forEach(iframe => observer.observe(iframe));
+})
+</script>
+
+</body>
+</html>

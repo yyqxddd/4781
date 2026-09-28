@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生日礼物｜诗情画奕的备忘录</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,"Microsoft YaHei","PingFang SC";}
+body{background:#f3eef9;padding:30px 16px;max-width:1200px;margin:0 auto;}
+.back-home {
+  display: inline-block;
+  text-decoration: none;
+  color: #8b5cf6;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+.back-home:hover{text-decoration:underline;}
+
+.tab-bar{
+  display:flex;
+  border-bottom:1px solid #ddd4ee;
+  margin-bottom:20px;
+  gap:0;
+  overflow-x:auto;
+}
+.tab-item{
+  padding:10px 20px;
+  cursor:pointer;
+  border-bottom:3px solid transparent;
+  font-size:16px;
+  white-space:nowrap;
+  border-right:1px solid #cccccc;
+}
+.tab-item:last-child{border-right:none;}
+.tab-item.active{
+  border-bottom-color:#a864c7;
+  color:#a864c7;
+  font-weight:bold;
+}
+.tab-content{display:none;margin-top:0 !important;padding-top:0 !important;}
+.tab-content.active{display:block;}
+
+table{width:100%;border-collapse:collapse;background:#f8f5fe;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:8px;}
+th,td{padding:12px 10px;border:1px solid #ede6f8;vertical-align:middle;text-align:center;}
+th{background:#ede6f8;font-weight:600;text-align:center;}
+tr{background:#f8f5fe;}
+.money{text-align:center;white-space:nowrap;}
+.desc{font-size:14px;color:#555;line-height:1.6;text-align:left;}
+.gift-img{
+  max-width:80px;
+  max-height:80px;
+  border-radius:4px;
+  cursor:pointer;
+}
+.link-cell {
+  text-align: center;
+  vertical-align: middle;
+}
+.link-cell a{
+  color:#2563eb;
+  text-decoration:none;
+}
+.link-cell a:hover{
+  text-decoration:underline;
+}
+
+/* PC端：🔗链接列正常显示，不再隐藏 */
+@media(min-width:721px){
+  .link-cell{
+    display:table-cell;
+  }
+}
+
+/* 侧边色条，更新为你指定的低饱和淡色：2020~2026 */
+.y2020 { border-left:6px solid #F3EED9; } /*雾奶黄（黄）*/
+.y2021 { border-left:6px solid #F1E2D3; } /*雾浅橙（橙）*/
+.y2022 { border-left:6px solid #DDEBDF; } /*灰薄荷浅绿（绿）*/
+.y2023 { border-left:6px solid #D9E9EC; } /*雾浅青（青）*/
+.y2024 { border-left:6px solid #D9E2F0; } /*灰调浅天蓝（蓝）*/
+.y2025 { border-left:6px solid #F0D9E0; } /*低饱和裸粉（粉）*/
+.y2026 { border-left:6px solid #DDD4EE; } /*雾淡紫（紫）*/
+/* 回到顶部按钮，和首页样式保持一致 */
+.back-to-top{
+  position:fixed;
+  bottom:18px;
+  right:18px;
+  width:33px;
+  height:33px;
+  border-radius:50%;
+  background:#8b5cf6;
+  color:#fff;
+  border:none;
+  cursor:pointer;
+  font-size:18px;
+  box-shadow:0 2px 8px rgba(139,92,246,0.35);
+  opacity:0;
+  visibility:hidden;
+  transition:0.25s ease;
+  z-index:999;
+}
+.back-to-top.show{
+  opacity:1;
+  visibility:visible;
+}
+.back-to-top:hover{
+  background:#7c4fe0;
+}
+/* PC端隐藏年份链接块，移动端保留 */
+@media(min-width:721px){
+  .year-link-block{
+    display:none;
+  }
+}
+
+/* 小于等于720px切换卡片布局 */
+@media(max-width:720px){
+  table, thead, tbody {
+    display: block;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    margin:0 !important;
+    padding:0 !important;
+  }
+  thead {
+    display: none !important;
+  }
+  th {
+    display: none !important;
+  }
+  tr {
+    display: block;
+    background:#f8f5fe;
+    padding:16px;
+    margin-bottom:14px;
+    border:1px solid transparent !important;
+    border-radius:10px;
+    box-shadow:0 1px 4px rgba(0,0,0,0.07);
+    margin-top:0 !important;
+  }
+  /* 移动端卡片左侧色条同步更新 */
+ @media(max-width:720px){
+    /* 移动端卡片左侧色条【修正】 */
+  tr.y2020 {border-left:6px solid #F3EED9 !important;}
+  tr.y2021 {border-left:6px solid #F1E2D3 !important;}
+  tr.y2022 {border-left:6px solid #DDEBDF !important;}
+  tr.y2023 {border-left:6px solid #D9E9EC !important;}
+  tr.y2024 {border-left:6px solid #D9E2F0 !important;}
+  tr.y2025 {border-left:6px solid #F0D9E0 !important;}
+  tr.y2026 {border-left:6px solid #DDD4EE !important;}
+
+  tbody{
+    margin-top:0 !important;
+    padding-top:0 !important;
+  }
+  td {
+    display: block;
+    border:none;
+    padding:4px 0;
+    vertical-align:unset;
+    text-align:left;
+  }
+  .money {
+    text-align:left;
+  }
+  .gift-img {
+    max-width:130px;
+    max-height:110px;
+  }
+  /* 移动端卡片内部🔗单元格隐藏 */
+  .link-cell {
+    display:none !important;
+  }
+  td:nth-of-type(1)::before {content:"🔢：";font-weight:bold;}
+  td:nth-of-type(2)::before {content:"📆：";font-weight:bold;}
+  td:nth-of-type(3)::before {content:"🎁：";font-weight:bold;}
+  td:nth-of-type(4)::before {content:"💰：";font-weight:bold;}
+  td:nth-of-type(5)::before {content:"🎞️：";font-weight:bold;display:block;margin-bottom:4px;}
+  td:nth-of-type(6)::before {content:"📝：";font-weight:bold;display:inline;}
+  /* 删掉移动端卡片里链接的前缀 */
+  td:nth-of-type(7)::before {content:"";}
+
+  /* 移动端年份链接块，放在当年所有卡片的底部 */
+  .year-link-block{
+    padding:10px 16px;
+    background:#ede6f8;
+    border-radius:8px;
+    margin: 12px 0 24px;
+  }
+  .year-link-block strong{
+    color:#5b2dd3;
+  }
+  .year-link-block a{
+    color:#2563eb;
+    text-decoration:none;
+    margin:0 4px;
+  }
+  .year-link-block a:hover{
+    text-decoration:underline;
+  }
+}
+</style>
+</head>
+<body>
+<a class="back-home" href="../index.html">← 返回主页导航</a>
+
+<div class="tab-bar">
+  <div class="tab-item active" data-tab="tab-bing">小雨🎂</div>
+  <div class="tab-item" data-tab="tab-yu">小饼🎂</div>
+</div>
+
+<!-- tab‑bing 小饼礼物 -->
+<div class="tab-content active" id="tab-bing">
+<table>
+  <thead>
+    <tr>
+      <th>🔢</th>
+      <th>🌧️📆</th>
+      <th>🎁</th>
+      <th>💰</th>
+      <th>🎞️</th>
+      <th>📝</th>
+      <th class="link-cell">🎬</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="y2020">
+      <td>1</td>
+      <td>2020‑04‑11</td>
+      <td>【项链】APM六芒星项链女生设计感毛衣链</td>
+      <td>1930</td>
+      <td><img class="gift-img" src="2.11.png" alt="1"></td>
+      <td class="desc">“我第一次给别人送这么贵重的礼物”</td>
+      <td class="link-cell"><a href="https://b23.tv/TJgj9tS" target="_blank">🔗</a></td>
+    </tr>
+    <tr class="y2021">
+      <td>2</td>
+      <td>2021‑04‑11</td>
+      <td>【包】TORYBURCH汤丽柏琦 ELEANOR单肩斜挎包</td>
+      <td>3200</td>
+      <td><img class="gift-img" src="2.12.png" alt="2"></td>
+      <td class="desc">“今年就不送你项链了。也‘不是很贵’的包吧”</td>
+      <td class="link-cell"><a href="https://b23.tv/Ccfn04o" target="_blank">🔗</a></td>
+    </tr>
+    <tr class="y2022">
+      <td>3</td>
+      <td>2022‑04‑11</td>
+      <td>【手机】苹果 iPhone XS Max正品</td>
+      <td>2500</td>
+      <td><img class="gift-img" src="2.13.png" alt="3"></td>
+      <td class="desc">从上个月就开始准备，但是快递延迟了。停产的xs</td>
+      <td class="link-cell"rowspan="3"><a href="https://b23.tv/eTw0EMD" target="_blank">🔗</a></td>
+    </tr>
+    <tr class="y2022">
+      <td>4</td>
+      <td>2022‑04‑11</td>
+      <td>【游戏机】索尼PS5 PlayStation®5 光驱版双手柄</td>
+      <td>4598</td>
+      <td><img class="gift-img" src="2.14.png" alt="4"></td>
+      <td class="desc">花了大价钱买的游戏机</td>
+    </tr>
+    <tr class="y2022">
+      <td>5</td>
+      <td>2022‑04‑11</td>
+      <td>【自制贺卡】手写贺卡</td>
+      <td>5</td>
+      <td><img class="gift-img" src="2.15.png" alt="5"></td>
+      <td class="desc">嗨!生日快乐!要开心哦!我已经尽力了。生日礼物之后补上，带你吃超级大餐，啵啵!希望你不要嫌弃!呜呜，以后生日也会在的，永远!</td>
+    </tr>
+    <tr class="y2023">
+      <td>6</td>
+      <td>2023‑04‑11</td>
+      <td>【戒指】TiffanyAndCo蒂芙尼 T系列 18K玫瑰金镶钻戒指</td>
+      <td>19300</td>
+      <td><img class="gift-img" src="2.16.png" alt="6"></td>
+      <td class="desc">“因为就是觉得应该正式送你一点比较有纪念意义的东西”</td>
+      <td class="link-cell"><a href="https://b23.tv/03lVydy" target="_blank">🔗</a></td>
+    </tr>
+    <tr class="y2024">
+      <td>7</td>
+      <td>2024‑04‑11</td>
+      <td>【包】路易威登 LOUIS VUITTON NOE Purse 水桶包单肩斜挎包烧麦包 棕色</td>
+      <td>19500</td>
+      <td><img class="gift-img" src="2.17.png" alt="7"></td>
+      <td class="desc">“这是我们两个一起去买的”</td>
+      <td class="link-cell"rowspan="2"><a href="https://b23.tv/OXkAZJz" target="_blank">🔗</a></td>
+    </tr>
+    <tr class="y2024">
+      <td>8</td>
+      <td>2024‑04‑11</td>
+      <td>【耳机】Apple AirPods Max无线降噪头戴式 粉色</td>
+      <td>3999</td>
+      <td><img class="gift-img" src="2.18.png" alt="8"></td>
+      <td class="desc">买粉色因为你特别喜欢</td>
+    </tr>
+    <tr class="y2025">
+      <td>9</td>
+      <td>2025‑04‑11</td>
+      <td>【五金】周大福 手镯､手链､戒指､耳环､项链</td>
+      <td >23688</td>
+      <td><img class="gift-img" src="2.19.png" alt="9"></td>
+      <td class="desc">和妈妈一起去挑的。本来想送金钗子，妈妈说没有人出门会戴这个</td>
+      <td class="link-cell"><a href="https://b23.tv/CTkxhfV" target="_blank">🔗</a></td>
+    </tr>
+    <tr class="y2026">
+      <td>10</td>
+      <td>2026‑04‑11</td>
+      <td>【美容仪】金茉全能粉光机 冷抗衰美容仪器</td>
+      <td>6399</td>
+      <td><img class="gift-img" src="2.110.png" alt="10"></td>
+      <td class="desc">看一个明星用得很有效，外观你肯定也喜欢</td>
+      <td class="link-cell"rowspan="8"><a href="https://b23.tv/7xExO4R" target="_blank">🔗</a></td>
+    </tr>
+    <tr class="y2026">
+      <td>11</td>
+      <td>2026‑04‑11</td>
+      <td>【DV】索尼HDR‑XR520E</td>
+      <td>1045</td>
+      <td><img class="gift-img" src="2.111.png" alt="11"></td>
+      <td class="desc">这个DV拍得很好看</td>
+    </tr>
+    <tr class="y2026">
+      <td>12</td>
+      <td>2026‑04‑11</td>
+      <td>【眼镜】CHOPARD萧邦 雪山傲翼系列</td>
+      <td>4999</td>
+      <td><img class="gift-img" src="2.112.png" alt="12"></td>
+      <td class="desc">送你个高质眼镜，漂亮得很</td>
+    </tr>
+    <tr class="y2026">
+      <td>13</td>
+      <td>2026‑04‑11</td>
+      <td>【瑜伽服】lululemon 运动长袖瑜伽外套</td>
+      <td>919</td>
+      <td><img class="gift-img" src="2.113.png" alt="13"></td>
+      <td class="desc">你很想要，但是因为太贵了舍不得买；都是穿T恤去上瑜伽课的</td>
+    </tr>
+    <tr class="y2026">
+      <td>14</td>
+      <td>2026‑04‑11</td>
+      <td>【游戏机】SWITCH 2 2025款 磁吸Joy‑Con 游戏主机</td>
+      <td>4016</td>
+      <td><img class="gift-img" src="2.114.png" alt="14"></td>
+      <td class="desc">你说你想玩的游戏只有switch2才能玩</td>
+    </tr>
+    <tr class="y2026">
+      <td>15</td>
+      <td>2026‑04‑11</td>
+      <td>【平板】Apple iPad Air 13英寸(第8代)2026款 M4芯片 紫色</td>
+      <td>6599</td>
+      <td><img class="gift-img" src="2.115.png" alt="15"></td>
+      <td class="desc">想要的A4纸，你说想要一个大一点的平板</td>
+    </tr>
+    <tr class="y2026">
+      <td>16</td>
+      <td>2026‑04‑11</td>
+      <td>【鞋子】DIOR迪奥 J'Adior 羊皮革芭蕾鞋 黑色</td>
+      <td>8331</td>
+      <td><img class="gift-img" src="2.116.png" alt="16"></td>
+      <td class="desc">问朋友，说你出门一直在看迪奥。你不喜欢穿高跟，磨脚，所以选平跟鞋</td>
+    </tr>
+    <tr class="y2026">
+      <td>17</td>
+      <td>2026‑04‑11</td>
+      <td>【耳麦】AKG爱科技 CROWN CM311无线头戴话筒</td>
+      <td>6399</td>
+      <td><img class="gift-img" src="2.117.png" alt="17"></td>
+      <td class="desc">趁阿姨打扫房间的时候，偷偷DIY贴钻手工，差点被你发现（DIY贴钻 🐾 ZZ♡）</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- tab‑yu 小雨礼物 -->
+<div class="tab-content" id="tab-yu">
+<table>
+  <thead>
+    <tr>
+      <th>🔢</th>
+      <th>🫓📆</th>
+      <th>🎁</th>
+      <th>💰</th>
+      <th>🎞️</th>
+      <th>📝</th>
+      <th class="link-cell">🎬</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="y2020">
+      <td>1</td>
+      <td>2020‑06‑06</td>
+      <td>【手链】施华洛世奇恶魔之眼 SWAROVSKI SYMBOL手链手镯</td>
+      <td>1190</td>
+      <td><img class="gift-img" src="2.21.png" alt="1"></td>
+      <td class="desc">Evil Eye：抵御负能量、挡灾守护</td>
+      <td class="link-cell"><a href="https://b23.tv/KWSuIZ1" target="_blank">🔗</a></td>
+    </tr>
+    <tr class="y2020">
+      <td>2</td>
+      <td>2020‑11‑15</td>
+      <td>【戒指】GUCCI古驰Blind For Love女士银戒指</td>
+      <td>1110</td>
+      <td><img class="gift-img" src="2.22.png" alt="2"></td>
+      <td class="desc">以为你不喜欢上个礼物，所以再送你一个</td>
+      <td class="link-cell"><a href="" target="_blank">🔗</a></td>
+    </tr>
+    <tr class="y2021">
+      <td>3</td>
+      <td>2021‑06‑06</td>
+      <td>【电子琴】雅马哈YDP‑164</td>
+      <td>8699</td>
+      <td><img class="gift-img" src="2.23.png" alt="3"></td>
+      <td class="desc">试探了好久，你说你最想学钢琴</td>
+      <td class="link-cell"rowspan="2"><a href="https://b23.tv/xOfaSTz" target="_blank">🔗</a></td>
+    </tr>
+    <tr class="y2021">
+      <td>4</td>
+      <td>2021‑06‑06</td>
+      <td>【风扇】定制生日小风扇</td>
+      <td>10</td>
+      <td><img class="gift-img" src="2.24.png" alt="4"></td>
+      <td class="desc">定制祝福：王奕 生日快乐</td>
+    </tr>
+    <tr class="y2022">
+      <td>5</td>
+      <td>2022‑06‑06</td>
+      <td>【相机】富士XT30 二代</td>
+      <td>6499</td>
+      <td><img class="gift-img" src="2.25.png" alt="5"></td>
+      <td class="desc">找黄牛买的溢价断货相机</td>
+      <td class="link-cell"rowspan="2"><a href="https://b23.tv/IPI5Lzb" target="_blank">🔗</a></td>
+    </tr>
+    <tr class="y2022">
+      <td>6</td>
+      <td>2022‑06‑06</td>
+      <td>【花】密西根碎冰蓝渐变玫瑰满天星</td>
+      <td>200</td>
+      <td><img class="gift-img" src="2.26.png" alt="6"></td>
+      <td class="desc">密西根碎冰蓝玫瑰的花语：你是我最珍贵的宝物，我愿意陪你去看你想要的星辰大海</td>
+    </tr>
+    <tr class="y2023">
+      <td>7</td>
+      <td>2023‑06‑06</td>
+      <td>【金手镯】周大福ING系列爱无尽循环不规则足金黄金手镯</td>
+      <td>12000</td>
+      <td><img class="gift-img" src="2.27.png" alt="7"></td>
+      <td class="desc">送你的五金第一金，还要再陪你过好几年生日凑齐</td>
+      <td class="link-cell"><a href="https://b23.tv/KKjJMXT" target="_blank">🔗</a></td>
+    </tr>
+    <tr class="y2024">
+      <td>8</td>
+      <td>2024‑06‑06</td>
+      <td>【项链】梵克雅宝四叶幸运Alhambra系列黄K金白母贝项链</td>
+      <td>11100</td>
+      <td><img class="gift-img" src="2.28.png" alt="8"></td>
+      <td class="desc">送你的五金第二金</td>
+      <td class="link-cell"rowspan="2"><a href="https://b23.tv/avqzJRf" target="_blank">🔗</a></td>
+    </tr>
+    <tr class="y2024">
+      <td>9</td>
+      <td>2024‑06‑06</td>
+      <td>【游戏】CAPCOM卡普空，生化危机6</td>
+      <td>200</td>
+      <td><img class="gift-img" src="2.29.png" alt="9"></td>
+      <td class="desc">你想玩的游戏</td>
+    </tr>
+    <tr class="y2025">
+      <td>10</td>
+      <td>2025‑06‑06</td>
+      <td>【戒指】BVLGARI宝格丽 SERPENTI系列 18k白金蛇形 戒指 银色</td>
+      <td>16999</td>
+      <td><img class="gift-img" src="2.210.png" alt="10"></td>
+      <td class="desc">一起去逛街的时候，你喜欢的小蛇元素戒指</td>
+      <td class="link-cell"rowspan="2"><a href="https://b23.tv/qAttvHG" target="_blank">🔗</a></td>
+    </tr>
+    <tr class="y2025">
+      <td>11</td>
+      <td>2025‑06‑06</td>
+      <td>【电脑】Apple MacBook Air 13英寸 M4芯片2025款 蓝色</td>
+      <td>7999</td>
+      <td><img class="gift-img" src="2.211.png" alt="11"></td>
+      <td class="desc">你说你想要个电脑能录歌，因为太贵了没买</td>
+    </tr>
+    <tr class="y2026">
+      <td>12</td>
+      <td>2026‑06‑06</td>
+      <td>【耳钉】CHAUMET尚美巴黎LIENS交叉孔雀石玫瑰金耳钉</td>
+      <td>18600</td>
+      <td><img class="gift-img" src="2.212.png" alt="12"></td>
+      <td class="desc">之前很少送耳钉，绿色是你的财，找到个绿色的东西不容易</td>
+      <td class="link-cell"rowspan="5"><a href="https://b23.tv/KtxfOKm" target="_blank">🔗</a></td>
+    </tr>
+    <tr class="y2026">
+      <td>13</td>
+      <td>2026‑06‑06</td>
+      <td>【旅行】马尔代夫·莉莉岛</td>
+      <td>30000</td>
+      <td><img class="gift-img" src="2.213.png" alt="13"></td>
+      <td class="desc">给你享受几天荣华富贵</td>
+    </tr>
+    <tr class="y2026">
+      <td>14</td>
+      <td>2026‑06‑06</td>
+      <td>【泳衣】WESWIM比基尼泳衣女连体</td>
+      <td>159</td>
+      <td><img class="gift-img" src="2.214.png" alt="14"></td>
+      <td class="desc">觉得这个很适合你</td>
+    </tr>
+    <tr class="y2026">
+      <td>15</td>
+      <td>2026‑06‑06</td>
+      <td>【驱蚊液】WEESEN户外蚊不叮防蚊喷雾</td>
+      <td>24</td>
+      <td><img class="gift-img" src="2.215.png" alt="15"></td>
+      <td class="desc">那里虫子很多</td>
+    </tr>
+    <tr class="y2026">
+      <td>16</td>
+      <td>2026‑06‑06</td>
+      <td>【自制机票】手写马尔代夫机票</td>
+      <td>5</td>
+      <td><img class="gift-img" src="2.216.png" alt="16"></td>
+      <td class="desc">因为它没有实体，所以我就手写了一张机票</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- 回到顶部按钮 -->
+<button class="back-to-top">↑</button>
+
+<script>
+// tab切换
+const tabs = document.querySelectorAll('.tab-item');
+tabs.forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-item').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    tab.classList.add('active');
+    const targetId = tab.dataset.tab;
+    document.getElementById(targetId).classList.add('active');
+    renderMobileYearLinks();
+  })
+})
+
+// 图片点击放大
+const imgList = document.querySelectorAll('.gift-img');
+imgList.forEach(img=>{
+  img.addEventListener('click',function(){
+    if(!this.src) return;
+    const mask = document.createElement('div');
+    mask.style.cssText = `
+      position:fixed;top:0;left:0;right:0;bottom:0;
+      background:rgba(0,0,0,0.85);z-index:9999;
+      display:flex;align-items:center;justify-content:center;
+      padding:20px;cursor:zoom-out;
+    `;
+    const bigImg = document.createElement('img');
+    bigImg.src = this.src;
+    bigImg.style.cssText = `
+      max-width:95%;max-height:95%;
+      object-fit:contain;border-radius:6px;
+    `;
+    mask.appendChild(bigImg);
+    document.body.appendChild(mask);
+    mask.onclick = ()=> mask.remove();
+  })
+})
+
+// 回顶部逻辑
+const backTopBtn = document.querySelector('.back-to-top');
+window.addEventListener('scroll',()=>{
+  if(window.scrollY > 300){
+    backTopBtn.classList.add('show');
+  }else{
+    backTopBtn.classList.remove('show');
+  }
+})
+backTopBtn.addEventListener('click',()=>{
+  window.scrollTo({top:0,behavior:'smooth'})
+})
+
+// =========移动端：按年份分组，一年只放一次链接块=========
+function renderMobileYearLinks(){
+  if(window.innerWidth > 720) return;
+  const activeTab = document.querySelector('.tab-content.active');
+  const tbody = activeTab.querySelector('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  // 按年份收集链接集合
+  const yearMap = {};
+  rows.forEach(tr=>{
+    const dateText = tr.children[1].innerText.trim();
+    const year = dateText.split('‑')[0];
+    const linkA = tr.querySelector('.link-cell a');
+    if(!yearMap[year]) yearMap[year] = new Set();
+    if(linkA && linkA.href){
+      yearMap[year].add(linkA.outerHTML);
+    }
+  })
+  //清空tbody，重新插入【所有当年卡片 → 年份链接块】
+  tbody.innerHTML = '';
+  Object.entries(yearMap).forEach(([year, linkSet])=>{
+    //先插入该年份全部礼物卡片
+    rows.filter(r=>r.children[1].innerText.trim().startsWith(year)).forEach(tr=>{
+      tbody.appendChild(tr);
+    })
+    // 年份链接块放在该年份所有卡片【底部】
+    const linkWrap = document.createElement('div');
+    linkWrap.className = 'year-link-block';
+    linkWrap.innerHTML = `<strong>${year}🎬：</strong> ${[...linkSet].join(' ')}`;
+    tbody.appendChild(linkWrap);
+  })
+}
+renderMobileYearLinks();
+window.addEventListener('resize',()=>{
+  renderMobileYearLinks();
+})
+</script>
+</body>
+</html>

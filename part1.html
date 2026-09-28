@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>41的小家｜诗情画奕的备忘录</title>
+<style>
+ * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+    background: #f3eef9;
+    color: #333;
+    line-height: 1.7;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px 16px 60px;
+  }
+
+  .back-home {
+    display: inline-block;
+    text-decoration: none;
+    color: #8b5cf6;
+    margin-bottom: 20px;
+    font-size: 15px;
+  }
+
+  .back-home:hover {
+    text-decoration: underline;
+  }
+
+  .content-box {
+    background: #f8f5fe;
+    border: 1px solid #e2d9f3;
+    border-radius: 12px;
+    padding: 28px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  }
+
+  /* 表格型时间线 PC端 */
+  .timeline {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .timeline th {
+    text-align: center;
+    font-weight: normal;
+    font-size: 13px;
+    color: #888;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2d9f3;
+  }
+
+  .timeline td {
+    padding:14px 8px;
+    border-bottom:1px dashed #ddd4ee;
+    vertical-align: middle;
+    font-size:15px;
+    text-align:center;
+  }
+
+  .timeline tr:last-child td {
+    border-bottom: none;
+  }
+
+  .col-index {
+    width:20%;
+    color:#999;
+  }
+
+  .col-date {
+    width:20%;
+    color:#666;
+  }
+
+  .col-title {
+    width:20%;
+    color:#333;
+  }
+
+  .col-title a {
+    color:#222;
+    text-decoration:none;
+  }
+
+  .col-title a:hover {
+    color:#8b5cf6;
+    text-decoration:underline;
+  }
+
+  .col-img {
+    width:20%;
+  }
+
+  .col-img img {
+    width:70px;
+    height:52px;
+    object-fit:cover;
+    border-radius:6px;
+    border:1px solid #ddd4ee;
+    background:#f4f0fc;
+  }
+
+  .col-note {
+    width:20%;
+    color:#888;
+    font-size:14px;
+    white-space: normal;
+  }
+
+  /* 回到顶部按钮 */
+  .back-to-top{
+    position:fixed;
+    right:18px;
+    bottom:18px;
+    width:33px;
+    height:33px;
+    border-radius:50%;
+    background:#8b5cf6;
+    color:#fff;
+    border:none;
+    cursor:pointer;
+    font-size:18px;
+    box-shadow:0 2px 8px rgba(139,92,246,0.35);
+    opacity:0;
+    visibility:hidden;
+    transition:0.25s ease;
+    z-index:999;
+  }
+  .back-to-top.show{
+    opacity:1;
+    visibility:visible;
+  }
+  .back-to-top:hover{
+    background:#7c4fe0;
+  }
+
+  /* 移动端 */
+  @media (max-width: 720px) {
+    .content-box {
+      padding: 20px 16px;
+    }
+
+    .timeline thead {
+      display: none;
+    }
+
+    .timeline tr {
+      display: block;
+      margin-bottom: 14px;
+      border-bottom: 1px dashed #ddd4ee;
+      padding-bottom: 14px;
+    }
+
+    .timeline td {
+      display: block;
+      padding: 4px 0;
+      border: none;
+      font-size: 14px;
+      text-align:left;
+    }
+
+    .col-index::before {content:"🫧：";font-weight:bold;color:#8b5cf6;white-space:nowrap;}
+    .col-date::before {content:"📆：";font-weight:bold;color:#666;white-space:nowrap;}
+    .col-title::before {content:"🏡：";font-weight:bold;color:#333;white-space:nowrap;}
+    .col-title a {white-space:nowrap;}
+    .col-img::before {content:"🎞️：";font-weight:bold;color:#666;display:block;margin-bottom:4px;}
+    .col-note::before {content:"📝：";font-weight:bold;color:#888;white-space:nowrap;}
+
+    .col-index {
+      color: #8b5cf6;
+      white-space:nowrap;
+    }
+
+    .col-date {
+      color: #000;
+      text-align:left;
+      white-space:nowrap;
+    }
+
+    .col-title {
+      font-size: 16px;
+      margin: 4px 0;
+      text-align:left;
+      white-space:nowrap;
+    }
+
+    .col-img {
+      width: auto;
+      text-align: left;
+      margin-top: 8px;
+    }
+
+    .col-img img {
+      width: 100%;
+      max-width: 320px;
+      height: auto;
+    }
+
+    .col-note {
+      width: auto;
+      text-align: left;
+      color: #888;
+      white-space:nowrap;
+    }
+.col-note.empty::before{
+  content:"";
+  display:none;
+}
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a class="back-home" href="index.html">← 返回存档首页</a>
+
+  <div class="content-box">
+    <table class="timeline">
+      <thead>
+        <tr>
+          <th class="col-index">🫧</th>
+         <th class="col-date">📆</th>
+          <th class="col-title">🏡</th>
+          <th class="col-img">🎞️</th>
+          <th class="col-note">📝</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr>
+          <td class="col-index">0</td>
+          <td class="col-date">2019年</td>
+          <td class="col-title"><a href="#">住一起前的同睡</a></td>
+          <td class="col-img"><img src="images/41home_0_cover.jpg" alt=""></td>
+          <td class="col-note"></td>
+        </tr>
+
+        <tr>
+          <td class="col-index">1</td>
+          <td class="col-date">2021年1月23日</td>
+          <td class="col-title"><a href="#">第一个小家</a></td>
+          <td class="col-img"><img src="images/41home_1_cover.jpg" alt=""></td>
+          <td class="col-note">不丢加入</td>
+        </tr>
+
+        <tr>
+          <td class="col-index">2</td>
+          <td class="col-date">2022年10月18日</td>
+          <td class="col-title"><a href="#">第二个小家</a></td>
+          <td class="col-img"><img src="images/41home_2_cover.jpg" alt=""></td>
+          <td class="col-note"></td>
+        </tr>
+
+        <tr>
+          <td class="col-index">3</td>
+          <td class="col-date">2023年3月20日</td>
+          <td class="col-title"><a href="#">第三个小家</a></td>
+          <td class="col-img"><img src="images/41home_3_cover.jpg" alt=""></td>
+          <td class="col-note"></td>
+        </tr>
+
+        <tr>
+          <td class="col-index">4</td>
+          <td class="col-date">2023年4月27日</td>
+          <td class="col-title"><a href="#">第四个小家</a></td>
+          <td class="col-img"><img src="images/41home_4_cover.jpg" alt=""></td>
+          <td class="col-note">不呆加入</td>
+        </tr>
+
+        <tr>
+          <td class="col-index">5</td>
+          <td class="col-date">2023年11月13日</td>
+          <td class="col-title"><a href="#">第五个小家</a></td>
+          <td class="col-img"><img src="images/41home_5_cover.jpg" alt=""></td>
+          <td class="col-note"></td>
+        </tr>
+
+        <tr>
+          <td class="col-index">6</td>
+          <td class="col-date">2024年11月21日</td>
+          <td class="col-title"><a href="#">第六个小家</a></td>
+          <td class="col-img"><img src="images/41home_6_cover.jpg" alt=""></td>
+          <td class="col-note"></td>
+        </tr>
+
+        <tr>
+          <td class="col-index">7</td>
+          <td class="col-date">2025年2月14日</td>
+          <td class="col-title"><a href="#">第七个小家</a></td>
+          <td class="col-img"><img src="images/41home_7_cover.jpg" alt=""></td>
+          <td class="col-note"></td>
+        </tr>
+
+        <tr>
+          <td class="col-index">8</td>
+          <td class="col-date">2025年11月15日</td>
+          <td class="col-title"><a href="#">第八个小家</a></td>
+          <td class="col-img"><img src="images/41home_8_cover.jpg" alt=""></td>
+          <td class="col-note">小叽、沫莉加入</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<button class="back-to-top">↑</button>
+
+<script>
+//回到顶部逻辑
+const btn = document.querySelector('.back-to-top');
+window.addEventListener('scroll',()=>{
+  if(window.scrollY > 300){
+    btn.classList.add('show');
+  }else{
+    btn.classList.remove('show');
+  }
+})
+btn.addEventListener('click',()=>{
+  window.scrollTo({top:0,behavior:'smooth'});
+})
+
+// 空备注隐藏📝前缀
+document.querySelectorAll('.col-note').forEach(td=>{
+  const text = td.innerText.trim();
+  if(text === ""){
+    td.classList.add('empty');
+  }
+})
+</script>
+</body>
+</html>

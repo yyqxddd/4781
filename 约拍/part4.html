@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>约拍合集｜诗情画奕的备忘录</title>
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+    background: #f3eef9;
+    color: #333;
+    line-height: 1.7;
+  }
+
+  /* 返回首页链接 左上角 */
+  .back-home{
+    position:absolute;
+    left:20px;
+    top:15px;
+    font-size:15px;
+    color:#8b5cf6;
+    text-decoration:none;
+  }
+  .back-home:hover{
+    text-decoration:underline;
+  }
+
+.page-header {
+    margin-top: 40px;  /* 新增这一行 */
+  }
+
+  .page-header h1 {
+    font-size: 24px;
+    font-weight: normal;
+    color: #222;
+    margin-bottom: 8px;
+  }
+  .page-header .page-sub {
+    font-size: 14px;
+    color: #888;
+  }
+
+  .container{
+    max-width:1000px;
+    margin:0 auto;
+    padding:0 16px 60px;
+  }
+
+  .card-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:11px;
+  }
+
+  .card-wrap{
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* 卡片外标题：已统一为接近主页的紫色 */
+  .card-outer-title{
+    font-size: 18px;
+    color: #946bfa;
+    margin: 30px 0 18px;
+    padding-left: 12px;
+    border-left: 4px solid #b39bf7;
+  }
+
+  /* 卡片本体 */
+  .item-card{
+    width:100%;
+    background:#fff;
+    border:1px solid #ddd4ee;
+    border-radius:10px;
+    overflow:hidden;
+    display:block;
+    text-decoration:none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .item-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    border-color: #a78bfa;
+  }
+
+  .item-card img{
+    width:100%;
+    display:block;
+    object-fit:contain;
+    background:#f4f0fc;
+  }
+  .item-card .note-text{
+    padding:2px 16px 8px;
+    font-size:14px;
+    color:#777;
+    text-align:center;
+    background-color:#f8f5fe;
+  }
+
+  @media (max-width:720px){
+    .card-grid{
+      grid-template-columns:1fr;
+    }
+    /* 只修改卡片，标题保持100%宽度 */
+    .item-card{
+      width:82%;
+      margin:0 auto;
+    }
+  }
+
+  /* 回顶部按钮 */
+  .back-top{
+    position:fixed;
+    bottom:18px;
+    right:18px;
+    width:33px;
+    height:33px;
+    border-radius:50%;
+    background:#8b5cf6;
+    color:#fff;
+    border:none;
+    font-size:18px;
+    cursor:pointer;
+    box-shadow:0 4px 12px rgba(139,92,246,0.25);
+    opacity:0;
+    visibility:hidden;
+    transition:0.25s;
+    z-index:98;
+  }
+  .back-top.show{
+    opacity:1;
+    visibility:visible;
+  }
+  .back-top:hover{
+    background:#7c3aed;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <!-- 返回主页链接 -->
+  <a href="../index.html" class="back-home">← 返回主页导航</a>
+</div>
+
+<div class="divider"></div>
+
+<div class="container">
+  <div class="card-grid">
+
+    <div class="card-wrap">
+      <div class="card-outer-title">🏰 迪士尼约拍</div>
+      <a href="part4.1.html" class="item-card">
+        <img src="part4.1.8.jpeg" alt="迪士尼约拍">
+        <div class="note-text">20210320</div>
+      </a>
+    </div>
+
+    <div class="card-wrap">
+      <div class="card-outer-title">❤️‍🩹 救赎PV约拍</div>
+      <a href="part4.2.html" class="item-card">
+        <img src="part4.2.7.jpeg" alt="救赎PV约拍">
+        <div class="note-text">20220902</div>
+      </a>
+    </div>
+
+    <div class="card-wrap">
+      <div class="card-outer-title">🏫 校园风约拍</div>
+      <a href="part4.5.html" class="item-card">
+        <img src="part4.5.6.jpeg" alt="校园风约拍">
+        <div class="note-text">20221203</div>
+      </a>
+    </div>
+
+    <div class="card-wrap">
+      <div class="card-outer-title">🏫 校园风约拍</div>
+      <a href="part4.3.html" class="item-card">
+        <img src="part4.3.9.webp" alt="校园风约拍">
+        <div class="note-text">20240112</div>
+      </a>
+    </div>
+
+    <div class="card-wrap">
+      <div class="card-outer-title">🏫 校园风合作拍摄</div>
+      <a href="part4.4.html" class="item-card">
+        <img src="part4.4.9.jpeg" alt="校园风合作拍摄">
+        <div class="note-text">20240611</div>
+      </a>
+    </div>
+
+    <div class="card-wrap">
+      <div class="card-outer-title">🏮 古风约拍</div>
+      <a href="part4.6.html" class="item-card">
+        <img src="part4.6.5.jpeg" alt="古风约拍">
+        <div class="note-text">20260214</div>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<button class="back-top" id="backTop">↑</button>
+
+<script>
+const backTopBtn = document.getElementById('backTop');
+window.addEventListener('scroll', ()=>{
+  if(window.scrollY > 300){
+    backTopBtn.classList.add('show');
+  }else{
+    backTopBtn.classList.remove('show');
+  }
+})
+backTopBtn.onclick = ()=>{
+  window.scrollTo({
+    top:0,
+    behavior:'smooth'
+  })
+}
+</script>
+
+</body>
+</html>

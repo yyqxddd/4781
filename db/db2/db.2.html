@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4781有哪些瞬间你觉得很真，讲讲细节</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #f4f4f4;
+        font-family: "Microsoft Yahei", SimHei, Arial, sans-serif;
+        font-size: 14px;
+        color: #333;
+        max-width: 720px;
+        margin: 24px auto;
+        padding: 0 16px;
+    }
+
+    /* 主楼卡片 */
+    .post-card {
+        background: #ffffff;
+        border: 1px solid #e7e7e7;
+        border-radius: 12px;
+        padding: 24px;
+    }
+
+    /* 标题 */
+    .post-title {
+        font-size: 20px;
+        font-weight: bold;
+        line-height: 1.4;
+        margin-bottom: 14px;
+        color: #111;
+    }
+
+    /* 楼主信息：ID 和日期分行 */
+    .post-author {
+        margin-bottom: 14px;
+    }
+
+    .author-name {
+        display: block;
+        color: #225599;
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 2px;
+    }
+
+    .post-date {
+        display: block;
+        color: #999;
+        font-size: 13px;
+    }
+
+    /* 主楼正文 */
+    .post-content {
+        line-height: 1.7;
+        color: #333;
+        font-size: 14px;
+    }
+
+    .post-content p {
+        margin-bottom: 8px;
+    }
+
+    /* ========= 居中加粗小标题（截图同款） ========= */
+    .center-bold-title{
+        font-weight: bold;
+        text-align: center;
+        margin:10px 0 26px;
+        font-size:14px;
+    }
+
+    /* 主楼底部 */
+    .post-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 16px;
+    }
+
+    /* 主楼赞 */
+    .post-like-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background-color: #fdf3e7;
+        border: 1px solid #f1e3c6;
+        border-radius: 8px;
+        color: #c17440;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 6px 14px;
+        cursor: pointer;
+    }
+
+    .post-like-btn .thumb {
+        font-size: 16px;
+    }
+
+    /* 分割线 */
+    .divider {
+        border: none;
+        border-top: 1px solid #e7e7e7;
+        margin: 24px 0;
+    }
+
+    /* 评论区灰色线框 */
+    .reply-section {
+        border: 1px solid #d9d9d9;
+        border-radius: 10px;
+        background: #fff;
+        overflow: hidden;
+    }
+
+   /* 评论区顶部灰色条 */
+    .reply-header-bar {
+        background-color: #eaeaea;
+        padding: 7px 12px;
+    }
+
+    .reply-header-bar span {
+        color: #555555;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    /* 评论列表 */
+    .reply-list {
+        padding: 4px 16px 12px;
+    }
+
+    /* 单条评论 */
+    .reply-item {
+        padding: 14px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .reply-item:last-child {
+        border-bottom: none;
+    }
+
+    /* ID时间浅紫矩形，100%宽度 */
+    .reply-user-tag {
+        display: flex;
+        align-items: center;
+        background-color: #e8e4f7;
+        border-radius: 6px;
+        padding: 4px 10px;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+
+    .reply-user {
+        color: #225599;
+        font-weight: 600;
+        font-size: 13px;
+        margin-right: 8px;
+        white-space: nowrap;
+    }
+
+    .reply-time {
+        color: #999;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+/* 默认：主楼gif 居中 */
+.post-content .gif-block {
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 6px 0 0;
+    padding: 0;
+}
+/* 回复区gif 左对齐（旧尺寸不变） */
+.reply-item .gif-block {
+    max-width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 6px 0 8px;
+    padding: 0;
+}
+
+.gif-block img {
+    display: block;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    cursor: zoom-in;
+    border-radius: 6px;
+}
+
+/* 【通用/回复区】原图尺寸：横42%｜竖20%｜正方28% */
+.gif-block img[orientation="landscape"] {
+    max-width: 42%;
+}
+.gif-block img[orientation="portrait"] {
+    max-width: 20%;
+}
+.gif-block img[orientation="square"] {
+    max-width: 28%;
+}
+
+/* 单独覆盖【主楼】：只有横图拉满，竖、正方维持小图 */
+.post-content .gif-block img[orientation="landscape"] {
+    max-width: 100%;
+}
+.post-content .gif-block img[orientation="portrait"] {
+    max-width: 100%;
+}
+.post-content .gif-block img[orientation="square"] {
+    max-width: 100%;
+}
+
+/* 【引用块quote】保留你原来缩小一档，不动！ */
+.quote-block .gif-block {
+    margin: 4px 0 !important;
+}
+.quote-block .gif-block img[orientation="landscape"] {
+    max-width: 38%;
+}
+.quote-block .gif-block img[orientation="portrait"] {
+    max-width: 18%;
+}
+.quote-block .gif-block img[orientation="square"] {
+    max-width: 24%;
+}
+
+/* ========== 引用容器：border‑left写外层，竖线包含图片+全部内容 ========== */
+.quote-block {
+    background-color: #f7f7f7;
+    border-left: 3px solid #999; /*灰色竖线在外层，所有内容都在竖线右侧*/
+    padding: 8px 12px;
+    margin: 8px 0 10px;
+    color: #555;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.quote-inner {
+    overflow: hidden;
+    display: inline; /* 行内，文字和span同行 */
+}
+.quote-inner.collapsed {
+    /* 不再用高度截断，JS直接截断文字 */
+}
+
+.quote-expand-btn {
+    display: inline;
+    color:#225599;
+    cursor:pointer;
+    user-select:none;
+    margin-left:4px; /* 文字和按钮之间留一点点间距 */
+}
+.quote-expand-btn.hidden{
+    display:none;
+}
+    /* 回复内容 */
+    .reply-content {
+        line-height: 1.75;
+        color: #333;
+        font-size: 14px;
+        white-space: pre-line;
+    }
+
+    .reply-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 10px;
+    }
+
+    /* 评论区赞 */
+    .reply-like-btn {
+        color: #666;
+        font-size: 13px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+    }
+
+    .reply-like-btn:hover {
+        color: #225599;
+    }
+
+  /* ========== 回顶部按钮样式【新增】 ========== */
+  .back-top{
+    position:fixed;
+    bottom:18px;
+    right:18px;
+    width:33px;
+    height:33px;
+    border-radius:50%;
+    background:#8b5cf6;
+    color:#fff;
+    border:none;
+    font-size:18px;
+    cursor:pointer;
+    box-shadow:0 4px 12px rgba(139,92,246,0.25);
+    opacity:0;
+    visibility:hidden;
+    transition:0.25s;
+    z-index:98;
+  }
+  .back-top.show{
+    opacity:1;
+    visibility:visible;
+  }
+  .back-top:hover{
+    background:#7c3aed;
+  }
+
+    /* 底部分页 */
+    .page-bar {
+        margin-top: 8px;
+        padding: 12px 20px;
+        background: #fff;
+        border: 1px solid #e7e7e7;
+        border-radius: 12px;
+        display: flex;
+        justify-content: center; /* 内容水平居中 */
+        align-items: center;
+        font-size:14px;
+        color: #666;
+    }
+    .page-left{
+        display:flex;
+        gap:12px;
+    }
+
+    .page-bar a {
+        color: #666;
+        text-decoration: none;
+        padding: 4px 8px;
+    }
+
+    .page-bar a:hover {
+        color: #225599;
+    }
+
+    .page-bar .current {
+        color: #225599;
+        font-weight: bold;
+    }
+.page-bar button {
+    color: #666;
+    background: transparent;
+    border: none;
+    padding: 2px 6px;
+    font-size:15px;
+    cursor:pointer;
+}
+.page-bar button:hover {
+    color: #225599;
+}
+.page-bar button:disabled {
+    color:#bbb;
+    cursor:not-allowed;
+}
+.back-nav{
+    display:inline-block;
+    margin-bottom:16px;
+    color:#8b5cf6;
+    text-decoration:none;
+}
+.back-nav:hover{
+    text-decoration:underline;
+}
+.quote-inner a, .reply-content a{
+    color:#0066cc;
+    text-decoration:underline;
+}
+.quote-inner a:hover, .reply-content a:hover{
+    color:#dd4444;
+}
+@media(max-width:720px){
+    body{
+        margin:12px auto;
+        padding:0 6px;
+    }
+    .post-card{
+        padding:16px;
+    }
+    .reply-item{
+        padding:10px 0;
+    }
+    .divider{
+        margin:16px 0;
+    }
+}
+</style>
+</head>
+
+<body>
+<a href="../db.html" class="back-nav">← 返回上一页</a>
+<div class="post-card">
+    <!-- 帖子标题 -->
+    <div class="post-title">没饭的日子按照时间线梳理一下业主为何23年看上去更安稳了</div>
+
+    <!-- 楼主信息 -->
+    <div class="post-author">
+        <span class="author-name">楼主</span>
+        <span class="post-date">2024-09-24 15:41:43 辽宁</span>
+    </div>
+
+    <!-- 主楼内容【严格按截图图片顺序重排】 -->
+    <div class="post-content">
+        <p>众所周知业主的关键日子是730，补档的话会发现2020年8月左右业主的氛围就有很明显的转变，毕竟当时二位也就20岁左右，修王甚至才19，情绪十分挂脸，二位当时的氛围只要补过档应该都能感觉到，但23年两位的关系又很明显的更加安稳了，甚至有的新粉还会认为23年关系才转变，本来补档时候我也觉得可能是时间越长安全感越足所以更安稳了，但昨天看reaction视频突然意识到23年其实是个关键节点，今天特意去看了时间线，这里感谢并借鉴下老组里整理时间线的老师，但我这里仅是梳理和主观猜测，大家看个热闹（严谨！）：<br><br><b>首先来到我们修王著名的分离焦虑症时期（23年过年异地期）</b></p>
+        <div class="gif-block">
+            <img src="db2.1.jpeg" alt="1" onclick="openImg(this.src)">
+        </div>
+        <div class="center-bold-title">著名的王妈ky</div>
+
+        <div class="gif-block">
+            <img src="db2.2.jpeg" alt="2" onclick="openImg(this.src)">
+        </div>
+        <div class="center-bold-title">看得出来分离焦虑症严重</div>
+
+        <div class="gif-block">
+            <img src="db2.3.jpeg" alt="3" onclick="openImg(this.src)">
+        </div>
+        <div class="center-bold-title">在我们cat一姐生日会调情的两位</div>
+
+        <p>其实这段时间大家虽然都笑着说修王分离焦虑症，但其实最让我震惊的是修王是当着父母的面跟公主调情，还让公主撒娇，甚至说：我知道你喜欢比你小的，我喜欢比我大的，这里是我第一次感觉到修王应该跟父母说了跟公主的关系（当然是我的主观感觉），毕竟如果修王只跟父母说是室友是关系很好的朋友的话，王妈不会让室友来家里拜年，修王更不会当着爸妈的面调情，由此推测下两位起码修王是23年过年是准备跟家里挑明了的也这么做了，但公主能看出来是没说，当然也不可能是约定好一起说但公主没说应该也是顾虑更多没准备说，很正常。<br><br><b>然后过年之后王妈就用上了两位的情侣头像：</b></p>
+
+        <div class="gif-block">
+            <img src="db2.4.jpeg" alt="4" onclick="openImg(this.src)">
+        </div>
+        <div class="center-bold-title">不知道现在换没换成现在的情侣头像</div>
+
+        <p>如果修王跟家里说明了，自然也会想公主给予回应，但公主当时狂飙入迷中，导致修王会想多从而导致分离焦虑症严重，然后就有了<b>修王生公时候：</b></p>
+        <div class="gif-block">
+            <img src="db2.5.jpeg" alt="6" onclick="openImg(this.src)">
+        </div>
+        <div class="center-bold-title">名场面：“我想跟你的距离更近一点”“还不够近？”“嗯，还不够”</div>
+        <p>这个名场面其实能分析出来很多，首先二位肯定是在一起了要不这句话就是一整个不当场告白，其次这个“近”应该就是想让公主给予回应，然后就有了双方家长的会晤：</p>
+
+        <div class="gif-block">
+            <img src="db2.6.jpeg" alt="7" onclick="openImg(this.src)">
+        </div>
+        <div class="center-bold-title">20230225失忆登场</div>
+
+        <div class="gif-block">
+            <img src="db2.7.jpeg" alt="8" onclick="openImg(this.src)">
+        </div>
+        <div class="center-bold-title">20230302修王爸妈来访39当时还很拘谨的公主</div>
+
+        <p><b>时间线来到了著名生公：</b></p>
+        <div class="gif-block">
+            <img src="db2.8.jpeg" alt="9" onclick="openImg(this.src)">
+        </div>
+        <div class="center-bold-title">修王直球表白现场</div>
+
+        <p><b>接下来是两位搬出中心租房住</b></p>
+        <p><b>然后就来到了水着出差xql撒糖名场面：</b></p>
+        <div class="gif-block">
+            <img src="db2.9.jpeg" alt="11" onclick="openImg(this.src)">
+        </div>
+        <div class="center-bold-title">携老婆感谢丢丢奶奶带孩子</div>
+
+        <div class="gif-block">
+            <img src="db2.10.jpeg" alt="12" onclick="openImg(this.src)">
+        </div>
+        <div class="center-bold-title">借助王妈的一家三口的通讯，修王的超绝遗漏，在王妈手机视角是放大的靠肩xql</div>
+
+        <p><b>接下来来到了载入史册的雨诞，</b>这里注意送戒指后公主问修王怎么想的，修王说了句：感觉就是是时候送你一个证明，这句话什么意思大家都知道，至于为什么今年送，个人主观的推测跟过年期间跟父母挑明关系也有些关系</p>
+        <div class="gif-block">
+            <img src="db2.11.jpeg" alt="13" onclick="openImg(this.src)">
+        </div>
+
+        <p><b>生日过后，</b>公主妈妈来到了两位新租的房子，住了几天，其实这个时候妈妈来了两位在新租的房子住在一起，此片段间接核实了两位的关系，我甚至在妈妈话里也懂了，期间公主上班修王还跟公主独处，公主妈妈起床，修王给公主妈妈买衣服，带去了自己风格的咖啡店被公主嫌弃眼光哈哈哈哈哈哈</p>
+        <div class="gif-block">
+            <img src="db2.12.jpeg" alt="15" onclick="openImg(this.src)">
+        </div>
+        <div class="center-bold-title">20230419</div>
+
+        <p><b>之后就是修王的生日，</b>这里的未解之谜就是业主的五年计划，说起来还有不到一年就到了</p>
+        <div class="gif-block">
+            <img src="db2.13.jpeg" alt="16" onclick="openImg(this.src)">
+        </div>
+        <div class="center-bold-title">咱修王的第一金</div>
+
+        <p><b>到这为止其实明面上的发展就差不多转变完了，</b>很明显的年后两位的相处中加入了与两方父母的相处，修王那边很明了，公主这边严谨的说跟业主搬出去住有很大关系，但搬出去住和让父母来家里一起住了几天这种深度的相处也都是两位今年的决定，就算公主没有跟父母挑明，但妈妈来住也跟修王一起，不得不被父母表明了一些事，退一万步来说起码修王跟公主妈妈的相处是很融洽了</p>
+        <div class="gif-block">
+            <img src="db2.14.jpeg" alt="17" onclick="openImg(this.src)">
+        </div>
+        <div class="center-bold-title">20230712关心修王的公主妈</div>
+
+        <div class="gif-block">
+            <img src="db2.15.jpeg" alt="17" onclick="openImg(this.src)">
+        </div>
+        <div class="gif-block">
+            <img src="db2.16.jpeg" alt="1" onclick="openImg(this.src)">
+        </div>
+        <div class="center-bold-title">跟妈妈报平安也顺便报了老婆的平安</div>
+
+        <p><b>梳理结束，</b>至今两位的父母来了很多次，也互相见过很多次面，包括近期的迪斯尼游玩，大家可以自行补档，可以看出s23年开始两位跟对方父母相处逐渐融洽，到了今年的公主生公修王的分离焦虑就治愈了，恭喜！</p>
+        <p>另外附上修王柜门摇摇欲坠加上父母心里清楚的又一证据：</p>
+        <div class="gif-block">
+            <img src="db2.17.jpeg" alt="18" onclick="openImg(this.src)">
+        </div>
+
+        <div class="center-bold-title">其实妈妈带孩子的梦想还是能实现的，毕竟有姐姐</div>
+
+        <p>最后想说下，梳理这个时间线并不是替两位cg的意思，只是主观推测，不管是不是经过这23年两位给对方的安全感更足了是事实。</p>
+    </div>
+
+    <!-- 主楼右下角赞 -->
+    <div class="post-footer">
+        <button class="post-like-btn">
+            <span>赞 (58)</span>
+        </button>
+    </div>
+</div>
+
+<hr class="divider" />
+
+<div class="reply-section">
+    <div class="reply-header-bar">
+        <span>回复</span>
+    </div>
+    <div class="reply-list">
+
+<!-- 用户 1 神人 四川 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 1</span>
+        <span class="reply-time">2024-09-24 15:47:50 四川</span>
+    </div>
+    <div class="reply-content">呜呜呜好长只能下班来细品了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<!-- 用户 2 上山打老虎 安徽 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 2</span>
+        <span class="reply-time">2024-09-24 15:49:03 安徽</span>
+    </div>
+    <div class="reply-content">23年确实肉眼可见的不一样了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<!-- 用户 3 飞天小女警 V 湖北 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 3</span>
+        <span class="reply-time">2024-09-24 15:51:11 湖北</span>
+    </div>
+    <div class="reply-content">好好好，我才在b站看了一次性路人re22-24年现在两人所有生公读信的视频，哎呀真是变化好大，越来越幸福安稳了。我个人是很坚信她俩可以真的做到白头到老不分离。</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (6)</button>
+    </div>
+</div>
+
+<!-- 用户 4 hermit 四川 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 4</span>
+        <span class="reply-time">2024-09-24 15:51:19 四川</span>
+    </div>
+<div class="gif-block">
+<img src="db2.18.jpeg" alt="1" onclick="openImg(this.src)">
+</div>
+    <div class="reply-content">举手！🐗宝宝第一次出去租房住是22年才对</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (21)</button>
+    </div>
+</div>
+
+<!-- 用户 5 HAZEDWendy 安徽 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 5</span>
+        <span class="reply-time">2024-09-24 15:51:31 安徽</span>
+    </div>
+    <div class="reply-content">还有小王生日雨雨妈特地做了小王喜欢吃的菜</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (20)</button>
+    </div>
+</div>
+
+<!-- 用户 6 SJDGUN 广东 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 6</span>
+        <span class="reply-time">2024-09-24 15:53:43 广东</span>
+    </div>
+    <div class="reply-content">呜呜呜先顶一下，谢谢劳斯，等下慢慢品</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<!-- 用户 7 。 广东 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 7</span>
+        <span class="reply-time">2024-09-24 15:54:05 广东</span>
+    </div>
+    <div class="reply-content">我更偏向于👸也是过年跟家里人坦白的，小王分离焦虑症很大原因也是因为这个，担心👸家里人不同意</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (62)</button>
+    </div>
+</div>
+
+<!-- 用户 8 momo 浙江 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 8</span>
+        <span class="reply-time">2024-09-24 15:54:57 浙江</span>
+    </div>
+    <div class="reply-content">👸🏻过年的时候也有说让小王和她爸妈谈谈心 我觉得也出了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (60)</button>
+    </div>
+</div>
+
+<!-- 用户 9 我就不 安徽 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 9</span>
+        <span class="reply-time">2024-09-24 15:56:43 安徽</span>
+    </div>
+    <div class="reply-content">写的好，同意你的观点。</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<!-- 楼主 L 辽宁 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2024-09-24 15:56:56 辽宁</span>
+    </div>
+    <div class="quote-block">
+<div class="gif-block">
+<img src="db2.18.jpeg" alt="1" onclick="openImg(this.src)">
+</div>
+        <div class="quote-inner collapsed">
+举手！🐗宝宝第一次出去租房住是22年才对
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">啊我的时间线混乱了！是有一阵新中心建好之后搬回新中心一阵然后又搬出去了，那对比更明显了，第一次搬出去之后我印象中没提过父母来住</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+
+<!-- 用户 10 设置昵称 江苏 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 10</span>
+        <span class="reply-time">2024-09-24 15:57:31 江苏</span>
+    </div>
+    <div class="reply-content">明面上，我个人印象最深的点倒是，雨雨生公上说“想做什么就做什么”然后现场也很给力都是“支持支持支持”然后公主说“谢谢你们的支持”<br>这个画面是我觉得每次想到23年她两在大家面前表现好像更外露了（指关系）的原因的一个重要点<br>当然整体核心还是感觉过年期间肯定发生了点啥哈哈哈</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (38)</button>
+    </div>
+</div>
+
+<!-- 楼主 L 辽宁 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2024-09-24 15:58:45 辽宁</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+我更偏向于👸也是过年跟家里人坦白的，小王分离焦虑症很大原因也是因为这个，担心👸家里人不同意
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">其实我也是这么想的，也这么写了，后来想想删了哈哈哈哈，毕竟我觉得从结果看应该是没说出口，要不修王也不能生公时候要更近一步</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<!-- 用户 11 好大的口气 中国台湾 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 11</span>
+        <span class="reply-time">2024-09-24 15:58:59 中国台湾</span>
+    </div>
+    <div class="reply-content">生公说的话真的是最好的证明 两方都有在为了彼此变成一块逐渐拼得刚刚好的拼图 🐗跟🐗🐶也都有好好成长</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (10)</button>
+    </div>
+</div>
+
+<!-- 用户 12 Will be there 广东 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 12</span>
+        <span class="reply-time">2024-09-24 15:59:29 广东</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+还有小王生日雨雨妈特地做了小王喜欢吃的菜
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">还特地等到她们一起回来才吃饭的</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<!-- 用户 5 HAZEDWendy 安徽 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 5</span>
+        <span class="reply-time">2024-09-24 16:01:53 安徽</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+生公说的话真的是最好的证明 两方都有在为了彼此变成一块逐渐拼得刚刚好的拼图 🐗跟🐗🐶也都有好好成长
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">今年雨雨生公，小王的信让人感觉她俩对彼此越来越坚定，感情越来越稳定，真是稳稳地幸福🥰🥰</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (7)</button>
+    </div>
+</div>
+
+<!-- 楼主 L 辽宁 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2024-09-24 16:02:09 辽宁</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+明面上，我个人印象最深的点倒是，雨雨生公上说“想做什么就做什么”然后现场也很给力都是“支持支持支持”然后公主说“谢谢你们的支持”这个画面是我觉得每次想到23年她两在大家面前表现好像更外露了（指关系）的原因的一个重要点当然整体核心还是感觉过年期间肯定发生了点啥哈哈哈
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">想做什么就做什么属于她俩对外的部分，想大大方方展示出来，毕竟谈恋爱哪有不秀的哈哈哈哈，我一直是觉得她俩去年借着最佳拍档狠狠爽了一把，毕竟有最佳拍档的由头dt们也不会反应太大</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (27)</button>
+    </div>
+</div>
+
+<!-- 用户 13 陶呆呆 福建 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 13</span>
+        <span class="reply-time">2024-09-24 16:03:38 福建</span>
+    </div>
+    <div class="reply-content">其实丢诞那次连麦当时大家都是分析雨雨那边和父母说了的可能性更大，先是雨雨和一一说让一一和自己爸爸妈妈谈谈心，所以雨雨因为看狂飙没及时回一一消息的时候一一那么着急，因为担心雨雨那边说了的结果</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (39)</button>
+    </div>
+</div>
+
+<!-- 楼主 L 辽宁 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2024-09-24 16:03:50 辽宁</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+还有小王生日雨雨妈特地做了小王喜欢吃的菜
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">是滴，从这之后双方父母跟两位甚至双方父母之间的相处交集就很多了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (5)</button>
+    </div>
+</div>
+
+<!-- 用户 14 hhh 上海 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 14</span>
+        <span class="reply-time">2024-09-24 16:05:40 上海</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+其实丢诞那次连麦当时大家都是分析雨雨那边和父母说了的可能性更大，先是雨雨和一一说让一一和自己爸爸妈妈谈谈心，所以雨雨因为看狂飙没及时回一一消息的时候一一那么着急，因为担心雨雨那边说了的结果
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">竟然还有这回事 现在就去回顾细品一下</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<!-- 用户 10 设置昵称 江苏 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 10</span>
+        <span class="reply-time">2024-09-24 16:13:57 江苏</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+想做什么就做什么属于她俩对外的部分，想大大方方展示出来，毕竟谈恋爱哪有不秀的哈哈哈哈，我一直是觉得她俩去年借着最佳拍档狠狠爽了一把，毕竟有最佳拍档的由头dt们也不会反应太大
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">最佳拍档真的是一个很好的buff（感恩感谢哈哈哈</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (5)</button>
+    </div>
+</div>
+
+<!-- 用户 15 momo 广东 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 15</span>
+        <span class="reply-time">2024-09-24 16:18:14 广东</span>
+    </div>
+    <div class="reply-content">等下班之后再来细品🥰🥰</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<!-- 用户 16 佩林卡诺克 辽宁 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 16</span>
+        <span class="reply-time">2024-09-24 16:20:53 辽宁</span>
+    </div>
+    <div class="reply-content">想起丢诞那句“王奕，你现在好这口啊”哈哈哈哈哈哈</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (11)</button>
+    </div>
+</div>
+
+<!-- 用户 17 比奇堡仙人 湖北 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 17</span>
+        <span class="reply-time">2024-09-24 16:26:32 湖北</span>
+    </div>
+    <div class="reply-content">👸也是过年和家里人坦白的吧，那个著名弹幕“和我爸妈谈谈心”，很明显是坦白后爸妈对另一半的好奇和考察</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (32)</button>
+    </div>
+</div>
+
+<!-- 用户 18 四夕 法国 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 18</span>
+        <span class="reply-time">2024-09-24 16:29:38 法国</span>
+    </div>
+    <div class="reply-content">好品，之前补档的时候一直有点疑惑，明明已经在一起了，为啥小王生公还说希望我们的关系更近一步，现在懂了，是想更进一步从恋爱咖变成结婚咖。<br>真的肉眼可见2023年开始变得超级安稳，也不怎么吵架了，补档2022年的直播，她俩还老吵架，感觉之前就是因为家庭等原因各自心里都有点不安全感，所以会因为一些需要体现出你到底是在乎还是不在乎我的事情起争执，互相变扭，自从2023年年后，感觉俩人整个一个大变化，对对方就特别放心，安全感很足了。<br>说到这，我超级期待2025年，她俩的五年之约到了到底要干嘛，这个五年之约能让雨雨说出“一一真是对我太好了”这句话，特别期待小王2025年会做出什么行动。</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (39)</button>
+    </div>
+</div>
+
+<!-- 用户 19 卟卟卟 四川 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 19</span>
+        <span class="reply-time">2024-09-24 16:30:57 四川</span>
+    </div>
+    <div class="reply-content">细糠！</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<!-- 楼主 L 辽宁 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2024-09-24 16:32:07 辽宁</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+👸也是过年和家里人坦白的吧，那个著名弹幕“和我爸妈谈谈心”，很明显是坦白后爸妈对另一半的好奇和考察
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">那阵更倾向于坦白前留个好印象，毕竟那阵就坦白了也就不至于分离焦虑症那么严重和之后的距离更近一点了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<!-- 楼主 L 辽宁 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2024-09-24 16:32:07 辽宁</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+好品，之前补档的时候一直有点疑惑，明明已经在一起了，为啥小王生公还说希望我们的关系更近一步，现在懂了，是想更进一步从恋爱咖变成结婚咖。 真的肉眼可见2023年开始变得超级安稳，也不怎么吵架了，补档2022年的直播，她俩还老吵架，感觉之前就是因为家庭等原因各自心里都有点不安全感，所以会因为一些需要体现出你到底是在乎还是不在乎我的事情起争执，互相变扭，自从2023年年后，感觉俩人整个一个大变化，对对方就特别放心，安全感很足了。 说到这，我超级期待2025年，她俩的五年之约到了到底要干嘛，这个五年之约能让雨雨说出“一一真是对我太好了”这句话，特别期待小王2025年会做出什么行动。
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">那阵更倾向于坦白前留个好印象，毕竟那阵就坦白了也就不至于分离焦虑症那么严重和之后的距离更近一点了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<!-- 用户 17 比奇堡仙人 湖北 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 17</span>
+        <span class="reply-time">2024-09-24 16:48:12 湖北</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+那阵更倾向于坦白前留个好印象，毕竟那阵就坦白了也就不至于分离焦虑症那么严重和之后的距离更近一点了
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">我个人还是觉得坦白了，但爸妈还没明确表态，所以会焦虑，要不以朋友/室友身份去和对方爸妈“谈谈心”有点怪怪的。<br>带入父母视角就能理解，这种大事爸妈需要时间考虑，以及要和爸妈“谈谈心”，能说明爸妈对此是有顾虑的，也能说明小饼为什么这么焦虑</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (15)</button>
+    </div>
+</div>
+
+<!-- 用户 20 dsdz 广东 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 20</span>
+        <span class="reply-time">2024-09-24 16:53:31 广东</span>
+    </div>
+    <div class="reply-content">今天刚刷过小日记，小王说“我以前会担心你有没有想我在意你一样在意我”，说的就是23年以前老吵架的那段时间吧。<br>小雨和小王的性格都太明显了，两个人都是会想很多的类型，小雨是自己不说，等别人先发现和说出来，小王是想多了就会想要搞清楚。23年之后不仅是她俩磨合得很好了，感觉她们对粉丝或者别人或者不好事情的表达和态度也变得比以前处理得更好了。她们真的是一起成长一起变好的😭</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (18)</button>
+    </div>
+</div>
+
+<!-- 楼主 L 辽宁 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2024-09-24 17:02:35 辽宁</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+我个人还是觉得坦白了，但爸妈还没明确表态，所以会焦虑，要不以朋友/室友身份去和对方爸妈“谈谈心”有点怪怪的。带入父母视角就能理解，这种大事爸妈需要时间考虑，以及要和爸妈“谈谈心”，能说明爸妈对此是有顾虑的，也能说明小饼为什么这么焦虑
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">我一开始确实这么觉得的，但过程我们没法推测，毕竟怎么解释都行，修王当时只是想问个好，公主这句谈谈心也可以属于想到哪说到哪的，公主跑火车经常这样，而且要是坦白了我觉得公主不会心大到看狂飙入迷导致不能及时回复修王消息她肯定也是心情紧张，所以我当时就把这个推论删了哈哈哈哈，既然过程怎么想都行，那就只能从小王那句想更近一步推断当时还没明说，要不小王不会说想更近一步，当然也可能是当时父母也还在考虑阶段还没给回复，怎么想都行，反正之后的发展是一样的哈哈哈</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<!-- 用户 17 比奇堡仙人 湖北 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 17</span>
+        <span class="reply-time">2024-09-24 17:18:06 湖北</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+我一开始确实这么觉得的，但过程我们没法推测，毕竟怎么解释都行，修王当时只是想问个好，公主这句谈谈心也可以属于想到哪说到哪的，公主跑火车经常这样，而且要是坦白了我觉得公主不会心大到看狂飙入迷导致不能及时回复修王消息她肯定也是心情紧张，所以我当时就把这个推论删了哈哈哈哈，既然过程怎么想都行，那就只能从小王那句想更近一步推断当时还没明说，要不小王不会说想更近一步，当然也可能是当时父母也还在考虑阶段还没给回复，怎么想都行，反正之后的发展是一样的哈哈哈
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">其实我有觉得狂飙可能是一系列事的总称/代称，过年的时候狂飙每天就播出两集😂无论如何，最后结果都是好的，现在安安稳稳就好</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (14)</button>
+    </div>
+</div>
+
+<!-- 楼主 L 辽宁 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2024-09-24 17:18:46 辽宁</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+今天刚刷过小日记，小王说“我以前会担心你有没有想我在意你一样在意我”，说的就是23年以前老吵架的那段时间吧。小雨和小王的性格都太明显了，两个人都是会想很多的类型，小雨是自己不说，等别人先发现和说出来，小王是想多了就会想要搞清楚。23年之后不仅是她俩磨合得很好了，感觉她们对粉丝或者别人或者不好事情的表达和态度也变得比以前处理得更好了。她们真的是一起成长一起变好的😭
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">这个真的很明显，公主性格从一开始就是傲娇型，对其他人可以跑火车各种夸，对真正喜欢的人绝不明说，当时推拉到修王破防过哈哈哈，各种情绪也是想等修王发现，修王又是直给型，之前也属于太直了哄人都不会，之前公主也说过感觉修王不在乎自己，两位之前属于互相都觉得对方不像自己一样在乎对方😂</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (20)</button>
+    </div>
+</div>
+
+<!-- 用户 21 我没有屁股 山东 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 21</span>
+        <span class="reply-time">2024-09-24 17:52:55 山东</span>
+    </div>
+    <div class="reply-content">写的太好了！！入坑后我是先补档了今年和去年的物料，一整个甜死，怎么会有又甜又温柔的两个人，后来再补档，我发现22年的日常就很难专心看进去了，甚至有点怀疑，怎么22年两个人还会跟小学生一样拌嘴，跟23年日常反差也太大了<br>感觉23年一整年持续起飞，不仅是她俩关系巨大转折点，也彻底改变了外界对她俩关系的认知</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (10)</button>
+    </div>
+</div>
+
+<!-- 用户 22 洗眼液 湖南 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 22</span>
+        <span class="reply-time">2024-09-24 17:59:01 湖南</span>
+    </div>
+    <div class="reply-content">俺滴🐗真是太好磕了！</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (6)</button>
+    </div>
+</div>
+
+<!-- 楼主 L 辽宁 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2024-09-24 19:19:34 辽宁</span>
+    </div>
+    <div class="reply-content">23年之前属于两位性格差异，一位从不直说另一位不直说感觉不到，导致两位互相安全感都不足，拌嘴属于是互相推拉的磨合阶段，别看现在修王跟公主说话比她直播时候温柔几度，之前小王正常说话语气公主都觉得修王在凶她😂公主之前简直傲娇加嘴硬，现在也可以说非常非常喜欢你～这种表白的话了😆公主这种性格要不是真的很强烈的感受到了修王的爱是不会说这种话的，修王因为直球先表达了也肯定需要公主的回应，就这样互相安全感给足了也就磨合成现在的感觉了，但现在她俩也喜欢xxj拌嘴属于一种调情了，我都怕她们拌拌嘴亲上</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (19)</button>
+    </div>
+</div>
+
+<!-- 用户 21 我没有屁股 山东 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 21</span>
+        <span class="reply-time">2024-09-24 19:25:21 山东</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+23年之前属于两位性格差异，一位从不直说另一位不直说感觉不到，导致两位互相安全感都不足，拌嘴属于是互相推拉的磨合阶段，别看现在修王跟公主说话比她直播时候温柔几度，之前小王正常说话语气公主都觉得修王在凶她😂公主之前简直傲娇加嘴硬，现在也可以说非常非常喜欢你～这种表白的话了😆公主这种性格要不是真的很强烈的感受到了修王的爱是不会说这种话的，修王因为直球先表达了也肯定需要公主的回应，就这样互相安全感给足了也就磨合成现在的感觉了，但现在她俩也喜欢xxj拌嘴属于一种调情了，我都怕她们拌拌嘴亲上
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">说的太好了！！让我对她们的了解又深了一点！</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<!-- 用户 23 用户 0103 河南 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 23</span>
+        <span class="reply-time">2024-09-24 19:41:12 河南</span>
+    </div>
+    <div class="reply-content">你们都好会磕收藏了🥰🥰</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<!-- 用户 24 momo 重庆 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 24</span>
+        <span class="reply-time">2024-09-24 20:54:44 重庆</span>
+    </div>
+    <div class="reply-content">不坦白不行呀，22年奕妈都试探多少次了“揪耳朵”“你和谁会睡一张床上吗”到后来说这边枕头有书小王肯定睡另一边的时候，感觉妈妈都已经心知肚明了。加上两人22年也更加确定了关系不会受到外界的影响，坦白也就顺理成章了。按两人的性格，要坦白肯定会一起的，所以我倾向于23年过年一起说的。<br>公主让小王和父母谈心，小王答应的时候语气感觉是有点忐忑的，谁家好人室友/朋友和父母谈心，坦白了的可能性很大，再加上小王莫名其妙几十分钟联系不上公主就急，可能性upup，加之从丢包生日连麦之后到回上海的种种表现两人像是从恋爱咖升级为结婚咖，父母也像是已经同意的样子，可能性直接拉满</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (20)</button>
+    </div>
+</div>
+
+<!-- 用户 25 北执 江苏 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 25</span>
+        <span class="reply-time">2024-09-24 21:05:34 江苏</span>
+    </div>
+    <div class="reply-content">我觉得23年安稳还有一个很重要的原因是不用异地了，小两口长时间待在一起也不用去猜你在做什么，你身边有什么我不认识的人。现身说法，我毕业同居之后就再也没有像之前上学一样有那么多猜疑和情知起伏，异地的时候担心很多东西，比如我担心你在别的地方过的太好就不会回来了，比如你有没有像我想你一样想我。</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (15)</button>
+    </div>
+</div>
+
+<!-- 用户 26 snh 金旼炡 广东 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 26</span>
+        <span class="reply-time">2024-09-24 22:55:26 广东</span>
+    </div>
+    <div class="reply-content">23年的宝们关系肉眼可见的变安稳 22年直播的拌嘴拌着拌着会打闹 谁也不太让谁 23年的拌嘴完全是撒娇调情…感觉两个人结束异地之后 都找到更好的相处方法了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (11)</button>
+    </div>
+</div>
+
+<!-- 用户 27 嘿桑 福建 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 27</span>
+        <span class="reply-time">2024-09-24 23:23:07 福建</span>
+    </div>
+    <div class="reply-content">五年之约是啥我咋没印象？</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<!-- 用户 28 别管我 福建 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 28</span>
+        <span class="reply-time">2024-09-25 00:17:44 福建</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+五年之约是啥我咋没印象？
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">去年小王生日直播两个人谈心的时候透露出来的</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<!-- 用户 29 可以谁都不认识 湖南 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 29</span>
+        <span class="reply-time">2024-09-25 03:43:48 湖南</span>
+    </div>
+    <div class="reply-content">👸🏻妈给她俩换床单 换的yyh的</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<!-- 用户 30 三岁爱看美女 江苏 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 30</span>
+        <span class="reply-time">2024-09-25 21:57:53 江苏</span>
+    </div>
+    <div class="reply-content">我来细品一下</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<!-- 用户 30 三岁爱看美女 江苏 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 30</span>
+        <span class="reply-time">2024-09-25 22:08:45 江苏</span>
+    </div>
+    <div class="reply-content">评论区的各位都是侦探啊</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<!-- 用户 31 好 山东 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 31</span>
+        <span class="reply-time">2025-10-27 23:17:29 山东</span>
+    </div>
+    <div class="reply-content">爽哉！</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<!-- 用户 32 我已力竭 匈牙利 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 32</span>
+        <span class="reply-time">2025-10-28 01:30:58 匈牙利</span>
+    </div>
+    <div class="reply-content">细糠 爽哉😋</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<!-- 用户 33 今天怎么样 新疆 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 33</span>
+        <span class="reply-time">2025-10-28 13:54:11 新疆</span>
+    </div>
+    <div class="reply-content">太好磕了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<!-- 用户 34 速溶咖啡成瘾者 上海 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 34</span>
+        <span class="reply-time">2025-10-28 23:00:09 上海</span>
+    </div>
+    <div class="reply-content">大吃特吃</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<!-- 用户 35 害怕网暴 陕西 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 35</span>
+        <span class="reply-time">2025-10-28 23:12:12 陕西</span>
+    </div>
+    <div class="reply-content">原来我想跟你的距离再近一点，都是二三年的事了，我的妈，时间过得好快</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<!-- 用户 36 wkh 四川 -->
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 36</span>
+        <span class="reply-time">2025-10-28 23:12:53 四川</span>
+    </div>
+    <div class="reply-content">重温一遍，好好吃</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+    </div>
+</div>
+
+<div class="page-bar">
+    <div class="page-left">
+        <button id="prevPageBtn">前页</button>
+        <a href="db.1.1.html" class="current">1</a>
+        <button id="nextPageBtn">后页</button>
+    </div>
+</div>
+  <button class="back-top" id="backTop">↑</button>
+
+<script>
+//网址转链接
+function urlToLink(text){
+  const reg = /(https?:\/\/[^\s，。！；：""'()【】]+)/gi;
+  return text.replace(reg,`<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>`)
+}
+
+//页面加载完毕，自动缓存每个quote原始文字
+document.addEventListener('DOMContentLoaded',function(){
+  document.querySelectorAll('.quote-inner').forEach(item=>{
+    item.dataset.fullText = item.textContent.trim();
+  })
+
+  //初始化折叠状态
+  document.querySelectorAll('.quote-block').forEach(function(block){
+    const inner = block.querySelector('.quote-inner');
+    const btn = block.querySelector('.quote-expand-btn');
+    if(!btn) return;
+    const fullTxt = inner.dataset.fullText;
+    if(fullTxt.length > 50){
+        let shortTxt = fullTxt.slice(0,50);
+        inner.innerHTML = urlToLink(shortTxt);
+        inner.classList.add("collapsed");
+        btn.style.display = "inline";
+    }else{
+        inner.innerHTML = urlToLink(fullTxt);
+        inner.classList.remove("collapsed");
+        btn.style.display = "none";
+    }
+  })
+
+  // 给reply-content评论正文也自动转链接
+  document.querySelectorAll('.reply-content').forEach(el=>{
+    const rawText = el.textContent;
+    el.innerHTML = urlToLink(rawText);
+  })
+})
+
+function toggleQuote(btn){
+  const wrap = btn.previousElementSibling;
+  const fullTxt = wrap.dataset.fullText;
+  if(wrap.classList.contains("collapsed")){
+    wrap.innerHTML = urlToLink(fullTxt);
+    wrap.classList.remove("collapsed");
+    btn.textContent="收起";
+  }else{
+    let shortTxt = fullTxt.slice(0,50);
+    wrap.innerHTML = urlToLink(shortTxt);
+    wrap.classList.add("collapsed");
+    btn.textContent="...";
+  }
+}
+
+//分页控制【修改：只有1页，前后按钮全部置灰】
+const prevPageBtn = document.getElementById('prevPageBtn');
+const nextPageBtn = document.getElementById('nextPageBtn');
+let currentPageNum = 1;
+const totalPageNum = 1;
+
+function updatePageBtnState(){
+    prevPageBtn.disabled = true; //首页，前页永久灰
+    nextPageBtn.disabled = true; //只有一页，后页永久灰
+}
+
+prevPageBtn.onclick = function(){
+    // 只有一页，点击无动作
+}
+nextPageBtn.onclick = function(){
+    // 只有一页，点击无动作
+}
+updatePageBtnState();
+
+// 自动判断横图/竖图/正方形
+document.querySelectorAll('.gif-block img').forEach(img => {
+    img.onload = function () {
+        const w = this.naturalWidth;
+        const h = this.naturalHeight;
+
+        if (w > h) {
+            this.setAttribute('orientation', 'landscape');
+        } else if (h > w) {
+            this.setAttribute('orientation', 'portrait');
+        } else {
+            this.setAttribute('orientation', 'square');
+        }
+    };
+});
+
+// 点击放大
+function openImg(src) {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        cursor: zoom-out;
+    `;
+
+    const bigImg = document.createElement('img');
+    bigImg.src = src;
+    bigImg.style.cssText = `
+        max-width: 92vw;
+        max-height: 92vh;
+        border-radius: 6px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    `;
+
+    overlay.appendChild(bigImg);
+    document.body.appendChild(overlay);
+
+    overlay.addEventListener('click', function () {
+        overlay.remove();
+    });
+}
+// ========== 回顶部JS ==========
+const backTopBtn = document.getElementById('backTop');
+window.addEventListener('scroll', ()=>{
+  if(window.scrollY > 300){
+    backTopBtn.classList.add('show');
+  }else{
+    backTopBtn.classList.remove('show');
+  }
+})
+backTopBtn.onclick = ()=>{
+  window.scrollTo({
+    top:0,
+    behavior:'smooth'
+  })
+}
+</script>
+</body>
+</html>
