@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>采访存档｜雨奕拾光册</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;}
+body{background:#f3eef9;padding:24px;max-width:1120px;margin:0 auto;color:#2c2c34}
+.back-home {
+  display: inline-block;
+  text-decoration: none;
+  color: #8b5cf6;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+.accordion-wrap{background:#f3eef9;border-radius:18px;margin-bottom:20px;overflow:hidden;box-shadow:0 3px 12px rgba(123,104,194,0.07);transition:0.3s ease}
+.accordion-wrap:hover{box-shadow:0 7px 22px rgba(123,104,194,0.13)}
+
+.acc-header{position:relative;width:100%;border:none;background:#f3eef9;padding:22px 24px;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.acc-left{flex:1;min-width:0}
+.acc-title-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.acc-title-row h3{font-size:18px;color:#3a3a48}
+.tag{padding:3px 9px;border-radius:99px;font-size:12px;background:#f0ecfa;color:#7b68c2}
+
+.acc-right{display:flex;align-items:center;gap:16px}
+.acc-arrow{width:34px;height:34px;border-radius:50%;background:#f5f2fc;display:flex;align-items:center;justify-content:center;color:#7b68c2;transition:0.35s}
+.acc-header.active .acc-arrow{transform:rotate(180deg);background:#7b68c2;color:#fff}
+
+.acc-body{max-height:0;overflow:hidden;transition:max-height 0.5s cubic-bezier(0.2,0,0.2,1)}
+.acc-body.open{max-height:99999px}
+.acc-inner{padding:10px 24px 26px;border-top:1px solid #e8e2f3;background:#f3eef9}
+
+.entry{margin:22px 0;padding-bottom:22px;border-bottom:1px dashed #e0d9f0}
+.entry:last-child{border-bottom:none;padding-bottom:0}
+.entry-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.entry-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.dot-video{background:#7b68c2}
+.dot-douyin{background:#fe2c55}
+.dot-gallery{background:#e6a23c}
+.entry-title{font-size:16.5px;color:#3a3a48;font-weight:600}
+.entry-date{font-size:13px;color:#888}
+.entry-type-tag{padding:2px 8px;border-radius:6px;font-size:11px}
+.et-video{background:#d8c8ee;color:#7b68c2}
+.et-douyin{background:#fdecef;color:#fe2c55}
+.et-gallery{background:#fdf6ec;color:#e6a23c}
+
+.iframe-wrap{width:100%;position:relative;margin-bottom:20px}
+.bili-player{width:100%;height:320px;border-radius:8px;border:0;display:block}
+.bili-player iframe{width:100%;height:100%;border-radius:8px;border:0}
+
+.douyin-card{display:flex;flex-direction:column;gap:10px;margin-top:6px;align-items:flex-start}
+.douyin-img{width:160px;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:linear-gradient(135deg,#fe2c55,#25f4ee);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px}
+.douyin-img img{width:100%;height:100%;object-fit:cover;display:block}
+.douyin-link{display:inline-block;padding:6px 14px;background:#fe2c55;color:#fff;border-radius:99px;text-decoration:none;font-size:12px;font-weight:600;transition:0.2s}
+.douyin-link:hover{background:#e02548}
+
+.gallery-main{position:relative;background:#1a1a1a;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:260px;max-height:420px;margin-top:6px;max-width:520px;width:100%}
+.gallery-main img{max-width:100%;max-height:420px;display:block}
+.gallery-placeholder{width:100%;min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#888;gap:10px}
+.gallery-placeholder .ph-icon{font-size:40px}
+.gallery-nav{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.55);color:#fff;border:none;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:0.2s;z-index:2}
+.gallery-nav:hover{background:rgba(123,104,194,0.85)}
+.gallery-prev{left:10px}
+.gallery-next{right:10px}
+.gallery-counter{position:absolute;bottom:10px;right:12px;background:rgba(0,0,0,0.6);color:#fff;padding:3px 10px;border-radius:99px;font-size:12px;z-index:2}
+.gallery-thumbs{display:flex;gap:8px;margin-top:10px;overflow-x:auto;padding-bottom:4px;max-width:520px}
+.gallery-thumb{width:64px;height:48px;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid transparent;flex-shrink:0;background:#e9e4f6;display:flex;align-items:center;justify-content:center;font-size:11px;color:#999}
+.gallery-thumb.active{border-color:#7b68c2}
+.gallery-thumb img{width:100%;height:100%;object-fit:cover}
+.gallery-actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+.gallery-btn{padding:9px 18px;border:none;border-radius:99px;font-size:13px;font-weight:600;cursor:pointer;transition:0.2s}
+.btn-text{background:#f0ecfa;color:#7b68c2}
+.btn-text:hover{background:#e0d7f7}
+
+.close-panel-wrap{margin-top:24px;margin-bottom:4px;text-align:right;padding-right:4px}
+.close-panel-btn{padding:8px 20px;border-radius:99px;border:none;background:#7b68c2;color:#fff;cursor:pointer;font-size:14px}
+.close-panel-btn:hover{background:#6b57b1}
+
+/* 弹窗：遮罩黑色半透明，标题和正文同白底，整体滚动，X按钮上移 */
+.modal-mask{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:999;display:none;align-items:flex-start;justify-content:center;padding:60px 20px 20px}
+.modal-mask.show{display:flex}
+.modal-box{position:relative;background:#f3eef9;;border-radius:16px;max-width:640px;width:100%;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+.modal-head{padding:26px 24px 18px;text-align:center;position:relative}
+.modal-head h3{font-size:22px;color:#7b68c2;font-weight:bold;letter-spacing:2px}
+.modal-close{position:absolute;right:14px;top:14px;width:34px;height:34px;border-radius:50%;border:none;background:#f0ecfa;color:#7b68c2;cursor:pointer;font-size:14px;transition:0.2s;z-index:2}
+.modal-close:hover{background:#7b68c2;color:#fff}
+.modal-body{padding:0 28px 30px;line-height:2;font-size:14.5px;color:#3a3a48}
+.modal-body p{margin-bottom:14px;}
+.modal-body .sec{text-align:center;font-weight:bold;color:#7b68c2;font-size:16px;margin:24px 0 16px;letter-spacing:6px;}
+
+.back-top{
+    position:fixed;
+    bottom:18px;
+    right:18px;
+    width:33px;
+    height:33px;
+    border-radius:50%;
+    background:#8b5cf6;
+    color:#fff;
+    border:none;
+    font-size:18px;
+    cursor:pointer;
+    box-shadow:0 4px 12px rgba(139,92,246,0.25);
+    opacity:0;
+    visibility:hidden;
+    transition:0.25s;
+    z-index:98;
+}
+.back-top.show{opacity:1;visibility:visible;}
+.back-top:hover{background:#7c3aed;}
+
+@media(max-width:640px){
+  body{padding:16px}
+  .acc-header{padding:18px 16px}
+  .acc-inner{padding:16px}
+  .douyin-img{width:130px}
+  .gallery-main{min-height:220px;max-height:320px}
+  .gallery-main img{max-height:320px}
+  .bili-player{height:220px}
+  .modal-mask{padding:30px 14px 14px}
+  .modal-body{padding:0 20px 24px;line-height:1.9}
+  .modal-head{padding:22px 20px 14px}
+}
+</style>
+</head>
+<body>
+  <a class="back-home" href="../index.html">← 返回主页导航</a>
+<div id="allPanel"></div>
+<div class="modal-mask" id="textModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>📝</h3>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+  <button class="back-top" id="backTop">↑</button>
+
+<script>
+const articleText =
+`<p>　　在古希腊的神话中，美少年纳西索斯爱上了自己在泉水中的倒影，赴水求爱却溺水身亡。众神同情他的遭遇，于是让他化作了水仙花。</p>
+<p>　　在 SNH48 GROUP 第九届年度金曲大赏演唱会上，这个略显悲情的传说被周诗雨和王奕搬上舞台。只是故事中的"倒影"被设定为了彼此，让那份孤独有了更浪漫的承托。</p>
+<p>　　两个人的故事，最初便是从"照镜子般的相像"开始。</p>
+<p class="sec">一</p>
+<p>　　王奕最开始对周诗雨的好奇，始于有人告诉自己。没过多久，王奕就在电梯里遇到了个和自己有同款耳饰的女孩，赶紧上前问："你就是周诗雨吗？"</p>
+<p>　　周诗雨点头，觉得打招呼的这个成员有点"愣"。</p>
+<p>　　两个人真正开始接触多起来，还要等到王奕被选入 TEAM FT 兼任——这对于两人来说都不是太顺利的一段经历。</p>
+<p>　　TEAM FT 是当时以九期生为主要班底成立的全新队伍，以"全开麦唱跳"为要求，老师们的日常训练极为严苛，这对于从小没有唱歌跳舞基础的周诗雨来说更是远超身体负荷。彼时周围的人虽然都看好周诗雨的发展，但在定首演站位的时候，周诗雨却只拿到了 15 号位，这让她颇为受挫。</p>
+<p>　　"首演结束，兴致勃勃去看回放，才发现 15 号位在镜头里几乎就是个隐形人。甚至很多时候都会怀疑自己这首歌当时有没有上。"</p>
+<p>　　与周诗雨不同，王奕则是以前辈的身份来 TEAM FT 兼任。因为兼任的特殊情况，王奕没有固定站位，常常是同站位的人缺席后才能替补，更是没有太多归属感。加上王奕当时年龄小，难以调整这种"茫然无措"，仿佛闯进了一座迷雾森林，不知方向。</p>
+<p>　　其实王奕入团时也只是因为"小时候喜欢唱歌，很希望站在舞台上面表演给大家看"，并不确切知道 SNH48 是个怎么样的团体。刚开始她还抱着"既然被选进来了，就说明我适合这里"这样的想法，但时间一长，她发现内向的性格让自己完全被甩在了聚光灯之外。她也曾经努力琢磨过"怎么样被大家看见并记住，怎么样讲好 MC"，但结果依旧还是徒劳。</p>
+<p>　　"在这个行业里，虽然成功一定需要努力，但努力不一定就能直接转化为成功。"</p>
+<p>　　与王奕不同的是，周诗雨入团时已经喜欢了 SNH48 很多年，觉得这个偶像这个职业能带给自己力量，上下学一直在听团里的歌，上高中后就开始给 SNH48 投报名邮件。虽然多次过了书审，也曾来过剧场线下面试，但周诗雨因学业问题迟迟没能最终下定决心入团。直到大一结束，面临搬迁校区，她终于鼓足勇气加入了 SNH48，成为了九期生。</p>
+<p>　　"我印象很深，自己当时是坐地铁去的中心报到。下了地铁后有一条很长的路要走，我就约了同期的另一个成员一起赶路。路上我们两人拖着行李箱聊天，各自幻想以后的生活和舞台，憧憬会有很多很多人喜欢我们。"</p>
+<p>　　与王奕遭遇的困境如出一辙，所有最初美好的幻想，在这段旅程的最开始就成为了大海上五彩缤纷的泡沫。</p>
+<p class="sec">二</p>
+<p>　　在低谷期中，彼此陪伴便成为了蒙尘时光中少有的光亮。</p>
+<p>　　王奕最感动的是"周诗雨愿意去看自己安利的动漫。"</p>
+<p>　　"我身边看动漫的人其实很少，一直都很想找个可以跟我聊动漫的朋友。她（周诗雨）是唯一一个会听我的安利而真的去看的人。因为这些动漫我都看过了，所以我会在她看的时候观察她的状态。如果她看的状态和我很像，就是那种比较有激情的，我就会很开心。"</p>
+<p>　　这种"共情"不仅仅是体现在看动漫的过程里，每次当王奕心情不好，周诗雨也总会及时出现在身边安慰她。</p>
+<p>　　王奕说自己难过时会不太愿意让别人靠近。但周诗雨会想办法用自己的方式安慰我，即使没有说很多话，但只是静静陪在身边一起流泪，都会让我觉得她是能和我感同身受的，这个对我很重要。</p>
+<p>　　除了看动漫，两人也会一起追周诗雨喜欢的剧集，比如《乔家的儿女》、《人世间》这类。虽然王奕小小吐槽说周诗雨爱看的剧都有点苦情。</p>
+<p>　　在采访中，两个人都感慨非常享受"在吃饭时一起追剧追动漫"这种状态，甚至把它当作未来最想和对方做的事情之一。</p>
+<p>　　"以前两个人人气不高，也没什么工作，所以看剧看动漫的时间比较多，疫情封控那会儿还有时间能一起玩 PS5 和 SWITCH。但是像今年工作安排得非常满，休息的时间都很少，吃饭就成为了唯一可以与彼此共享的时光，真的会蛮珍惜的。"周诗雨说。</p>
+<p>　　不过在周诗雨心中，"愣愣"的王奕总会在些生活小事上感动自己。比如说两人想泡腾的时候，因为自己提不动水桶，王奕就会主动去打水倒水。"那一瞬间会因为这样具体的小事而很感动。"</p>
+<p>　　"王奕在生活和工作上真的都还蛮小孩子的。了解她的人都知道，她的个性就是非常小孩子嘛，不会想特别多的事情，老老实实地过好当下就行。但是她在团里也到了一定的阶段，境遇变化很大，现在有时又会想太多，给自己增加很多很多额外的负担，这点是我觉得她和以前变化最大的地方。"</p>
+<p>　　"我其实蛮希望她在心态上能和以前一样放松，不要有那么多忧虑。"——对于两个人互相扶持的岁月，周诗雨在回望时，也有这样小小的遗憾。</p>
+<p class="sec">三</p>
+<p>　　支撑她们走出困境的除了彼此，还有粉丝。</p>
+<p>　　周诗雨有件现在想起来都会哽咽的事："大家固有的印象中，就是觉得我歌舞实力差。有次跳完 unit，因为我和其他几个成员的跳得节拍不同，网上就有很多人过来骂我。大家会指责说你跳 C 位还跳错，不配站在这个位置。但那时有个粉丝就翻遍了所有的公演，把那首歌的动作都整理对照了一遍，发现其实只有我的拍子是对的。如果没有那个粉丝这么用心，这就会成为一件大家永远可以用来攻击我的事，甚至让我对自己产生怀疑。就是因为有这样的粉丝存在，才会让我在每次坚持不下去的时候，觉得这一切又变得很值得。"</p>
+<p>　　让王奕印象深刻的则是一次生日应援："那时我人气还不是很高，但粉丝依然帮我在商场的大屏上进行了生日祝福的投放。我真的想都不敢想，之前觉得可能灯箱上有个照片已经很厉害了，结果他们给我准备的是上海市中心的商场大屏。我在口袋翻牌里收到粉丝通知的时候，又惊又喜，就跳起来立刻去合影打卡，特别特别感动。"</p>
+<p>　　这届金曲大赏对于两人来说，有个共同的意义，就是对"喜欢自己的人变多"这件事第一次有了确切的实感。</p>
+<p>　　在两人成长的这几年中，因为疫情，大型活动要么是限流举办，要么就是云演出。更多时候，两个人只能在剧场或通过屏幕和大家见面。但这次金曲大赏演唱会时隔三年再度回到大型场馆举办，就有了许许多多的粉丝从四面八方赶来见她们。</p>
+<p>　　"我们去演唱会那天遇见了粉丝的应援大巴，大巴上面印着我们俩的名字。我们就站在旁边很开心地看。但是粉丝们好像就赶着挤应援站台，下车的匆匆忙忙的，压根就没人理会站在旁边的我俩，现在想起来也觉得她们都很可爱。"周诗雨对演唱会当天发生的趣事历历在目。不过她随即又补充："演唱会我们俩表演的时候，就可以看到很大一片的红色荧光棒，那是我们共同的应援色，那个时刻真的很震撼又很感动。"</p>
+<p>　　王奕也对这件事情印象很深，她还特别提到了握手会的时候遇到了很多粉丝来见自己。"就有点像是网上彼此相识很久的朋友见面吧。本来是一串 ID 或者名字，终于能在线下见到真人，那种感觉和线上真的是完全不同的，想起来就会暖心很久很久。"</p>
+<p class="sec">四</p>
+<p>　　当然，相处过程中并不是一帆风顺，用周诗雨的话说，两个人的个性其实并不相同，更多是互补，肯定会有摩擦和纠结。</p>
+<p>　　就在采访开始的时候，周诗雨还"吐槽"王奕："我有天晚上身体很不舒服，特别想吃妈妈做的面条。王奕就在我身边说她给我做。结果等了很久她也没去，我就难受地哭了出来。"</p>
+<p>　　王奕立刻"抗议"："明明是问你的时候，你说不用做，我才没有做的。那时又是深夜了，我就想着明天做给你吃。"</p>
+<p>　　看来，嘴上说的"不用"究竟是不是真的不用，大概是横亘在世间所有好友之间的永恒难题。</p>
+<p>　　有时，两人是为了些奇怪的事而争论不休，比如她俩刚刚为了某个动作手到底是伸直还是弯曲而爆发了"局部战争"。</p>
+<p>　　有的则是因为难过的步调不太一致。在去年的《最佳拍档》活动中，被寄予厚望的两人爆发出海淘风波成为压在彼此心头的巨石。王奕的难过来得迅速而直接，但是在她好不容易消化掉情绪之后，却发现周诗雨陷入了滞后而缓慢的情绪之中。</p>
+<p>　　不过所有的问题，最终都会被彻底消解。这种解决方式可能很简单，也许只是通过聊天，彼此给对方说声对不起和好关系。甚至仅仅依靠时间本身，也能让那些当下看起来严重的事情很快变得不再重要。</p>
+<p>　　与其说这是两个越发成熟的人解决问题的方式，不如说，这是在常年相处下两个人建立的某种默契。经历了很多风雨，两个人也会共同商量，对很多事情提前打好预防针，为对方建立好心理防线。</p>
+<p>　　"就像去年的最佳拍档事件，可能对我们和粉丝来说都是很难受的一件事。今年我们也参加了这个活动，不过这次定的基调就是顺其自然吧。不管是外界还是自己，都不要寄予太多。尤其是一开始让自己放松些，不要想那么多，一步一步、一步一个脚印就好。"</p>
+<p>　　对于未来，"旅游"是个非常非常重要的关键词。</p>
+<p>　　此前两个人就有个略显"失败"的旅游体验：大冬天去杭州西湖划船，结果划了 50 分钟已经被湖面的风吹得不行，又冷又累，但还得接着努力划才能靠岸休息。</p>
+<p>　　所以，这次两个人都对能去泰国拍夏季单 MV 充满着期待。</p>
+<p>　　王奕说："我们一直都很想去远点的地方旅行，好好放松。虽然这次还是去工作，并没有办法完全休息，但是想到能和她一起去那么远的地方，就会非常非常期待和开心。"</p>
+<p>　　对于旅行，周诗雨有着同样的憧憬，她是个非常看重"体验"的人，希望能够趁着今年和王奕一起多去些没有去过的地方，体验那些没有接触过的生活。"我始终觉得我体内的前几年有些随波逐流，希望接下来的日子能够抓住机会，把能够体验的事情都体验一遍。"</p>
+<p>　　两个人对未来的认知还有些难得的默契：计划归计划，更重要的是踏踏实实过好眼前的每一步，都在努力，让每个明天比今天过得更好就行。</p>
+<p>　　不过王奕犹豫再三，还是小心翼翼提出了一个略带野心的设想：三年内在上海和周诗雨共同买一个房。</p>
+<p>　　务实主义的周诗雨立刻笑着戳破了王奕的幻想泡泡：那至少要 10 年好吧！</p>
+<p>　　在场的人都被这段对话逗得笑了起来。</p>
+<p>　　无论三年或是十年，只希望她们的房子附近都会有个如同金曲舞台般梦幻的花园。在那个花园里面，她们不用再通过滤镜的阴影便能够常常见到彼此，能够永远经历这段共同出发的那海。</p>
+<p>　　每年金曲演唱会的最后都会有漫天彩带飘落。</p>
+<p>　　与前几年不同的是，今年有无数炙热的眼睛在这一刻望向舞台。</p>
+<p>　　在这场巨大庆典的结尾，大家彼此道贺，互相告别。</p>
+<p>　　这一次，我们知道，很快，我们便会再见。</p>
+<p>　　再见，为了再见。</p>`;
+
+const groups = [
+  {
+    title:"最佳拍档",
+    items:[
+      {type:"douyin", title:"关于最佳拍档采访", date:"2022-02-28", url:"https://v.douyin.com/NiB2RnsyODU/", douyinImg:"7.11.jpeg"},
+      {type:"video", title:"第二届最佳拍档预热采访", date:"2022-03-07", bv:"BV1wL411K7J6"},
+      {type:"video", title:"第二届最佳拍档应援会采访", date:"2022-03-20", bv:"BV1WS4y1U7Rx"},
+      {type:"video", title:"第二届最佳拍档第一阶段采访", date:"2022-05-22", bv:"BV1MB4y1R7nP"},
+      {type:"video", title:"第二届最佳拍档第二阶段采访", date:"2022-08-11", bv:"BV1DW4y187xA"},
+      {type:"video", title:"第三届最佳拍档第一轮采访", date:"2023-04-22", bv:"BV1uk4y1J7Fz"},
+      {type:"video", title:"第三届最佳拍档第二轮采访1", date:"2023-06-01", bv:"BV12X4y1b7pt"},
+      {type:"video", title:"第三届最佳拍档第二轮采访2", date:"2023-09-23", bv:"BV1r84y1S7XT"},
+      {type:"video", title:"第三届最佳拍档半决赛采访", date:"2023-10-14", bv:"BV1Tp4y1T7d5"}
+    ]
+  },
+  {
+    title:"一周的日记",
+    items:[
+      {type:"video", title:"先导片Reaction", date:"2024-03-14", bv:"BV1ZC411h72M"},
+      {type:"video", title:"综艺采访", date:"2024-03-15", bv:"BV1Mj421o766"},
+      {type:"video", title:"旅行心愿清单", date:"2024-03-16", bv:"BV1Dx4y1S7hw"},
+      {type:"video", title:"脑图解析", date:"2024-03-22", bv:"BV1MZ421t7dT"}
+    ]
+  },
+  {
+    title:"双人巡演",
+    items:[
+      {type:"video", title:"\"予你\"主题巡演成都站采访", date:"2024-07-13", bv:"BV1VJ4m1M7K3"},
+      {type:"video", title:"双人舞分享会采访", date:"2024-12-12", bv:"BV1LNq8YkETQ"},
+      {type:"video", title:"\"予你\"主题巡演南昌站采访", date:"2024-12-28", bv:"BV1mWCqYPEjf"}
+    ]
+  },
+ {
+    title:"金曲大赏",
+    items:[
+      {type:"douyin", title:"第七届年度金曲大赏采访", date:"2021-01-30", url:"https://v.douyin.com/QsFoZcNjl3w/", douyinImg:"7.10.jpeg"},
+      {type:"video", title:"第九届年度金曲大赏采访", date:"2023-02-25", bv:"BV12b411D7U2"},
+      {type:"gallery", title:"第九届年度金曲大赏采访", date:"2023-04-14",
+       images:["7.1.jpeg","7.2.jpeg","7.3.jpeg","7.4.jpeg","7.5.jpeg","7.6.jpeg","7.7.jpeg","7.8.jpeg","7.9.jpeg"],
+       text: articleText},
+      {type:"video", title:"第十届年度金曲大赏采访", date:"2024-01-17", bv:"BV19V411X7WB"}
+    ]
+  },
+  {
+    title:"双人外务",
+    items:[
+      {type:"video", title:"蜻蜓FM采访", date:"2021-06-04", bv:"BV1Mh411e7iG"},
+      {type:"video", title:"Meet48香港行采访", date:"2023-10-18", bv:"BV1B8aJ6KECt"},
+      {type:"video", title:"抖音仲夏毕业歌会节目后采访", date:"2024-06-10", bv:"BV15z421b72p"},
+      {type:"video", title:"抖音仲夏毕业歌会后台采访", date:"2024-06-10", bv:"BV1Rr421c7ye"},
+      {type:"video", title:"鹊梦千年七夕歌会采访", date:"2024-08-10", bv:"BV1HS42197Hr"}
+    ]
+  },
+  {
+    title:"年度总决选",
+    items:[
+      {type:"video", title:"\"想见你\"采访", date:"2021-06-18", bv:"BV1HKap6JEoA"},
+      {type:"video", title:"\"全新娱乐\"采访", date:"2021-07-23", bv:"BV18DaH6hEpJ"},
+      {type:"video", title:"\"抱走吧大明星\"采访", date:"2023-08-12", bv:"BV1eu411E7LE"},
+      {type:"video", title:"\"答尔问研究院\"采访", date:"2024-08-08", bv:"BV1Dw4m1k7wM"},
+      {type:"video", title:"\"挑战探班一百个艺人\"采访", date:"2024-08-11", bv:"BV184421Z7G8"}
+    ]
+  }
+];
+
+
+const lazyObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const iframe = entry.target;
+      iframe.src = iframe.dataset.src;
+      lazyObserver.unobserve(iframe);
+    }
+  })
+},{rootMargin:"200px"});
+
+let galleryStates = {};
+
+function entryHTML(item, key){
+  let dot="dot-video", et="et-video", etText="b站";
+  if(item.type==="douyin"){dot="dot-douyin";et="et-douyin";etText="抖音";}
+  if(item.type==="gallery"){dot="dot-gallery";et="et-gallery";etText="扫图";}
+
+  let body="";
+  if(item.type==="video"){
+    body = `<div class="iframe-wrap">
+      <div class="bili-player">
+        <iframe data-src="https://player.bilibili.com/player.html?bvid=${item.bv}&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+      </div>
+    </div>`;
+  } else if(item.type==="douyin"){
+    const imgHTML = item.douyinImg
+      ? `<div class="douyin-img"><img src="${item.douyinImg}" alt="${item.title}"></div>`
+      : `<div class="douyin-img">抖音封面</div>`;
+    const linkHTML = item.url
+      ? `<a class="douyin-link" href="${item.url}" target="_blank" rel="noopener noreferrer">前往抖音观看 →</a>`
+      : `<a class="douyin-link" href="#" onclick="alert('请在 url 字段填入抖音链接');return false;">填写抖音链接</a>`;
+    body = `<div class="douyin-card">${imgHTML}${linkHTML}</div>`;
+  } else if(item.type==="gallery"){
+    body = `<div class="gallery-main" id="gm-${key}"></div>
+      <div class="gallery-thumbs" id="gt-${key}"></div>
+      <div class="gallery-actions">
+        <button class="gallery-btn btn-text" onclick="openTextModal('${item.title.replace(/'/g,"\\'")}', ${JSON.stringify(item.text||'').replace(/"/g,'&quot;')})">📄 采访文字</button>
+      </div>`;
+  }
+
+  return `<div class="entry">
+    <div class="entry-head">
+      <span class="entry-dot ${dot}"></span>
+      <span class="entry-title">${item.title}</span>
+      <span class="entry-date">${item.date}</span>
+      <span class="entry-type-tag ${et}">${etText}</span>
+    </div>
+    ${body}
+  </div>`;
+}
+
+function loadPanelContent(wrap, g, gIdx){
+  const inner = wrap.querySelector(".acc-inner");
+  const prefix = "g"+gIdx;
+  const entries = g.items.map((it,i)=>entryHTML(it, prefix+"-"+i)).join("");
+  inner.innerHTML = entries + `
+    <div class="close-panel-wrap">
+      <button class="close-panel-btn">收起 ▲</button>
+    </div>`;
+
+  inner.querySelectorAll('iframe[data-src]').forEach(iframe=>{
+    lazyObserver.observe(iframe);
+  });
+
+  g.items.forEach((it,eIdx)=>{
+    if(it.type==="gallery"){
+      const key = prefix+"-"+eIdx;
+      galleryStates[key] = {images:it.images||[], idx:0, title:it.title};
+      renderGallery(key);
+    }
+  });
+
+  const closeBtn = inner.querySelector(".close-panel-btn");
+  const header = wrap.querySelector(".acc-header");
+  const bodyDom = wrap.querySelector(".acc-body");
+  closeBtn.onclick = function(e){
+    e.stopPropagation();
+    header.classList.remove("active");
+    bodyDom.classList.remove("open");
+  };
+}
+
+const allPanel = document.getElementById("allPanel");
+groups.forEach((g,gIdx)=>{
+  const wrap = document.createElement("div");
+  wrap.className = "accordion-wrap";
+  wrap.innerHTML = `
+    <button class="acc-header">
+      <div class="acc-left">
+        <div class="acc-title-row">
+          <h3>${g.title}</h3>
+          <span class="tag">${g.items.length}条</span>
+        </div>
+      </div>
+      <div class="acc-right"><div class="acc-arrow">▼</div></div>
+    </button>
+    <div class="acc-body"><div class="acc-inner"></div></div>`;
+  allPanel.appendChild(wrap);
+
+  const header = wrap.querySelector(".acc-header");
+  const bodyDom = wrap.querySelector(".acc-body");
+
+  header.onclick = ()=>{
+    const willOpen = !bodyDom.classList.contains("open");
+    header.classList.toggle("active");
+    bodyDom.classList.toggle("open");
+    if(willOpen && !wrap.dataset.loaded){
+      loadPanelContent(wrap, g, gIdx);
+      wrap.dataset.loaded = "1";
+    }
+  };
+});
+
+function renderGallery(key){
+  const st = galleryStates[key];
+  if(!st) return;
+  const main = document.getElementById("gm-"+key);
+  const thumbs = document.getElementById("gt-"+key);
+  if(!main) return;
+  const imgs = st.images;
+  if(imgs.length===0){
+    main.innerHTML = `<div class="gallery-placeholder">
+      <div class="ph-icon">🖼️</div>
+      <div>暂无扫图，请在 images 数组中添加图片路径</div>
+    </div>`;
+    thumbs.innerHTML="";
+    return;
+  }
+  const cur = imgs[st.idx];
+  main.innerHTML = `
+    <img src="${cur}" alt="" onerror="this.style.display='none'">
+    <button class="gallery-nav gallery-prev" onclick="galleryMove('${key}',-1)">‹</button>
+    <button class="gallery-nav gallery-next" onclick="galleryMove('${key}',1)">›</button>
+    <div class="gallery-counter">${st.idx+1} / ${imgs.length}</div>`;
+  thumbs.innerHTML = imgs.map((src,i)=>
+    `<div class="gallery-thumb ${i===st.idx?'active':''}" onclick="galleryJump('${key}',${i})"><img src="${src}" alt="" onerror="this.style.display='none'"></div>`
+  ).join("");
+}
+function galleryMove(key,step){
+  const st = galleryStates[key];
+  if(!st||!st.images.length) return;
+  st.idx = (st.idx+step+st.images.length)%st.images.length;
+  renderGallery(key);
+}
+function galleryJump(key,i){
+  galleryStates[key].idx = i;
+  renderGallery(key);
+}
+
+const modal = document.getElementById("textModal");
+const modalBody = document.getElementById("modalBody");
+function openTextModal(title, html){
+  modalBody.innerHTML = html || "<p>暂无文字内容</p>";
+  modal.classList.add("show");
+}
+document.getElementById("modalClose").onclick = ()=>modal.classList.remove("show");
+modal.onclick = (e)=>{ if(e.target===modal) modal.classList.remove("show"); };
+document.addEventListener("keydown",(e)=>{ if(e.key==="Escape") modal.classList.remove("show"); });
+
+const backTopBtn = document.getElementById('backTop');
+window.addEventListener('scroll', ()=>{
+  if(window.scrollY > 300){
+    backTopBtn.classList.add('show');
+  }else{
+    backTopBtn.classList.remove('show');
+  }
+})
+backTopBtn.onclick = ()=>{
+  window.scrollTo({
+    top:0,
+    behavior:'smooth'
+  })
+}
+</script>
+</body>
+</html>
