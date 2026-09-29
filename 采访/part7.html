@@ -41,10 +41,7 @@ body{background:#f3eef9;padding:24px;max-width:1120px;margin:0 auto;color:#2c2c3
 .dot-gallery{background:#e6a23c}
 .entry-title{font-size:16.5px;color:#3a3a48;font-weight:600}
 .entry-date{font-size:13px;color:#888}
-.entry-type-tag{padding:2px 8px;border-radius:6px;font-size:11px}
-.et-video{background:#d8c8ee;color:#7b68c2}
-.et-douyin{background:#fdecef;color:#fe2c55}
-.et-gallery{background:#fdf6ec;color:#e6a23c}
+.entry-type-tag{display:none}
 
 .iframe-wrap{width:100%;position:relative;margin-bottom:20px}
 .bili-player{width:100%;height:320px;border-radius:8px;border:0;display:block}
@@ -57,7 +54,7 @@ body{background:#f3eef9;padding:24px;max-width:1120px;margin:0 auto;color:#2c2c3
 .douyin-link:hover{background:#e02548}
 
 .gallery-main{position:relative;background:#1a1a1a;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:260px;max-height:420px;margin-top:6px;max-width:520px;width:100%}
-.gallery-main img{max-width:100%;max-height:420px;display:block}
+.gallery-main img{max-width:100%;max-height:420px;display:block;cursor:zoom-in}
 .gallery-placeholder{width:100%;min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#888;gap:10px}
 .gallery-placeholder .ph-icon{font-size:40px}
 .gallery-nav{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.55);color:#fff;border:none;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:0.2s;z-index:2}
@@ -71,17 +68,17 @@ body{background:#f3eef9;padding:24px;max-width:1120px;margin:0 auto;color:#2c2c3
 .gallery-thumb img{width:100%;height:100%;object-fit:cover}
 .gallery-actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
 .gallery-btn{padding:9px 18px;border:none;border-radius:99px;font-size:13px;font-weight:600;cursor:pointer;transition:0.2s}
-.btn-text{background:#f0ecfa;color:#7b68c2}
-.btn-text:hover{background:#e0d7f7}
+.btn-text{background:#d8c8ee;color:#5a3d8a}
+.btn-text:hover{background:#c8b3e0}
 
 .close-panel-wrap{margin-top:24px;margin-bottom:4px;text-align:right;padding-right:4px}
 .close-panel-btn{padding:8px 20px;border-radius:99px;border:none;background:#7b68c2;color:#fff;cursor:pointer;font-size:14px}
 .close-panel-btn:hover{background:#6b57b1}
 
-/* 弹窗：遮罩黑色半透明，标题和正文同白底，整体滚动，X按钮上移 */
+/* 文字弹窗 */
 .modal-mask{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:999;display:none;align-items:flex-start;justify-content:center;padding:60px 20px 20px}
 .modal-mask.show{display:flex}
-.modal-box{position:relative;background:#f3eef9;;border-radius:16px;max-width:640px;width:100%;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+.modal-box{position:relative;background:#f3eef9;border-radius:16px;max-width:640px;width:100%;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
 .modal-head{padding:26px 24px 18px;text-align:center;position:relative}
 .modal-head h3{font-size:22px;color:#7b68c2;font-weight:bold;letter-spacing:2px}
 .modal-close{position:absolute;right:14px;top:14px;width:34px;height:34px;border-radius:50%;border:none;background:#f0ecfa;color:#7b68c2;cursor:pointer;font-size:14px;transition:0.2s;z-index:2}
@@ -89,6 +86,11 @@ body{background:#f3eef9;padding:24px;max-width:1120px;margin:0 auto;color:#2c2c3
 .modal-body{padding:0 28px 30px;line-height:2;font-size:14.5px;color:#3a3a48}
 .modal-body p{margin-bottom:14px;}
 .modal-body .sec{text-align:center;font-weight:bold;color:#7b68c2;font-size:16px;margin:24px 0 16px;letter-spacing:6px;}
+
+/* 扫图大图预览 */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:1000;display:none;align-items:center;justify-content:center;cursor:zoom-out;padding:30px}
+.lightbox.show{display:flex}
+.lightbox img{max-width:100%;max-height:100%;border-radius:6px;display:block}
 
 .back-top{
     position:fixed;
@@ -131,11 +133,14 @@ body{background:#f3eef9;padding:24px;max-width:1120px;margin:0 auto;color:#2c2c3
 <div class="modal-mask" id="textModal">
   <div class="modal-box">
     <div class="modal-head">
-      <h3>📝</h3>
+      <h3>🎙️📝</h3>
       <button class="modal-close" id="modalClose">✕</button>
     </div>
     <div class="modal-body" id="modalBody"></div>
   </div>
+</div>
+<div class="lightbox" id="lightbox">
+  <img id="lightboxImg" src="" alt="">
 </div>
   <button class="back-top" id="backTop">↑</button>
 
@@ -304,7 +309,7 @@ function entryHTML(item, key){
     body = `<div class="gallery-main" id="gm-${key}"></div>
       <div class="gallery-thumbs" id="gt-${key}"></div>
       <div class="gallery-actions">
-        <button class="gallery-btn btn-text" onclick="openTextModal('${item.title.replace(/'/g,"\\'")}', ${JSON.stringify(item.text||'').replace(/"/g,'&quot;')})">📄 采访文字</button>
+        <button class="gallery-btn btn-text" onclick="openTextModal('${item.title.replace(/'/g,"\\'")}', ${JSON.stringify(item.text||'').replace(/"/g,'&quot;')})">📄 文字版</button>
       </div>`;
   }
 
@@ -313,7 +318,6 @@ function entryHTML(item, key){
       <span class="entry-dot ${dot}"></span>
       <span class="entry-title">${item.title}</span>
       <span class="entry-date">${item.date}</span>
-      <span class="entry-type-tag ${et}">${etText}</span>
     </div>
     ${body}
   </div>`;
@@ -398,7 +402,7 @@ function renderGallery(key){
   }
   const cur = imgs[st.idx];
   main.innerHTML = `
-    <img src="${cur}" alt="" onerror="this.style.display='none'">
+    <img src="${cur}" alt="" onclick="openLightbox(this.src)" onerror="this.style.display='none'">
     <button class="gallery-nav gallery-prev" onclick="galleryMove('${key}',-1)">‹</button>
     <button class="gallery-nav gallery-next" onclick="galleryMove('${key}',1)">›</button>
     <div class="gallery-counter">${st.idx+1} / ${imgs.length}</div>`;
@@ -417,6 +421,17 @@ function galleryJump(key,i){
   renderGallery(key);
 }
 
+/* 扫图大图预览 */
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightboxImg");
+function openLightbox(src){
+  lightboxImg.src = src;
+  lightbox.classList.add("show");
+}
+lightbox.onclick = ()=>{ lightbox.classList.remove("show"); lightboxImg.src=""; };
+document.addEventListener("keydown",(e)=>{ if(e.key==="Escape"){ lightbox.classList.remove("show"); lightboxImg.src=""; } });
+
+/* 文字弹窗 */
 const modal = document.getElementById("textModal");
 const modalBody = document.getElementById("modalBody");
 function openTextModal(title, html){
