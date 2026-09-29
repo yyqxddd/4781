@@ -324,6 +324,14 @@
         margin:16px 0;
     }
 }
+/* 回复所有orientation图片统一35% */
+.reply-item .gif-block img:not([orientation]) {
+    max-width: 35%;
+}
+/* 引用所有orientation图片统一28% */
+.quote-block .gif-block img:not([orientation]) {
+    max-width: 28%;
+}
 </style>
 </head>
 
@@ -507,7 +515,7 @@ zsy妈妈在她们租的房子里断断续续住了也蛮久的，她俩依旧�
 </div>
     <div class="reply-content">还有今年那个zsy生日的时候</div>
     <div class="reply-footer">
-        <button class="reply-like-btn">赞（30）</button>
+        <button class="reply-like-btn">赞(30)</button>
     </div>
 </div>
 
@@ -527,7 +535,7 @@ zsy妈妈在她们租的房子里断断续续住了也蛮久的，她俩依旧�
     </div>
     <div class="reply-content">这个真的嗑鼠，躺lp腿上而且脸还是往肚子方向，要是我好朋友这样躺下来我肯定一腳踢飞她</div>
     <div class="reply-footer">
-        <button class="reply-like-btn">赞（46）</button>
+        <button class="reply-like-btn">赞(46)</button>
     </div>
 </div>
 
@@ -1608,12 +1616,21 @@ nextPageBtn.onclick = function(){
     }
 }
 updatePageBtnState();
-// 自动判断横图/竖图/正方形
+// 自动判断横图/竖图/正方形，加载前先锁尺寸，动态加上懒加载
 document.querySelectorAll('.gif-block img').forEach(img => {
+    img.loading = "lazy"; // 动态懒加载，不用改HTML
+
+    // ✅ 改成向上查找父容器，判断属于哪个区域
+       if(img.closest('.reply-item')){
+        img.style.maxWidth = "35%";
+    }else if(img.closest('.quote-block')){
+        img.style.maxWidth = "28%";
+    }
+
     img.onload = function () {
+        this.style.maxWidth = ""; // 清空行内，交给CSS orientation
         const w = this.naturalWidth;
         const h = this.naturalHeight;
-
         if (w > h) {
             this.setAttribute('orientation', 'landscape');
         } else if (h > w) {
@@ -1622,6 +1639,9 @@ document.querySelectorAll('.gif-block img').forEach(img => {
             this.setAttribute('orientation', 'square');
         }
     };
+    img.onerror = function(){
+        this.style.display="none"; // 图片失效直接隐藏裂图
+    }
 });
 
 // 点击放大
