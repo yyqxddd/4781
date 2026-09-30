@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>直播合集｜诗情画奕的备忘录</title>
+<style>
+ * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+    background: #f3eef9;
+    color: #333;
+    line-height: 1.7;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px 16px 60px;
+  }
+
+  .back-home {
+    display: inline-block;
+    text-decoration: none;
+    color: #8b5cf6;
+    margin-bottom: 20px;
+    font-size: 15px;
+  }
+
+  .back-home:hover {
+    text-decoration: underline;
+  }
+
+  /* 顶层Tab栏 */
+ .tab-bar{
+  display:flex;
+  border-bottom:1px solid #ddd4ee;
+  margin-bottom:20px;
+  gap:0;
+  overflow-x:auto;
+}
+.tab-item{
+  flex:1;
+  padding:10px 20px;
+  cursor:pointer;
+  border-bottom:3px solid transparent;
+  font-size:16px;
+  white-space:nowrap;
+  border-right:1px solid #cccccc;
+  text-align:center;
+}
+.tab-item:last-child{
+  border-right:none;
+}
+.tab-item.active{
+  border-bottom-color:#a864c7;
+  color:#a864c7;
+  font-weight:bold;
+}
+
+  .content-box {
+    background: #f8f5fe;
+    border: 1px solid #e2d9f3;
+    border-radius: 12px;
+    padding: 28px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  }
+
+  /* 飘屏子tab小按钮 */
+.sub-tab-bar{
+  display:flex;
+  gap:12px;
+  margin-bottom:20px;
+  flex-wrap:wrap;
+}
+.sub-tab-btn{
+  padding:6px 16px;
+  border-radius:999px;
+  border:1px solid #ddd4ee;
+  background:#e9e1f8;
+  color:#8b5cf6;
+  cursor:pointer;
+}
+.sub-tab-btn.active{
+  background:#8b5cf6;
+  color:#fff;
+  border-color:#8b5cf6;
+}
+
+  .timeline-wrap{
+    display:none;
+  }
+  .timeline-wrap.active{
+    display:block;
+  }
+  /* 子Tab容器 修复切换 */
+  .sub-wrap{
+    display:none;
+  }
+  .sub-wrap.active{
+    display:block;
+  }
+  .timeline {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .timeline th {
+    text-align: center;
+    font-weight: normal;
+    font-size: 13px;
+    color: #888;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2d9f3;
+  }
+
+  .timeline td {
+    padding:14px 8px;
+    border-bottom:1px dashed #ddd4ee;
+    vertical-align: middle;
+    font-size:15px;
+    text-align:center;
+  }
+
+  .timeline tr:last-child td {
+    border-bottom: none;
+  }
+
+  .col-index {
+    width:14%;
+    color:#999;
+  }
+
+  .col-note {
+    width:24%;
+    color:#000;
+  }
+  .col-date {
+    width:24%;
+    color:#666;
+  }
+
+  .col-link {
+    width:38%;
+  }
+  .col-link iframe{
+    width:100%;
+    height:180px;
+    border-radius:8px;
+  }
+  .col-link img {
+    width: 100%;
+    height: auto;
+    border-radius:8px;
+  }
+
+/*平台标签样式*/
+.tag{
+  display:inline-block;
+  font-size:12px;
+  padding:2px 7px;
+  border-radius:6px;
+  margin-left:6px;
+}
+.tag.koudai{
+  background:#e9e1f8;
+  color:#8b5cf6;
+}
+.tag.douyin{
+  background:#fee2e2;
+  color:#dc2626;
+}
+.tag.weibo{
+  background:#fffbeb;
+  color:#d97706;
+}
+.tag.kuaishou{
+  background:#ffedd5;
+  color:#ea580c;
+}
+
+  /* 回到顶部按钮 */
+.back-top{
+    position:fixed;
+    bottom:18px;
+    right:18px;
+    width:33px;
+    height:33px;
+    border-radius:50%;
+    background:#8b5cf6;
+    color:#fff;
+    border:none;
+    font-size:18px;
+    cursor:pointer;
+    box-shadow:0 4px 12px rgba(139,92,246,0.25);
+    opacity:0;
+    visibility:hidden;
+    transition:0.25s;
+    z-index:98;
+  }
+  .back-top.show{
+    opacity:1;
+    visibility:visible;
+  }
+  .back-top:hover{
+    background:#7c3aed;
+  }
+
+  /* 移动端 */
+  @media (max-width: 720px) {
+    .content-box {
+      padding: 20px 16px;
+    }
+    .sub-tab-bar{
+      justify-content:center;
+    }
+
+    .timeline thead {
+      display: none;
+    }
+
+    .timeline tr {
+      display: block;
+      margin-bottom: 14px;
+      border-bottom: 1px dashed #ddd4ee;
+      padding-bottom: 14px;
+    }
+
+    .timeline td {
+      display: block;
+      padding: 4px 0;
+      border: none;
+      font-size: 14px;
+      text-align:left;
+    }
+
+    .col-index::before {content:"🫧：";font-weight:bold;color:#8b5cf6;white-space:nowrap;}
+    .col-note::before {content:"✨：";font-weight:bold;color:#000;white-space:nowrap;}
+    .col-date::before {content:"📆：";font-weight:bold;color:#666;white-space:nowrap;}
+    .col-link::before {content:"🎬：";font-weight:bold;color:#666;display:block;margin-bottom:4px;}
+
+    .col-index {
+      color: #8b5cf6;
+      white-space:nowrap;
+    }
+    .col-note {
+      color:#000;
+      white-space:nowrap;
+    }
+    .col-date {
+      color: #000;
+      text-align:left;
+      white-space:nowrap;
+    }
+
+    .col-link {
+      width: auto;
+      text-align: left;
+      margin-top: 8px;
+    }
+    .col-link iframe{
+      width:100%;
+      height:180px;
+    }
+    .col-link img {
+      width:100%;
+      height:auto;
+      border-radius:8px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a class="back-home" href="index.html">← 返回存档首页</a>
+
+  <div class="tab-bar">
+    <div class="tab-item active" data-tab="t1">直播</div>
+    <div class="tab-item" data-tab="t2">电台&连麦</div>
+    <div class="tab-item" data-tab="t3">飘屏</div>
+  </div>
+
+  <div class="content-box">
+    <!-- Tab1 直播 -->
+    <div class="timeline-wrap active" id="t1">
+      <table class="timeline">
+        <thead>
+          <tr>
+            <th class="col-index">🫧</th>
+            <th class="col-note">✨</th>
+           <th class="col-date">📆</th>
+            <th class="col-link">🎬</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-index">1</td>
+            <td class="col-note">双人六小时直播1.0<span class="tag koudai">口袋</span></td>
+            <td class="col-date">2022年3月20日</td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">2</td>
+            <td class="col-note">双人六小时直播2.0<span class="tag koudai">口袋</span></td>
+            <td class="col-date">2023年3月21日</td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">3</td>
+            <td class="col-note">双人三小时直播<span class="tag koudai">口袋</span></td>
+            <td class="col-date">2023年5月30日</td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">4</td>
+            <td class="col-note">双人一个半小时直播<span class="tag koudai">口袋</span></td>
+            <td class="col-date">2023年10月4日</td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">5</td>
+            <td class="col-note">双人六小时直播3.0<span class="tag koudai">口袋</span></td>
+            <td class="col-date">2025年1月13日</td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">6</td>
+            <td class="col-note">四强综艺双人直播<span class="tag kuaishou">快手</span></td>
+            <td class="col-date">2025年4月18日</td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">7</td>
+            <td class="col-note">百万共创双人直播<span class="tag douyin">抖音</span></td>
+            <td class="col-date">2025年9月27日</td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">8</td>
+            <td class="col-note">圣诞双人直播<span class="tag douyin">抖音</span></td>
+            <td class="col-date">2025年12月24日</td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">9</td>
+            <td class="col-note">小日记周年双人直播<span class="tag douyin">抖音</span></td>
+            <td class="col-date">2026年3月21日</td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">10</td>
+            <td class="col-note">中秋双人直播<span class="tag douyin">抖音</span></td>
+            <td class="col-date">2026年9月26日</td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Tab2 电台&连麦 -->
+    <div class="timeline-wrap" id="t2">
+      <table class="timeline">
+        <thead>
+          <tr>
+            <th class="col-index">🫧</th>
+            <th class="col-note">✨</th>
+           <th class="col-date">📆</th>
+            <th class="col-link">🎬</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-index">1</td>
+            <td class="col-note">双人电台<span class="tag douyin">抖音</span></td>
+            <td class="col-date">2026年5月8日</td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">2</td>
+            <td class="col-note">不丢生日连麦<span class="tag koudai">口袋</span></td>
+            <td class="col-date">2023年1月27日</td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">3</td>
+            <td class="col-note">情人节连麦<span class="tag koudai">口袋</span></td>
+            <td class="col-date">2023年2月14日</td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">4</td>
+            <td class="col-note">不丢生日连麦<span class="tag koudai">口袋</span></td>
+            <td class="col-date">2024年1月28日</td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">5</td>
+            <td class="col-note">双巡后台双人连麦<span class="tag weibo">微博</span></td>
+            <td class="col-date">2024年11月30日</td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">6</td>
+            <td class="col-note">圣诞双人连麦<span class="tag weibo">微博</span></td>
+            <td class="col-date">2024年12月24日</td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">7</td>
+            <td class="col-note">不丢生日连麦<span class="tag koudai">口袋</span></td>
+            <td class="col-date">2025年1月28日</td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+          <tr>
+            <td class="col-index">8</td>
+            <td class="col-note">雨奕瑶连麦<span class="tag douyin">抖音</span></td>
+            <td class="col-date">2025年7月18日</td>
+            <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Tab3 飘屏 内置子Tab -->
+    <div class="timeline-wrap" id="t3">
+      <div class="sub-tab-bar">
+        <button class="sub-tab-btn active" data-sub="sub1">王奕飘屏</button>
+        <button class="sub-tab-btn" data-sub="sub2">周诗雨飘屏</button>
+      </div>
+      <div class="sub-wrap active" id="sub1">
+        <table class="timeline">
+          <thead>
+            <tr>
+              <th class="col-index">🫧</th>
+              <th class="col-note">✨</th>
+             <th class="col-date">📆</th>
+              <th class="col-link">🎬</th>
+            </tr>
+          </thead>
+          <tbody>
+           <tr>
+              <td class="col-index">1</td>
+              <td class="col-note">周诗雨直播<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2019年9月28日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+            <tr>
+              <td class="col-index">2</td>
+              <td class="col-note">周诗雨直播<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2020年9月6日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+            <tr>
+              <td class="col-index">3</td>
+              <td class="col-note">周诗雨电台<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2020年10月11日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+            <tr>
+              <td class="col-index">4</td>
+              <td class="col-note">周诗雨电台<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2020年10月26日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+            <tr>
+              <td class="col-index">5</td>
+              <td class="col-note">周诗雨电台<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2020年11月11日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+            <tr>
+              <td class="col-index">6</td>
+              <td class="col-note">周诗雨直播<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2020年11月12日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+            <tr>
+              <td class="col-index">7</td>
+              <td class="col-note">周诗雨直播<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2021年1月1日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+            <tr>
+              <td class="col-index">8</td>
+              <td class="col-note">周诗雨电台<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2021年7月24日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+            <tr>
+              <td class="col-index">9</td>
+              <td class="col-note">周诗雨直播<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2021年10月24日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+            <tr>
+              <td class="col-index">10</td>
+              <td class="col-note">周诗雨直播<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2022年1月24日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+            <tr>
+              <td class="col-index">11</td>
+              <td class="col-note">周诗雨直播<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2022年2月6日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+            <tr>
+              <td class="col-index">12</td>
+              <td class="col-note">周诗雨直播<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2022年9月8日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+            <tr>
+              <td class="col-index">13</td>
+              <td class="col-note">周诗雨直播<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2023年1月21日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+            <tr>
+              <td class="col-index">14</td>
+              <td class="col-note">周诗雨直播<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2023年4月7日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+            <tr>
+              <td class="col-index">15</td>
+              <td class="col-note">周诗雨直播<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2024年2月9日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+            <tr>
+              <td class="col-index">16</td>
+              <td class="col-note">周诗雨电台<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2024年6月5日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+            <tr>
+              <td class="col-index">17</td>
+              <td class="col-note">周诗雨直播<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2024年7月7日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sub-wrap" id="sub2">
+        <table class="timeline">
+          <thead>
+            <tr>
+              <th class="col-index">🫧</th>
+              <th class="col-note">✨</th>
+             <th class="col-date">📆</th>
+              <th class="col-link">🎬</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="col-index">1</td>
+              <td class="col-note">王奕直播<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2020年10月12日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+            <tr>
+              <td class="col-index">2</td>
+              <td class="col-note">王奕直播<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2020年10月28日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+            <tr>
+              <td class="col-index">3</td>
+              <td class="col-note">王奕直播<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2020年11月10日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+            <tr>
+              <td class="col-index">4</td>
+              <td class="col-note">王奕直播<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2020年11月26日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+            <tr>
+              <td class="col-index">5</td>
+              <td class="col-note">王奕电台<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2023年1月25日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+            <tr>
+              <td class="col-index">6</td>
+              <td class="col-note">王奕直播<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2023年5月1日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+            <tr>
+              <td class="col-index">7</td>
+              <td class="col-note">王奕直播<span class="tag koudai">口袋</span></td>
+              <td class="col-date">2024年9月25日</td>
+              <td class="col-link"><iframe data-src="https://player.bilibili.com/player.html?bvid=&autoplay=0&danmaku=0" src="" scrolling="no" frameborder="no" allowfullscreen></iframe></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+ <button class="back-top" id="backTop">↑</button>
+
+<script>
+//顶层Tab切换
+const tabItems = document.querySelectorAll('.tab-item');
+const tabWraps = document.querySelectorAll('.timeline-wrap');
+//保存已加载标记，防止重复加载iframe
+const loadedTab = new Set();
+let currentTabId = 't1';
+
+//子Tab飘屏切换
+const subBtns = document.querySelectorAll('.sub-tab-btn');
+const subWraps = document.querySelectorAll('.sub-wrap');
+const loadedSub = new Set();
+let currentSubId = 'sub1';
+
+//加载当前tab里所有iframe
+function loadIframeWrap(wrapDom, markKey){
+  if(loadedTab.has(markKey)) return;
+  const iframes = wrapDom.querySelectorAll('iframe[data-src]');
+  iframes.forEach(iframe=>{
+    iframe.src = iframe.dataset.src;
+  })
+  loadedTab.add(markKey);
+}
+
+//顶层tab点击
+tabItems.forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    tabItems.forEach(i=>i.classList.remove('active'));
+    tabWraps.forEach(w=>w.classList.remove('active'));
+    tab.classList.add('active');
+    const targetId = tab.dataset.tab;
+    currentTabId = targetId;
+    const targetWrap = document.getElementById(targetId);
+    targetWrap.classList.add('active');
+    loadIframeWrap(targetWrap, targetId);
+  })
+})
+
+//子tab点击
+subBtns.forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    subBtns.forEach(b=>b.classList.remove('active'));
+    subWraps.forEach(w=>w.classList.remove('active'));
+    btn.classList.add('active');
+    const sid = btn.dataset.sub;
+    currentSubId = sid;
+    const subWrapDom = document.getElementById(sid);
+    subWrapDom.classList.add('active');
+    loadIframeWrap(subWrapDom, "t3-"+sid);
+  })
+})
+
+//页面初始：加载默认t1
+document.addEventListener('DOMContentLoaded', function(){
+  const defaultWrap = document.getElementById("t1");
+  loadIframeWrap(defaultWrap,"t1");
+})
+
+//回到顶部
+const backTopBtn = document.getElementById('backTop');
+window.addEventListener('scroll', ()=>{
+  if(window.scrollY > 300){
+    backTopBtn.classList.add('show');
+  }else{
+    backTopBtn.classList.remove('show');
+  }
+})
+backTopBtn.onclick = ()=>{
+  window.scrollTo({
+    top:0,
+    behavior:'smooth'
+  })
+}
+</script>
+
+</body>
+</html>

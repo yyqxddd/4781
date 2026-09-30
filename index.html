@@ -213,7 +213,7 @@
     gap: 18px;
   }
 
-  .archive-card {
+.archive-card {
     background: #f8f5fe;
     border: 1px solid #e2d9f3;
     border-radius: 12px;
@@ -223,10 +223,12 @@
     transition: transform 0.15s ease, box-shadow 0.15s ease;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center; /* 垂直居中 */
+    align-items: center;     /* 弹性子项水平居中（保险加固） */
     box-shadow: 0 1px 4px rgba(0,0,0,0.04);
     text-align:center;
-  }
+    min-height:140px; /* 固定卡片最小高度，网格所有卡片高度统一，视觉整齐 */
+}
 
   .archive-card:hover {
     transform: translateY(-3px);
