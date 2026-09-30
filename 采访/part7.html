@@ -22,7 +22,7 @@ body{background:#f3eef9;padding:24px;max-width:1120px;margin:0 auto;color:#2c2c3
 .acc-left{flex:1;min-width:0}
 .acc-title-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .acc-title-row h3{font-size:18px;color:#3a3a48}
-.tag{padding:3px 9px;border-radius:99px;font-size:12px;background:#f0ecfa;color:#7b68c2}
+.tag{padding:3px 9px;border-radius:99px;font-size:12px;background:#ddd0f0;color:#6b4fa0}
 
 .acc-right{display:flex;align-items:center;gap:16px}
 .acc-arrow{width:34px;height:34px;border-radius:50%;background:#f5f2fc;display:flex;align-items:center;justify-content:center;color:#7b68c2;transition:0.35s}
@@ -88,9 +88,14 @@ body{background:#f3eef9;padding:24px;max-width:1120px;margin:0 auto;color:#2c2c3
 .modal-body .sec{text-align:center;font-weight:bold;color:#7b68c2;font-size:16px;margin:24px 0 16px;letter-spacing:6px;}
 
 /* 扫图大图预览 */
-.lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:1000;display:none;align-items:center;justify-content:center;cursor:zoom-out;padding:30px}
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:1000;display:none;align-items:center;justify-content:center;cursor:zoom-out}
 .lightbox.show{display:flex}
-.lightbox img{max-width:100%;max-height:100%;border-radius:6px;display:block}
+.lightbox img{max-width:88vw;max-height:88vh;border-radius:6px;display:block;touch-action:pan-y;}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,0.12);color:#fff;border:none;cursor:pointer;font-size:22px;display:flex;align-items:center;justify-content:center;transition:0.2s;z-index:1001}
+.lb-nav:hover{background:rgba(255,255,255,0.25)}
+.lb-prev{left:24px}
+.lb-next{right:24px}
+.lb-counter{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.6);color:#fff;padding:5px 16px;border-radius:99px;font-size:13px;z-index:1001}
 
 .back-top{
     position:fixed;
@@ -124,6 +129,9 @@ body{background:#f3eef9;padding:24px;max-width:1120px;margin:0 auto;color:#2c2c3
   .modal-mask{padding:30px 14px 14px}
   .modal-body{padding:0 20px 24px;line-height:1.9}
   .modal-head{padding:22px 20px 14px}
+  .lb-nav{width:38px;height:38px;font-size:18px}
+  .lb-prev{left:10px}
+  .lb-next{right:10px}
 }
 </style>
 </head>
@@ -140,7 +148,10 @@ body{background:#f3eef9;padding:24px;max-width:1120px;margin:0 auto;color:#2c2c3
   </div>
 </div>
 <div class="lightbox" id="lightbox">
+  <button class="lb-nav lb-prev" id="lbPrev">‹</button>
   <img id="lightboxImg" src="" alt="">
+  <button class="lb-nav lb-next" id="lbNext">›</button>
+  <div class="lb-counter" id="lbCounter"></div>
 </div>
   <button class="back-top" id="backTop">↑</button>
 
@@ -402,7 +413,7 @@ function renderGallery(key){
   }
   const cur = imgs[st.idx];
   main.innerHTML = `
-    <img src="${cur}" alt="" onclick="openLightbox(this.src)" onerror="this.style.display='none'">
+    <img src="${cur}" alt="" onclick="openLightbox('${key}')" onerror="this.style.display='none'">
     <button class="gallery-nav gallery-prev" onclick="galleryMove('${key}',-1)">‹</button>
     <button class="gallery-nav gallery-next" onclick="galleryMove('${key}',1)">›</button>
     <div class="gallery-counter">${st.idx+1} / ${imgs.length}</div>`;
@@ -415,21 +426,99 @@ function galleryMove(key,step){
   if(!st||!st.images.length) return;
   st.idx = (st.idx+step+st.images.length)%st.images.length;
   renderGallery(key);
+  // 如果lightbox开着，同步更新大图
+  if(lightbox.classList.contains("show")){
+    updateLightbox(key);
+  }
 }
 function galleryJump(key,i){
   galleryStates[key].idx = i;
   renderGallery(key);
+  if(lightbox.classList.contains("show")){
+    updateLightbox(key);
+  }
 }
 
-/* 扫图大图预览 */
+/* ===== 扫图大图预览（支持左右切换） ===== */
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightboxImg");
-function openLightbox(src){
-  lightboxImg.src = src;
+const lbCounter = document.getElementById("lbCounter");
+let lbKey = null;
+
+function openLightbox(key){
+  lbKey = key;
+  updateLightbox(key);
   lightbox.classList.add("show");
 }
-lightbox.onclick = ()=>{ lightbox.classList.remove("show"); lightboxImg.src=""; };
-document.addEventListener("keydown",(e)=>{ if(e.key==="Escape"){ lightbox.classList.remove("show"); lightboxImg.src=""; } });
+function updateLightbox(key){
+  const st = galleryStates[key];
+  if(!st||!st.images.length) return;
+  lightboxImg.src = st.images[st.idx];
+  lbCounter.textContent = (st.idx+1)+" / "+st.images.length;
+}
+function closeLightbox(){
+  lightbox.classList.remove("show");
+  lightboxImg.src="";
+  lbKey = null;
+}
+document.getElementById("lbPrev").onclick = function(e){ e.stopPropagation(); if(lbKey) galleryMove(lbKey,-1); };
+document.getElementById("lbNext").onclick = function(e){ e.stopPropagation(); if(lbKey) galleryMove(lbKey,1); };
+lightbox.onclick = closeLightbox;
+document.addEventListener("keydown",(e)=>{
+  if(e.key==="Escape"){ closeLightbox(); modal.classList.remove("show"); }
+  if(!lightbox.classList.contains("show")) return;
+  if(e.key==="ArrowLeft" && lbKey) galleryMove(lbKey,-1);
+  if(e.key==="ArrowRight" && lbKey) galleryMove(lbKey,1);
+});
+
+// ==========【触屏滑动手势：放大缩小都可以左右滑切换图片】==========
+let touchStartX = 0;
+let touchEndX = 0;
+lightboxImg.addEventListener('touchstart', e => {
+  touchStartX = e.changedTouches[0].screenX;
+});
+lightboxImg.addEventListener('touchend', e => {
+  touchEndX = e.changedTouches[0].screenX;
+  handleSwipe();
+});
+function handleSwipe(){
+  const diff = touchEndX - touchStartX;
+  // 阈值：滑动超过50px才判定切换图片
+  if(Math.abs(diff) > 50){
+    if(diff < 0){
+      // 向左滑 → 下一张
+      galleryMove(lbKey, 1);
+    }else{
+      // 向右滑 → 上一张
+      galleryMove(lbKey, -1);
+    }
+  }
+}
+// ==========【新增：电脑鼠标拖拽左右滑动切换图片】==========
+let mouseDown = false;
+let mouseStartX = 0;
+let mouseEndX = 0;
+lightboxImg.addEventListener('mousedown', (e) => {
+  mouseDown = true;
+  mouseStartX = e.clientX;
+});
+document.addEventListener('mousemove', (e) => {
+  if (!mouseDown) return;
+  mouseEndX = e.clientX;
+});
+document.addEventListener('mouseup', () => {
+  if (!mouseDown) return;
+  mouseDown = false;
+  const diff = mouseEndX - mouseStartX;
+  if(Math.abs(diff) > 50){
+    if(diff < 0){
+      galleryMove(lbKey, 1);
+    }else{
+      galleryMove(lbKey, -1);
+    }
+  }
+});
+// =====================================================================
 
 /* 文字弹窗 */
 const modal = document.getElementById("textModal");
@@ -440,7 +529,6 @@ function openTextModal(title, html){
 }
 document.getElementById("modalClose").onclick = ()=>modal.classList.remove("show");
 modal.onclick = (e)=>{ if(e.target===modal) modal.classList.remove("show"); };
-document.addEventListener("keydown",(e)=>{ if(e.key==="Escape") modal.classList.remove("show"); });
 
 const backTopBtn = document.getElementById('backTop');
 window.addEventListener('scroll', ()=>{
