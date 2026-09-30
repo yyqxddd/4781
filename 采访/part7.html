@@ -54,7 +54,7 @@ body{background:#f3eef9;padding:24px;max-width:1120px;margin:0 auto;color:#2c2c3
 .douyin-link:hover{background:#e02548}
 
 .gallery-main{position:relative;background:#1a1a1a;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:260px;max-height:420px;margin-top:6px;max-width:520px;width:100%}
-.gallery-main img{max-width:100%;max-height:420px;display:block;cursor:zoom-in}
+.gallery-main img{max-width:100%;max-height:420px;display:block;cursor:zoom-in;touch-action:pan-y}
 .gallery-placeholder{width:100%;min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#888;gap:10px}
 .gallery-placeholder .ph-icon{font-size:40px}
 .gallery-nav{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.55);color:#fff;border:none;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:0.2s;z-index:2}
@@ -88,7 +88,7 @@ body{background:#f3eef9;padding:24px;max-width:1120px;margin:0 auto;color:#2c2c3
 .modal-body .sec{text-align:center;font-weight:bold;color:#7b68c2;font-size:16px;margin:24px 0 16px;letter-spacing:6px;}
 
 /* 扫图大图预览 */
-.lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:1000;display:none;align-items:center;justify-content:center;overflow:hidden;touch-action:none;}
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:1000;display:none;align-items:center;justify-content:center;overflow:hidden}
 .lightbox.show{display:flex}
 .lightbox img{
   max-width:88vw;
@@ -96,6 +96,7 @@ body{background:#f3eef9;padding:24px;max-width:1120px;margin:0 auto;color:#2c2c3
   border-radius:6px;
   display:block;
   transform-origin:center center;
+  touch-action:none;
   user-select:none;
   -webkit-user-drag:none;
 }
@@ -428,6 +429,30 @@ function renderGallery(key){
   thumbs.innerHTML = imgs.map((src,i)=>
     `<div class="gallery-thumb ${i===st.idx?'active':''}" onclick="galleryJump('${key}',${i})"><img src="${src}" alt="" onerror="this.style.display='none'"></div>`
   ).join("");
+
+  /* ===== 新增：原图区单指左右滑动切图 ===== */
+  let gsX = 0, gsY = 0, gsMoved = false;
+  main.ontouchstart = function(e){
+    gsX = e.touches[0].clientX;
+    gsY = e.touches[0].clientY;
+    gsMoved = false;
+  };
+  main.ontouchmove = function(e){
+    const dx = Math.abs(e.touches[0].clientX - gsX);
+    const dy = Math.abs(e.touches[0].clientY - gsY);
+    if(dx > 10 && dx > dy) gsMoved = true;
+  };
+  main.ontouchend = function(e){
+    if(!gsMoved) return;
+    const geX = e.changedTouches[0].clientX;
+    const geY = e.changedTouches[0].clientY;
+    const dx = geX - gsX;
+    const dy = geY - gsY;
+    if(Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)){
+      if(dx < 0) galleryMove(key, 1);
+      else galleryMove(key, -1);
+    }
+  };
 }
 function galleryMove(key,step){
   const st = galleryStates[key];
@@ -446,7 +471,7 @@ function galleryJump(key,i){
   }
 }
 
-/* ===== 扫图大图预览 ===== */
+/* ===== 扫图大图预览：双指缩放+放大拖拽平移+未放大单指滑切换 ===== */
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightboxImg");
 const lbCounter = document.getElementById("lbCounter");
@@ -497,17 +522,17 @@ document.addEventListener("keydown",(e)=>{
   if(e.key==="ArrowRight" && lbKey) galleryMove(lbKey,1);
 });
 
-/* ========== 触摸手势：绑定在lightbox容器上（含图片区域） ========== */
+/* ========== 触摸手势：单指滑切换 / 双指缩放+拖拽 ========== */
 let touchState = {
   touching: false,
   startX: 0, startY: 0,
   lastX: 0, lastY: 0,
   initialDist: 0,
   initialScale: 1,
-  mode: null
+  mode: null  // 'swipe' | 'drag' | 'pinch'
 };
 
-lightbox.addEventListener('touchstart', (e) => {
+lightboxImg.addEventListener('touchstart', (e) => {
   if(e.touches.length === 1){
     const t = e.touches[0];
     touchState.touching = true;
@@ -528,7 +553,7 @@ lightbox.addEventListener('touchstart', (e) => {
   }
 }, {passive:true});
 
-lightbox.addEventListener('touchmove', (e) => {
+lightboxImg.addEventListener('touchmove', (e) => {
   if(!touchState.touching) return;
 
   if(touchState.mode === 'pinch' && e.touches.length === 2){
@@ -538,6 +563,7 @@ lightbox.addEventListener('touchmove', (e) => {
     let newScale = touchState.initialScale * (dist / touchState.initialDist);
     newScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, newScale));
     scale = newScale;
+    // 双指中心平移
     const cx = (e.touches[0].clientX + e.touches[1].clientX)/2;
     const cy = (e.touches[0].clientY + e.touches[1].clientY)/2;
     tx += cx - touchState.lastX;
@@ -554,20 +580,22 @@ lightbox.addEventListener('touchmove', (e) => {
     touchState.lastY = t.clientY;
     applyTransform();
   }
+  // swipe模式不在这里处理，等touchend判断
 }, {passive:true});
 
-lightbox.addEventListener('touchend', (e) => {
+lightboxImg.addEventListener('touchend', (e) => {
   if(!touchState.touching) return;
 
   if(touchState.mode === 'swipe' && e.changedTouches.length === 1){
     const t = e.changedTouches[0];
     const diffX = t.clientX - touchState.startX;
-    if(Math.abs(diffX) > 45){
+    if(Math.abs(diffX) > 60){
       if(diffX < 0){ galleryMove(lbKey, 1); }
       else { galleryMove(lbKey, -1); }
     }
   }
 
+  // 如果pinch结束后scale回到1以下，重置
   if(scale <= 1){
     resetTransform();
   }
@@ -594,7 +622,7 @@ let mouseStartX = 0, mouseStartY = 0;
 let mouseLastX = 0, mouseLastY = 0;
 
 lightboxImg.addEventListener('mousedown', (e) => {
-  if(scale <= 1) return;
+  if(scale <= 1) return; // 未放大不拖拽，用左右按钮切换
   mouseDown = true;
   mouseStartX = e.clientX;
   mouseStartY = e.clientY;
