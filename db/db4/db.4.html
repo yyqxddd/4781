@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>嗑🐗这么久了，说点碎碎念</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #f4f4f4;
+        font-family: "Microsoft Yahei", SimHei, Arial, sans-serif;
+        font-size: 14px;
+        color: #333;
+        max-width: 100%;
+        max-width: 720px;
+        margin: 24px auto;
+        padding: 0 16px;
+    }
+
+    /* 主楼卡片 */
+    .post-card {
+        background: #ffffff;
+        border: 1px solid #e7e7e7;
+        border-radius: 12px;
+        padding: 24px;
+    }
+
+    /* 标题 */
+    .post-title {
+        font-size: 20px;
+        font-weight: bold;
+        line-height: 1.4;
+        margin-bottom: 14px;
+        color: #111;
+    }
+
+    /* 楼主信息：ID 和日期分行 */
+    .post-author {
+        margin-bottom: 14px;
+    }
+
+    .author-name {
+        display: block;
+        color: #225599;
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 2px;
+    }
+
+    .post-date {
+        display: block;
+        color: #999;
+        font-size: 13px;
+    }
+
+    /* 主楼正文 */
+    .post-content {
+        line-height: 1.7;
+        color: #333;
+        font-size: 14px;
+    }
+
+    .post-content p {
+        margin-bottom: 8px;
+    }
+
+    /* ========= 居中加粗小标题（截图同款） ========= */
+    .center-bold-title{
+        font-weight: bold;
+        text-align: center;
+        margin:10px 0 26px;
+        font-size:14px;
+    }
+
+    /* 主楼底部 */
+    .post-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 16px;
+    }
+
+    /* 主楼赞 */
+    .post-like-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background-color: #fdf3e7;
+        border: 1px solid #f1e3c6;
+        border-radius: 8px;
+        color: #c17440;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 6px 14px;
+        cursor: pointer;
+    }
+
+    .post-like-btn .thumb {
+        font-size: 16px;
+    }
+
+    /* 分割线 */
+    .divider {
+        border: none;
+        border-top: 1px solid #e7e7e7;
+        margin: 24px 0;
+    }
+
+    /* 评论区灰色线框 */
+    .reply-section {
+        border: 1px solid #d9d9d9;
+        border-radius: 10px;
+        background: #fff;
+        overflow: hidden;
+    }
+
+   /* 评论区顶部灰色条 */
+    .reply-header-bar {
+        background-color: #eaeaea;
+        padding: 7px 12px;
+    }
+
+    .reply-header-bar span {
+        color: #555555;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    /* 评论列表 */
+    .reply-list {
+        padding: 4px 16px 12px;
+    }
+
+    /* 单条评论 */
+    .reply-item {
+        padding: 14px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .reply-item:last-child {
+        border-bottom: none;
+    }
+
+    /* ID时间浅紫矩形，100%宽度 */
+    .reply-user-tag {
+        display: flex;
+        align-items: center;
+        background-color: #e8e4f7;
+        border-radius: 6px;
+        padding: 4px 10px;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+
+    .reply-user {
+        color: #225599;
+        font-weight: 600;
+        font-size: 13px;
+        margin-right: 8px;
+        white-space: nowrap;
+    }
+
+    .reply-time {
+        color: #999;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+/* 默认：主楼gif 居中 */
+.post-content .gif-block {
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 6px 0 0;
+    padding: 0;
+}
+/* 回复区gif 左对齐（旧尺寸不变） */
+.reply-item .gif-block {
+    max-width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 6px 0 8px;
+    padding: 0;
+}
+
+.gif-block img {
+    display: block;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    cursor: zoom-in;
+    border-radius: 6px;
+}
+
+/* 【通用/回复区】原图尺寸：横42%｜竖20%｜正方28% */
+.gif-block img[orientation="landscape"] {
+    max-width: 42%;
+}
+.gif-block img[orientation="portrait"] {
+    max-width: 20%;
+}
+.gif-block img[orientation="square"] {
+    max-width: 28%;
+}
+
+/* 单独覆盖【主楼】：只有横图拉满，竖、正方维持小图 */
+.post-content .gif-block img[orientation="landscape"] {
+    max-width: 100%;
+}
+.post-content .gif-block img[orientation="portrait"] {
+    max-width: 100%;
+}
+.post-content .gif-block img[orientation="square"] {
+    max-width: 100%;
+}
+
+/* 【引用块quote】保留你原来缩小一档，不动！ */
+.quote-block .gif-block {
+    margin: 4px 0 !important;
+}
+.quote-block .gif-block img[orientation="landscape"] {
+    max-width: 38%;
+}
+.quote-block .gif-block img[orientation="portrait"] {
+    max-width: 18%;
+}
+.quote-block .gif-block img[orientation="square"] {
+    max-width: 24%;
+}
+
+/* ========== 引用容器：border‑left写外层，竖线包含图片+全部内容 ========== */
+.quote-block {
+    background-color: #f7f7f7;
+    border-left: 3px solid #999; /*灰色竖线在外层，所有内容都在竖线右侧*/
+    padding: 8px 12px;
+    margin: 8px 0 10px;
+    color: #555;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.quote-inner {
+    overflow: hidden;
+    display: inline; /* 行内，文字和span同行 */
+}
+.quote-inner.collapsed {
+    /* 不再用高度截断，JS直接截断文字 */
+}
+
+.quote-expand-btn {
+    display: inline;
+    color:#225599;
+    cursor:pointer;
+    user-select:none;
+    margin-left:4px; /* 文字和按钮之间留一点点间距 */
+}
+.quote-expand-btn.hidden{
+    display:none;
+}
+    /* 回复内容 */
+    .reply-content {
+        line-height: 1.75;
+        color: #333;
+        font-size: 14px;
+        white-space: pre-line;
+    }
+
+    .reply-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 10px;
+    }
+
+    /* 评论区赞 */
+    .reply-like-btn {
+        color: #666;
+        font-size: 13px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+    }
+
+    .reply-like-btn:hover {
+        color: #225599;
+    }
+
+  /* ========== 回顶部按钮样式【新增】 ========== */
+  .back-top{
+    position:fixed;
+    bottom:18px;
+    right:18px;
+    width:33px;
+    height:33px;
+    border-radius:50%;
+    background:#8b5cf6;
+    color:#fff;
+    border:none;
+    font-size:18px;
+    cursor:pointer;
+    box-shadow:0 4px 12px rgba(139,92,246,0.25);
+    opacity:0;
+    visibility:hidden;
+    transition:0.25s;
+    z-index:98;
+  }
+  .back-top.show{
+    opacity:1;
+    visibility:visible;
+  }
+  .back-top:hover{
+    background:#7c3aed;
+  }
+
+    /* 底部分页 */
+    .page-bar {
+        margin-top: 8px;
+        padding: 12px 20px;
+        background: #fff;
+        border: 1px solid #e7e7e7;
+        border-radius: 12px;
+        display: flex;
+        justify-content: center; /* 内容水平居中 */
+        align-items: center;
+        font-size:14px;
+        color: #666;
+    }
+    .page-left{
+        display:flex;
+        gap:12px;
+    }
+
+    .page-bar a {
+        color: #666;
+        text-decoration: none;
+        padding: 4px 8px;
+    }
+
+    .page-bar a:hover {
+        color: #225599;
+    }
+
+    .page-bar .current {
+        color: #225599;
+        font-weight: bold;
+    }
+.page-bar button {
+    color: #666;
+    background: transparent;
+    border: none;
+    padding: 2px 6px;
+    font-size:15px;
+    cursor:pointer;
+}
+.page-bar button:hover {
+    color: #225599;
+}
+.page-bar button:disabled {
+    color:#bbb;
+    cursor:not-allowed;
+}
+.back-nav{
+    display:inline-block;
+    margin-bottom:16px;
+    color:#8b5cf6;
+    text-decoration:none;
+}
+.back-nav:hover{
+    text-decoration:underline;
+}
+.quote-inner a, .reply-content a{
+    color:#0066cc;
+    text-decoration:underline;
+}
+.quote-inner a:hover, .reply-content a:hover{
+    color:#dd4444;
+}
+@media(max-width:720px){
+    body{
+        margin:12px auto;
+        padding:0 6px;
+    }
+    .post-card{
+        padding:16px;
+    }
+    .reply-item{
+        padding:10px 0;
+    }
+    .divider{
+        margin:16px 0;
+    }
+}
+/* 主楼所有orientation图片统一100% */
+.post-content .gif-block img:not([orientation]){
+    max-width: 100%;
+}
+/* 回复所有orientation图片统一35% */
+.reply-item .gif-block img:not([orientation]) {
+    max-width: 35%;
+}
+/* 引用所有orientation图片统一28% */
+.quote-block .gif-block img:not([orientation]) {
+    max-width: 28%;
+}
+</style>
+</head>
+
+<body>
+<a href="../db.html" class="back-nav">← 返回上一页</a>
+<div class="post-card">
+    <!-- 帖子标题 -->
+    <div class="post-title">嗑🐗这么久了，说点碎碎念</div>
+
+    <!-- 楼主信息 -->
+    <div class="post-author">
+        <span class="author-name">楼主</span>
+        <span class="post-date">2026-03-24 11:20:14 山东</span>
+    </div>
+
+    <div class="post-content">
+        <p>嗑了🐗之后会发现，其实🐗单人和cp和外界刻板印象完全不一样。<br><br>小王第一眼感觉高冷难接近，实际上私下粘人又可爱。小王也并不执着于做瓜，只是她觉得粉丝更喜欢两个人瓜花分明的样子。小王内心还有一部分是萌妹，会喜欢化学超女子这种歌。<br><br>粥粥也是从出道就一直饱受舆论风波，被人误解为心眼多。实际上是个能随便被人拿捏的绝世i人软柿子罢了。而且粥粥在我这的形象其实不是那种抖人爱嗑的引导型恋人，毕竟小王也不拧巴不用引导，有时候她多问几句纯粹就是想听更多好话。<br><br>再说回🐗，🐗其实不是理想型的情侣模板，我之前还和同担说，这俩给我的话我一个也不想谈，但是两个人在一起偏偏非常合适。<br><br>俩人都是互相占有欲爆棚，私下黏糊的要命，一点私人空间不给对方留，各种密码互相知道，手机可以对方随便看，出门默认俩人一起，好友圈90%重合，秀恩爱不分场合，和朋友出门也不会避嫌自成一体。两个人即使谈了n年依旧会吃飞醋，在大庭广众大发嫂子瘾。而且俩人也会吵架，只不过两个人能互相磨合互相理解。<br><br>而且两个人都对外和对内完全就是两种人，粥粥在N队的时候的形象一般是成熟稳重的姐姐类型，对小后辈也各种包容照顾。但是面对小王的时候就是小拳头满天飞，三句话不离撒娇，会耍小脾气会提要求，配得感特别高。小王更明显，后期在H的时候和队友基本是非必要不交流。但是回家了就是打滚闹腾的快乐小狗。<br><br>从我入坑那天就看到🐗天天被骂整天就知道麦咭，我就特别替🐗委屈，🐗其实真的不算能卖的，她俩已经尽力维护了单推想看单人的心情。日常生活99%重合，放出来给cpf看的撑死也就1%。某些cp日常生活重合的部分也就10%，放出来给粉丝看的有8%，这种情况下还说🐗能卖cpf真的委屈得很。</p>
+    </div>
+
+    <!-- 主楼右下角赞 -->
+    <div class="post-footer">
+        <button class="post-like-btn">
+            <span>赞 (75)</span>
+        </button>
+    </div>
+</div>
+
+<hr class="divider" />
+
+<div class="reply-section">
+    <div class="reply-header-bar">
+        <span>回复</span>
+    </div>
+    <div class="reply-list">
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户1</span>
+        <span class="reply-time">2026-03-24 11:38:07 福建</span>
+    </div>
+    <div class="reply-content">在芭这么久，我们家业主真是出淤泥而不染的那种。不抽烟不纹身喝酒也是喝一口，甚至都很少去多人聚会社交。因为这个还一直被骂孤狼。她们俩只想和对方呆在一起罢了，那鱼龙混杂的场合到底有什么好处。而且包括她们的朋友，在精不在多，都是出了名的人好脾气好，她俩就是这样的。只能说业主私生活太干净了，完全没有不良嗜好，而且三观特别正。</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (76)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户2</span>
+        <span class="reply-time">2026-03-24 11:39:46 河北</span>
+    </div>
+<div class="gif-block">
+<img src="db4.1.jpeg" alt="" onclick="openImg(this.src)">
+</div>
+    <div class="reply-content">“我之前还和同担说，这俩给我的话我一个也不想谈，但是两个人在一起偏偏非常合适。”
+这句话给我笑的不行了，有时候觉得cpf比dt更了解她们，因为单人的会去看，双人的更会看，人在爱与被爱时是最脆弱的，更能看出一个人的性格。每次她俩透露一点私下，都感觉展现出来的和真实的真是小巫见大巫🤭</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (35)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户1</span>
+        <span class="reply-time">2026-03-24 11:41:44 福建</span>
+    </div>
+    <div class="reply-content">其实双初恋，感情能经营这么久真的是很有东西了。放在普通人身上都做不到这样，更何况是在这样能被外人随意点评指导的恶意环境下，还能保持自己的初心，依旧热恋，这太难得了。</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (34)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2026-03-24 12:05:38 山东</span>
+    </div>
+    <div class="quote-block">
+<div class="gif-block">
+<img src="db4.1.jpeg" alt="" onclick="openImg(this.src)">
+</div>
+        <div class="quote-inner collapsed">
+        “我之前还和同担说，这俩给我的话我一个也不想谈，但是两个人在一起偏偏非常合适。”这句话给我笑的不行了，有时候觉得cpf比dt更了解她们，因为单人的会去看，双人的更会看，人在爱与被爱时是最脆弱的，更能看出一个人的性格。每次她俩透露一点私下，都感觉展现出来的和真实的真是小巫见大巫🤭
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">对！而且因为偶像身份的特殊性，她俩漏出来的部分比起真实性其实更偏向于粉丝喜欢。真实的人就是会拉屎放屁，会有起床气，会耍赖会无理取闹，会讲黄段子会有心眼。我一直觉得比起她俩在dt面前展现的，和对方在一起的时候更接近真实。</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (17)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户3</span>
+        <span class="reply-time">2026-03-24 12:07:26 广东</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+        其实双初恋，感情能经营这么久真的是很有东西了。放在普通人身上都做不到这样，更何况是在这样能被外人随意点评指导的恶意环境下，还能保持自己的初心，依旧热恋，这太难得了。
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">初恋这点就比大部分人牛了 经过磨合很健康的恋爱方式 最重要的是两个人真的很坚定</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (14)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2026-03-24 12:10:40 山东</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+        在芭这么久，我们家业主真是出淤泥而不染的那种。不抽烟不纹身喝酒也是喝一口，甚至都很少去多人聚会社交。因为这个还一直被骂孤狼。她们俩只想和对方呆在一起罢了，那鱼龙混杂的场合到底有什么好处。而且包括她们的朋友，在精不在多，都是出了名的人好脾气好，她俩就是这样的。只能说业主私生活太干净了，完全没有不良嗜好，而且三观特别正。
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">而且48内部风气也不好，互相耍心眼、关系混乱、没有边界感。两个i人好宝宝完全没必要为了随大流而去委屈自己去社交。说句难听的，因为利益报团的人也会因为利益分配不均而分开，而且🐗在团的最后两三年已经基本做到顶了，和别人在一起报团只会给别人引流罢了。 再说人能有几个知心好友就很难得了，🐗又不是没朋友，本i人真的完全不理解陌生酒局有什么好玩的</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (29)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2026-03-24 12:13:32 山东</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+        其实双初恋，感情能经营这么久真的是很有东西了。放在普通人身上都做不到这样，更何况是在这样能被外人随意点评指导的恶意环境下，还能保持自己的初心，依旧热恋，这太难得了。
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">说到双初恋还有个很好嗑的点，因为俩人谈的时候都还小，很多xp都是按照对方来养成的。有些朦朦胧胧还没成型的xp都被扭曲成了对方的样子，以至于两个人一直觉得互相特别合适。其实不是天生合适，是你俩互相养成啊！</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (31)</button>
+    </div>
+</div>
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户4</span>
+        <span class="reply-time">2026-03-24 12:15:37 云南</span>
+    </div>
+ 
+   <div class="reply-content">楼主说出来我一直以来的想法（表达能力太差了）楼主真的好会说，和我磕了那么久的想法一样的，
+之前看过了了所谓的各种单人双人“黑料”，确实有那么几个点吃的给我劝退，但是我发现双人的时候，那些外接质疑批评反而更好磕了，
+就是那种我知道你有很多缺点和不足，但是就是想要在一起的生理性喜欢，另外从时间线磕会发现，他们两个真的改变了很多，变得更好更适合彼此了。
+（若我词不达意，先致歉）</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户1</span>
+        <span class="reply-time">2026-03-24 12:18:14 福建</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+        而且48内部风气也不好，互相耍心眼、关系混乱、没有边界感。两个i人好宝宝完全没必要为了随大流而去委屈自己去社交。说句难听的，因为利益报团的人也会因为利益分配不均而分开，而且🐗在团的最后两三年已经基本做到顶了，和别人在一起报团只会给别人引流罢了。 再说人能有几个知心好友就很难得了，🐗又不是没朋友，本i人真的完全不理解陌生酒局有什么好玩的
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">是的。芭女私联出轨家暴冷暴力精神PUA的屡见不鲜，甚至还有约过炮堕过胎，和男的谈恋爱的。业主在这种环境下谈了一个正常健康的恋爱，特别珍贵。</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (12)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户2</span>
+        <span class="reply-time">2026-03-24 12:38:52 河北</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">楼主说出来我一直以来的想法（表达能力太差了）楼主真的好会说，和我磕了那么久的想法一样的，
+之前看过了了所谓的各种单人双人“黑料”，确实有那么几个点吃的给我劝退，但是我发现双人的时候，那些外接质疑批评反而更好磕了，
+就是那种我知道你有很多缺点和不足，但是就是想要在一起的生理性喜欢，另外从时间线磕会发现，他们两个真的改变了很多，变得更好更适合彼此了。
+（若我词不达意，先致歉）
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">其实这种在别人眼里是CP附魅，一麦遮百丑，但是不管咋样，业主依旧甜蜜的在一起啊，这就够了，这就说明没磕错</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (7)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户5</span>
+        <span class="reply-time">2026-03-24 12:40:43 广东</span>
+    </div>
+    <div class="reply-content">极力赞同最后一段，两人私下黏黏糊糊，但展现出来给cp粉看到的只有冰山一角！这叫什么麦吉！明明就是捂不住了漏了一点☺️</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (21)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户6</span>
+        <span class="reply-time">2026-03-24 13:36:50 广东</span>
+    </div>
+    <div class="reply-content">🐗是我磕的第一对也是唯一一对觉得cpf在唯粉面前也可以大声说话的！也有发言权的。她们真的维护得很好，有时候饭圈的事大家也都自觉不去打扰她们，吵归吵，闹归闹，一致对外还是很团结的…有时候我真的想磕🍋和💦</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (13)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户7</span>
+        <span class="reply-time">2026-03-24 15:09:33 江西</span>
+    </div>
+    <div class="reply-content">那句“两个我都不想谈”我笑死。确实啊，别说爱豆了，就连普通人也没办法接受另外一半占自己生活里的百分之九十，一点个人空间都不留。。。前两天我还更和朋友聊完，这种恋爱只能看别人谈（嗯对说的就是野猪）要是换我来的话我估计半年不到就受不了了。我其实蛮佩服这两个人能做到天天黏在一起，出去玩睡觉吃饭干什么都要一起，甚至连自己的交际圈都是大部分重合的…这也太吓人了。手机也是 居然能做到互相看，我身边就没有说谈恋爱能谈成到这种程度的朋友，我自己也做不到🤣。讲真的我觉得这两个人能谈这么久爱这么久，都是因为都愿意包容对方不会计较付出。看她们两个谈恋爱的某些情况，我还会感叹我恋爱白谈了，很多时候她们的一些处理情况，比如打翻了东西或者是发生了一些事情，两个人第一反应都不会情绪失控什么的，都会想着好好的解决问题，也不会去抱怨对方。我真的觉得两个人都很好，就给我一种她们不是在谈恋爱是在认真的和对方生活。有一种岁月静好的感觉（应该是这么讲） 其实看她们对孩子是什么态度就知道她们对对方是什么态度啦</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (17)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户8</span>
+        <span class="reply-time">2026-03-24 15:18:30 云南</span>
+    </div>
+    <div class="reply-content">真真切切感觉新鲜感，平淡期这些词汇在她们的爱情里是不存在的，对对方专一长情。这俩不出意外应该是要这样爱一辈子了，想象不了她们会以什么理由分开</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (11)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户9</span>
+        <span class="reply-time">2026-03-24 15:32:42 福建</span>
+    </div>
+    <div class="reply-content">其他不说 双初恋 私生活干净 没有不良嗜好 父母和谐 猫狗双全 赢了99%的情侣</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (14)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户10</span>
+        <span class="reply-time">2026-03-24 16:38:34 北京</span>
+    </div>
+    <div class="reply-content">🐗就是那种我自己谈不了的恋爱，首先我就接受不了基本完全没有个人空间。而且她俩以前还有一些需要磨合的问题，现在基本很少了。还记得有一阵她俩有点会互相拆台，后来有说约法几章，在后面就很少看到说对方不高兴的事了。基本都是有什么事问对方“我可以说吗”，就算谈了很久也会尊重对方。还有就是知道自己在对方心里的位置，偶尔有小吃醋也是情趣，不会真的怀疑对方，彼此安全感给的很足。最羡慕的还是两家父母关系都很好，就算没有她俩在也会互动，结婚了的异性恋亲家大部分都没这个关系，别说同性双方父母都同意了。</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (9)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户6</span>
+        <span class="reply-time">2026-03-24 17:08:48 广东</span>
+    </div>
+    <div class="reply-content">说到情绪稳定，我印象深刻的是11月份她们去厦门忘带梳妆包那次！在岛上很难点外卖，在不确定能不能点到的情况下两个人情绪特别稳定，一句抱怨都没有，我真的做不到，两个人真的命定是对方的人！</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (4)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户11</span>
+        <span class="reply-time">2026-03-24 17:52:22 广东</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+        说到情绪稳定，我印象深刻的是11月份她们去厦门忘带梳妆包那次！在岛上很难点外卖，在不确定能不能点到的情况下两个人情绪特别稳定，一句抱怨都没有，我真的做不到，两个人真的命定是对方的人！
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">还有一次六小时直播 把桌子上的饭打翻了 两个人也没有怨一句 一起打扫情绪真的太稳定了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (3)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户1</span>
+        <span class="reply-time">2026-03-24 18:15:05 福建</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+        还有一次六小时直播 把桌子上的饭打翻了 两个人也没有怨一句 一起打扫情绪真的太稳定了
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">还有一次小饼把奶茶洒身上了，拜托小雨去拿纸张。小雨拿了一个纸巾盒盖子过来，发现之后还一直拖着没拿，在那里萌萌地笑！换我我都急死了！饼儿情绪超稳的（专门指对待老婆，对别人就是脾气暴躁了hhh</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (10)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户1</span>
+        <span class="reply-time">2026-03-24 19:26:28 福建</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+        那句“两个我都不想谈”我笑死。确实啊，别说爱豆了，就连普通人也没办法接受另外一半占自己生活里的百分之九十，一点个人空间都不留。。。前两天我还更和朋友聊完，这种恋爱只能看别人谈（嗯对说的就是野猪）要是换我来的话我估计半年不到就受不了了。我其实蛮佩服这两个人能做到天天黏在一起，出去玩睡觉吃饭干什么都要一起，甚至连自己的交际圈都是大部分重合的…这也太吓人了。手机也是 居然能做到互相看，我身边就没有说谈恋爱能谈成到这种程度的朋友，我自己也做不到🤣。讲真的我觉得这两个人能谈这么久爱这么久，都是因为都愿意包容对方不会计较付出。看她们两个谈恋爱的某些情况，我还会感叹我恋爱白谈了，很多时候她们的一些处理情况，比如打翻了东西或者是发生了一些事情，两个人第一反应都不会情绪失控什么的，都会想着好好的解决问题，也不会去抱怨对方。我真的觉得两个人都很好，就给我一种她们不是在谈恋爱是在认真的和对方生活。有一种岁月静好的感觉（应该是这么讲） 其实看她们对孩子是什么态度就知道她们对对方是什么态度啦
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">她们的生活不管是哪一part，都全是对方的痕迹了，不管干什么事情都有对方的影子在了，生活轨迹完全是交叠在一起，就没有对方不知道不参与的事！对方已经是属于自己的一部分了，完全分不开一点。</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (4)</button>
+    </div>
+</div>
+
+    </div>
+</div>
+
+<div class="page-bar">
+    <div class="page-left">
+        <button id="prevPageBtn">前页</button>
+        <a href="db.1.1.html" class="current">1</a>
+        <button id="nextPageBtn">后页</button>
+    </div>
+</div>
+  <button class="back-top" id="backTop">↑</button>
+
+<script>
+//网址转链接
+function urlToLink(text){
+  const reg = /(https?:\/\/[^\s，。！；：""'()【】]+)/gi;
+  return text.replace(reg,`<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>`)
+}
+
+//页面加载完毕，自动缓存每个quote原始文字
+document.addEventListener('DOMContentLoaded',function(){
+  document.querySelectorAll('.quote-inner').forEach(item=>{
+    item.dataset.fullText = item.textContent.trim();
+  })
+
+  //初始化折叠状态
+  document.querySelectorAll('.quote-block').forEach(function(block){
+    const inner = block.querySelector('.quote-inner');
+    const btn = block.querySelector('.quote-expand-btn');
+    if(!btn) return;
+    const fullTxt = inner.dataset.fullText;
+    if(fullTxt.length > 50){
+        let shortTxt = fullTxt.slice(0,50);
+        inner.innerHTML = urlToLink(shortTxt);
+        inner.classList.add("collapsed");
+        btn.style.display = "inline";
+    }else{
+        inner.innerHTML = urlToLink(fullTxt);
+        inner.classList.remove("collapsed");
+        btn.style.display = "none";
+    }
+  })
+
+  // 给reply-content评论正文也自动转链接
+  document.querySelectorAll('.reply-content').forEach(el=>{
+    const rawText = el.textContent;
+    el.innerHTML = urlToLink(rawText);
+  })
+})
+
+function toggleQuote(btn){
+  const wrap = btn.previousElementSibling;
+  const fullTxt = wrap.dataset.fullText;
+  if(wrap.classList.contains("collapsed")){
+    wrap.innerHTML = urlToLink(fullTxt);
+    wrap.classList.remove("collapsed");
+    btn.textContent="收起";
+  }else{
+    let shortTxt = fullTxt.slice(0,50);
+    wrap.innerHTML = urlToLink(shortTxt);
+    wrap.classList.add("collapsed");
+    btn.textContent="...";
+  }
+}
+
+//分页控制【修改：只有1页，前后按钮全部置灰】
+const prevPageBtn = document.getElementById('prevPageBtn');
+const nextPageBtn = document.getElementById('nextPageBtn');
+let currentPageNum = 1;
+const totalPageNum = 1;
+
+function updatePageBtnState(){
+    prevPageBtn.disabled = true; //首页，前页永久灰
+    nextPageBtn.disabled = true; //只有一页，后页永久灰
+}
+
+prevPageBtn.onclick = function(){
+    // 只有一页，点击无动作
+}
+nextPageBtn.onclick = function(){
+    // 只有一页，点击无动作
+}
+updatePageBtnState();
+
+// 自动判断横图/竖图/正方形，加载前先锁尺寸，动态加上懒加载
+document.querySelectorAll('.gif-block img').forEach(img => {
+    img.loading = "lazy"; // 动态懒加载，不用改HTML
+
+    // ✅ 改成向上查找父容器，判断属于哪个区域
+    if(img.closest('.post-content')){
+        img.style.maxWidth = "100%";
+    }else if(img.closest('.reply-item')){
+        img.style.maxWidth = "35%";
+    }else if(img.closest('.quote-block')){
+        img.style.maxWidth = "28%";
+    }
+
+    img.onload = function () {
+        this.style.maxWidth = ""; // 清空行内，交给CSS orientation
+        const w = this.naturalWidth;
+        const h = this.naturalHeight;
+        if (w > h) {
+            this.setAttribute('orientation', 'landscape');
+        } else if (h > w) {
+            this.setAttribute('orientation', 'portrait');
+        } else {
+            this.setAttribute('orientation', 'square');
+        }
+    };
+    img.onerror = function(){
+        this.style.display="none"; // 图片失效直接隐藏裂图
+    }
+});
+
+// 点击放大
+function openImg(src) {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        cursor: zoom-out;
+    `;
+
+    const bigImg = document.createElement('img');
+    bigImg.src = src;
+    bigImg.style.cssText = `
+        max-width: 92vw;
+        max-height: 92vh;
+        border-radius: 6px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    `;
+
+    overlay.appendChild(bigImg);
+    document.body.appendChild(overlay);
+
+    overlay.addEventListener('click', function () {
+        overlay.remove();
+    });
+}
+// ========== 回顶部JS ==========
+const backTopBtn = document.getElementById('backTop');
+window.addEventListener('scroll', ()=>{
+  if(window.scrollY > 300){
+    backTopBtn.classList.add('show');
+  }else{
+    backTopBtn.classList.remove('show');
+  }
+})
+backTopBtn.onclick = ()=>{
+  window.scrollTo({
+    top:0,
+    behavior:'smooth'
+  })
+}
+</script>
+</body>
+</html>
