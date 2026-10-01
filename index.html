@@ -85,7 +85,6 @@
   /* 弹窗遮罩 */
 .modal-mask{
     position:fixed;
-
     inset:0;
     background:rgba(0,0,0,0.4);
     display:none;
@@ -253,6 +252,58 @@
     color: #222;
   }
 
+  /* ====== 未完待续弹窗样式 ====== */
+.modal-mask-more{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.4);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:99;
+}
+.modal-box-more{
+    width:90%;
+    max-width:480px;
+    background:#f8f5fe;
+    border-radius:16px;
+    padding:32px 24px 24px;
+    border:1px solid #ddd4ee;
+    position:relative;
+}
+.modal-box-more h3{
+    color:#7c3aed;
+    margin-bottom:14px;
+    text-align:center;
+    font-size:18px;
+    text-shadow: 0 0 8px rgba(139,92,246,0.25);
+}
+.modal-box-more p{
+    font-size:16px;
+    color:#a78bfa;
+    text-align:center;
+    line-height:1.8;
+}
+.modal-close-more{
+    position:absolute;
+    top:12px;
+    right:12px;
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    border:none;
+    background:#e9e1f8;
+    color:#8b5cf6;
+    font-size:16px;
+    line-height:30px;
+    text-align:center;
+    cursor:pointer;
+    padding:0;
+}
+.modal-close-more:hover{
+    background:#ddd4ee;
+}
+
   /* 底部说明 */
   .footer-note {
     margin-top: 15px;
@@ -294,7 +345,7 @@
       <span class="sep">/</span>
       <a href="#archive">🗂️ 存档导航</a>
     </nav>
-    <div class="update-info">更新于 20260930</div>
+    <div class="update-info">更新于 20261001</div>
   </header>
 
   <main class="container">
@@ -387,11 +438,11 @@
   <div class="card-icon">📺</div>
   <h3>综艺</h3>
 </a>
-
-<a href="part12.html" class="archive-card">
+<!-- 未完待续：去掉a链接，改成点击弹窗 -->
+<div class="archive-card" onclick="openMoreModal()">
   <div class="card-icon">🗂️</div>
   <h3>未完待续</h3>
-</a>
+</div>
     </div>
 
     <div class="footer-note">
@@ -411,6 +462,15 @@
     </div>
   </div>
 
+  <!-- 未完待续弹窗 -->
+  <div class="modal-mask-more" id="modalMore">
+    <div class="modal-box-more">
+      <button class="modal-close-more" onclick="closeMoreModal()" aria-label="关闭">×</button>
+      <h3>₍˄•͈༝•͈˄₎ฅ˒˒✖️ ૮´͈ ᗜ `͈ა</h3>
+      <p>王奕周诗雨热恋ing，更多美好敬请期待💜</p>
+    </div>
+  </div>
+
 <script>
 const modal = document.getElementById('modal');
 function openModal(){
@@ -426,7 +486,21 @@ modal.addEventListener('click',function(e){
   }
 })
 
-// ========== 回顶部JS【新增】 ==========
+// ===== 未完待续弹窗JS =====
+const modalMore = document.getElementById('modalMore');
+function openMoreModal(){
+  modalMore.style.display = 'flex';
+}
+function closeMoreModal(){
+  modalMore.style.display = 'none';
+}
+modalMore.addEventListener('click',function(e){
+  if(e.target === modalMore){
+    closeMoreModal();
+  }
+})
+
+// ========== 回顶部JS ==========
 const backTopBtn = document.getElementById('backTop');
 window.addEventListener('scroll', ()=>{
   if(window.scrollY > 300){

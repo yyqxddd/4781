@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>一周的日记｜诗情画奕备忘录</title>
+<title>综艺｜诗情画奕备忘录</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}
 body{max-width:900px;margin:30px auto;padding:0 16px;background:#f3eef9;}
@@ -14,11 +14,72 @@ body{max-width:900px;margin:30px auto;padding:0 16px;background:#f3eef9;}
   margin-bottom: 20px;
   font-size: 15px;
 }
-/* 顶部标签栏 */
+
+/* ========== 新增：顶部大Tab（胶囊实心样式，和小tab区分） ========== */
+.big-tab-bar{
+  display:flex;
+  gap:16px;
+  margin-bottom:24px;
+  flex-wrap:wrap;
+}
+/* 一周的日记 - 浅蓝 */
+.big-tab-item.blue{
+  padding:12px 28px;
+  border-radius:999px;
+  background:#e1edf9;
+  color:#2b6cb0;
+  font-size:17px;
+  font-weight:600;
+  cursor:pointer;
+  border:2px solid #e1edf9;
+  transition:0.2s;
+}
+.big-tab-item.blue.active{
+  background:#639cd9;
+  color:#fff;
+  border-color:#639cd9;
+  box-shadow:0 4px 12px rgba(99,156,217,0.25);
+}
+.big-tab-item.blue:hover{
+  background:#c5def5;
+}
+.big-tab-item.blue.active:hover{
+  background:#4f86c2;
+}
+
+/* 与奇妙握爪 - 柔和浅橙 */
+.big-tab-item.orange{
+  padding:12px 28px;
+  border-radius:999px;
+  background:#fff0e1;
+  color:#b46236;
+  font-size:17px;
+  font-weight:600;
+  cursor:pointer;
+  border:2px solid #fff0e1;
+  transition:0.2s;
+}
+.big-tab-item.orange.active{
+  background:#ec9864;
+  color:#fff;
+  border-color:#ec9864;
+  box-shadow:0 4px 12px rgba(236,152,100,0.25);
+}
+.big-tab-item.orange:hover{
+  background:#ffe2c0;
+}
+.big-tab-item.orange.active:hover{
+  background:#dd844f;
+}
+
+.big-content{display:none;}
+.big-content.active{display:block;}
+
+/* 小tab栏（原来的下划线样式，放在大tab里面） */
 .tab-bar{
   display:flex;
   border-bottom:1px solid #ddd4ee;
-  margin-bottom:30px;
+  margin-bottom:24px;
   gap:0;
   overflow-x:auto;
 }
@@ -38,11 +99,10 @@ body{max-width:900px;margin:30px auto;padding:0 16px;background:#f3eef9;}
   color:#a864c7;
   font-weight:bold;
 }
-
 .tab-content{display:none;}
 .tab-content.active{display:block;}
 
-/* 选集按钮 放到播放器下方，加宽适配EP01文字 */
+/* 选集按钮 */
 .select-wrap{
   display:flex;
   flex-wrap:wrap;
@@ -95,9 +155,13 @@ body{max-width:900px;margin:30px auto;padding:0 16px;background:#f3eef9;}
     margin: 16px auto;
     padding: 0 12px;
   }
+  .big-tab-item.blue, .big-tab-item.orange{
+    padding:10px 20px;
+    font-size:15px;
+  }
   .tab-item {
     padding: 8px 14px;
-    font-size: 14px;
+    font-size:14px;
   }
   .bili-player{
     height:220px;
@@ -113,109 +177,114 @@ body{max-width:900px;margin:30px auto;padding:0 16px;background:#f3eef9;}
 <body>
 <div class="container">
   <a class="back-home" href="index.html">← 返回主页导航</a>
-<div class="tab-bar">
-  <div class="tab-item active" data-tab="tab-zongyi">📺｜正片</div>
-  <div class="tab-item" data-tab="tab-xd">✨｜先导片</div>
-  <div class="tab-item" data-tab="tab-cf">🎙️｜采访</div>
-  <div class="tab-item" data-tab="tab-hx">🎞️｜花絮</div>
-</div>
 
-<!-- Tab1 正片 -->
-<div class="tab-content active" id="tab-zongyi">
-  <div class="iframe-wrap">
-    <div class="bili-player">
-      <iframe id="iframe-zongyi" data-ep="" src="" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+  <!-- 顶部大Tab栏，删掉｜ -->
+  <div class="big-tab-bar">
+    <div class="big-tab-item blue active" data-big="big-zrjil">📓 一周的日记</div>
+    <div class="big-tab-item orange" data-big="big-qmzw">🐾 与奇妙握爪</div>
+  </div>
+
+  <!-- 大Tab1：一周的日记（带小分类） -->
+  <div class="big-content active" id="big-zrjil">
+    <div class="tab-bar">
+      <div class="tab-item active" data-tab="tab-zongyi">📺｜正片</div>
+      <div class="tab-item" data-tab="tab-xd">✨｜先导片</div>
+      <div class="tab-item" data-tab="tab-cf">🎙️｜采访</div>
+      <div class="tab-item" data-tab="tab-hx">🎞️｜花絮</div>
+    </div>
+
+    <div class="tab-content active" id="tab-zongyi">
+      <div class="iframe-wrap"><div class="bili-player">
+        <iframe id="iframe-zongyi" src="" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+      </div></div>
+      <div class="select-wrap" id="sel-zongyi"></div>
+    </div>
+
+    <div class="tab-content" id="tab-xd">
+      <div class="iframe-wrap"><div class="bili-player">
+        <iframe id="iframe-xd" src="" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+      </div></div>
+      <div class="select-wrap" id="sel-xd"></div>
+    </div>
+
+    <div class="tab-content" id="tab-cf">
+      <div class="iframe-wrap"><div class="bili-player">
+        <iframe id="iframe-cf" src="" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+      </div></div>
+      <div class="select-wrap" id="sel-cf"></div>
+    </div>
+
+    <div class="tab-content" id="tab-hx">
+      <div class="iframe-wrap"><div class="bili-player">
+        <iframe id="iframe-hx" src="" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+      </div></div>
+      <div class="select-wrap" id="sel-hx"></div>
     </div>
   </div>
-  <div class="select-wrap" id="sel-zongyi"></div>
-</div>
 
-<!-- Tab2 先导片 -->
-<div class="tab-content" id="tab-xd">
-  <div class="iframe-wrap">
-    <div class="bili-player">
-      <iframe id="iframe-xd" data-ep="" src="" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
-    </div>
+  <!-- 大Tab2：与奇妙握爪（直接选集） -->
+  <div class="big-content" id="big-qmzw">
+    <div class="iframe-wrap"><div class="bili-player">
+      <iframe id="iframe-qmzw" src="" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+    </div></div>
+    <div class="select-wrap" id="sel-qmzw"></div>
   </div>
-  <div class="select-wrap" id="sel-xd"></div>
-</div>
-
-<!-- Tab3 采访 -->
-<div class="tab-content" id="tab-cf">
-  <div class="iframe-wrap">
-    <div class="bili-player">
-      <iframe id="iframe-cf" data-ep="" src="" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
-    </div>
-  </div>
-  <div class="select-wrap" id="sel-cf"></div>
-</div>
-
-<!-- Tab4 花絮 -->
-<div class="tab-content" id="tab-hx">
-  <div class="iframe-wrap">
-    <div class="bili-player">
-      <iframe id="iframe-hx" data-ep="" src="" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
-    </div>
-  </div>
-  <div class="select-wrap" id="sel-hx"></div>
-</div>
 
 <script>
-// ========= 配置区域 =========
 const data = {
-  "zongyi": {
-    eps: [
-      {ep:"BV1jj421o7KD", num:"EP01"},
-      {ep:"BV1yf421Z7Jn", num:"EP02"},
-      {ep:"BV1eM4m1X7VE", num:"EP03"},
-      {ep:"BV1FC41157Zf", num:"EP04"},
-      {ep:"BV1TF4m1P7uq", num:"EP05"},
-      {ep:"BV1oC411n796", num:"EP06"},
-      {ep:"BV1mt421c7NR", num:"EP07"},
-      {ep:"BV1s7421f73y", num:"EP08"},
-      {ep:"BV18f42127tA", num:"加更"},
-    ]
-  },
-  "xd": {
-    eps: [
-      {ep:"BV1VK421x7h6", num:"EP01"},
-      {ep:"BV1vQ4y157CS", num:"EP02"},
-    ]
-  },
-  "cf": {
-    eps: [
-      {ep:"BV1ZC411h72M", num:"EP01"},
-      {ep:"BV1Mj421o766", num:"EP02"},
-      {ep:"BV1Dx4y1S7hw", num:"EP03"},
-      {ep:"BV1MZ421t7dT", num:"EP04"},
-    ]
-  },
-  "hx": {
-    eps: [
-      {ep:"BV1FD421j79Q", num:"EP01"},
-      {ep:"BV1Kx421X7ei", num:"EP02"},
-      {ep:"BV1vE421g7Fp", num:"EP03"},
-      {ep:"BV1jr421x7J1", num:"EP04"},
-      {ep:"BV14E421M7n6", num:"EP05"},
-      {ep:"BV1CH4y1A7Dr", num:"EP06"},
-      {ep:"BV1Zb421Y7p7", num:"EP07"},
-      {ep:"BV1GH4y137yA", num:"EP08"},
-    ]
-  }
+  "zongyi": {eps: [
+    {ep:"BV1jj421o7KD", num:"EP01"},
+    {ep:"BV1yf421Z7Jn", num:"EP02"},
+    {ep:"BV1eM4m1X7VE", num:"EP03"},
+    {ep:"BV1FC41157Zf", num:"EP04"},
+    {ep:"BV1TF4m1P7uq", num:"EP05"},
+    {ep:"BV1oC411n796", num:"EP06"},
+    {ep:"BV1mt421c7NR", num:"EP07"},
+    {ep:"BV1s7421f73y", num:"EP08"},
+    {ep:"BV18f42127tA", num:"加更"},
+  ]},
+  "xd": {eps: [
+    {ep:"BV1VK421x7h6", num:"EP01"},
+    {ep:"BV1vQ4y157CS", num:"EP02"},
+  ]},
+  "cf": {eps: [
+    {ep:"BV1ZC411h72M", num:"EP01"},
+    {ep:"BV1Mj421o766", num:"EP02"},
+    {ep:"BV1Dx4y1S7hw", num:"EP03"},
+    {ep:"BV1MZ421t7dT", num:"EP04"},
+  ]},
+  "hx": {eps: [
+    {ep:"BV1FD421j79Q", num:"EP01"},
+    {ep:"BV1Kx421X7ei", num:"EP02"},
+    {ep:"BV1vE421g7Fp", num:"EP03"},
+    {ep:"BV1jr421x7J1", num:"EP04"},
+    {ep:"BV14E421M7n6", num:"EP05"},
+    {ep:"BV1CH4y1A7Dr", num:"EP06"},
+    {ep:"BV1Zb421Y7p7", num:"EP07"},
+    {ep:"BV1GH4y137yA", num:"EP08"},
+  ]},
+  "qmzw": {eps: [
+    {ep:"BV1UH92YXEks", num:"EP01"},
+    {ep:"BV1NFQ6YoE76", num:"EP02"},
+    {ep:"BV1xhXkYTEYe", num:"EP03"},
+    {ep:"BV1K2oRYJezF", num:"EP04"},
+    {ep:"BV1CxZZYWE8i", num:"EP05"},
+    {ep:"BV15vdDY7EM2", num:"EP06"},
+  ]}
 }
 
-// 渲染选集按钮
+let renderedTabs = new Set();
+
 function renderSelect(type, selWrapId, iframeId){
+  if(renderedTabs.has(type)) return;
   const wrapDom = document.getElementById(selWrapId);
   const iframeDom = document.getElementById(iframeId);
   const list = data[type].eps;
   wrapDom.innerHTML = "";
-
   list.forEach((item, idx)=>{
     const btn = document.createElement('button');
     btn.className = "select-btn" + (idx===0 ? " active":"");
     btn.innerText = item.num;
-    btn.dataset.ep = item.ep;
     btn.onclick = function(){
       wrapDom.querySelectorAll('.select-btn').forEach(b=>b.classList.remove('active'));
       this.classList.add('active');
@@ -223,17 +292,46 @@ function renderSelect(type, selWrapId, iframeId){
     }
     wrapDom.appendChild(btn);
   })
-  // 默认加载第一集
-  const firstEp = list[0].ep;
-  iframeDom.src = `https://player.bilibili.com/player.html?bvid=${firstEp}&autoplay=0&poster=1`;
+  iframeDom.src = `https://player.bilibili.com/player.html?bvid=${list[0].ep}&autoplay=0&poster=1`;
+  renderedTabs.add(type);
 }
 
-// tab切换
-const tabList = document.querySelectorAll('.tab-item');
+function unloadAllIframes(containerId){
+  const c = document.getElementById(containerId);
+  c.querySelectorAll('iframe').forEach(f=>{f.src="";})
+}
+
+const bigTabs = document.querySelectorAll('.big-tab-item');
+const bigContents = document.querySelectorAll('.big-content');
+bigTabs.forEach(tab=>{
+  tab.onclick = function(){
+    bigTabs.forEach(t=>t.classList.remove('active'));
+    bigContents.forEach(c=>{
+      c.classList.remove('active');
+      unloadAllIframes(c.id);
+    })
+    this.classList.add('active');
+    const bigId = this.dataset.big;
+    document.getElementById(bigId).classList.add('active');
+    if(bigId === "big-zrjil"){
+      renderSelect("zongyi","sel-zongyi","iframe-zongyi");
+      document.getElementById("iframe-zongyi").src = `https://player.bilibili.com/player.html?bvid=${data.zongyi.eps[0].ep}&autoplay=0&poster=1`;
+    }
+    if(bigId === "big-qmzw"){
+      renderSelect("qmzw","sel-qmzw","iframe-qmzw");
+      document.getElementById("iframe-qmzw").src = `https://player.bilibili.com/player.html?bvid=${data.qmzw.eps[0].ep}&autoplay=1`;
+    }
+  }
+})
+
+const tabList = document.querySelectorAll('#big-zrjil .tab-item');
 tabList.forEach(tab=>{
   tab.onclick = function(){
     tabList.forEach(t=>t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    document.querySelectorAll('#big-zrjil .tab-content').forEach(c=>{
+      c.classList.remove('active');
+      c.querySelector('iframe').src="";
+    })
     this.classList.add('active');
     const tabId = this.dataset.tab;
     document.getElementById(tabId).classList.add('active');
@@ -244,7 +342,6 @@ tabList.forEach(tab=>{
   }
 })
 
-// 页面初始化加载第一个tab
 renderSelect("zongyi","sel-zongyi","iframe-zongyi");
 </script>
 </body>
