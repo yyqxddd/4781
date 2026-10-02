@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>优质剪辑｜诗情画奕的备忘录</title>
+<style>
+ * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+    background: #f3eef9;
+    color: #333;
+    line-height: 1.7;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px 16px 60px;
+  }
+
+  .back-home {
+    display: inline-block;
+    text-decoration: none;
+    color: #8b5cf6;
+    margin-bottom: 16px;
+    font-size: 15px;
+  }
+  .back-home:hover {
+    text-decoration: underline;
+  }
+
+  /* ========== 升级版 Tab 栏 ========== */
+  .tab-bar {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding: 6px;
+    background: #e9e1f8;
+    border-radius: 999px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .tab {
+    position: relative;
+    padding: 10px 32px;
+    border-radius: 999px;
+    border: none;
+    background: transparent;
+    color: #8b5cf6;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .tab:hover {
+    color: #7c3aed;
+  }
+
+  .tab.active {
+    background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4);
+  }
+
+  .tab .tab-icon {
+    font-size: 16px;
+  }
+
+  /* 视频卡片网格 */
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 24px;
+  }
+
+  .video-card {
+    background: #f8f5fe;
+    border: 1px solid #e2d9f3;
+    border-radius: 14px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .video-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(139,92,246,0.15);
+    border-color: #a78bfa;
+  }
+
+  /* B站iframe 16:9自适应容器【懒加载占位】 */
+  .iframe-wrap {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+    background:#ede8f7;
+  }
+  .iframe-wrap iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border:0;
+  }
+
+  /* 卡片信息 */
+  .card-info {
+    padding: 14px 16px 16px;
+  }
+  .card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  .card-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: #e9e1f8;
+    color: #8b5cf6;
+  }
+  .tag.sweet { background: #fce7f3; color: #db2777; }
+  .tag.tear { background: #e0e7ff; color: #4338ca; }
+  .tag.grow { background: #dcfce7; color: #15803d; }
+  .tag.funny { background: #fef3c7; color: #d97706; }
+  .tag.obey { background: #fef2f2; color: #b91c1c; }
+  .tag.praise { background: #f0fdf4; color: #047857; }
+  .tag.focus { background: #eff6ff; color: #1d4ed8; }
+  .tag.feed { background: #fffbeb; color: #b45309; }
+  .tag.coconut { background: #ffedd5; color: #c2410c; }
+  .tag.possess { background:#fef2f2;color:#b91c1c;}
+  .tag.tease { background:#fef3c7;color:#d97706;}
+
+  /* 回顶部 */
+  .back-top {
+    position: fixed;
+    bottom: 18px;
+    right: 18px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #8b5cf6;
+    color: #fff;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(139,92,246,0.25);
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.25s;
+    z-index: 98;
+  }
+  .back-top.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  .back-top:hover {
+    background: #7c3aed;
+  }
+
+  /* 移动端 */
+  @media (max-width: 720px) {
+    .tab-bar {
+      gap: 4px;
+      padding: 4px;
+    }
+    .tab {
+      padding: 8px 20px;
+      font-size: 14px;
+    }
+    .video-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a class="back-home" href="index.html">← 返回存档首页</a>
+
+  <!-- Tab栏：神剪 / 相处 -->
+  <div class="tab-bar">
+    <button class="tab active" data-tab="edit"><span class="tab-icon">🎬</span>神剪</button>
+    <button class="tab" data-tab="getalong"><span class="tab-icon">🧩</span>相处</button>
+  </div>
+
+  <!-- 视频卡片网格 -->
+  <div class="video-grid" id="videoGrid">
+
+    <!-- ===== 成长向 ===== -->
+    <div class="video-card" data-cat="edit" data-src="https://player.bilibili.com/player.html?bvid=BV1fSNneZEBu&autoplay=0&danmaku=1&poster=1">
+      <div class="iframe-wrap">
+      </div>
+      <div class="card-info">
+        <div class="card-title">【诗情画奕】真情实感的时间线</div>
+        <div class="card-tags">
+          <span class="tag grow">成长</span>
+          <span class="tag">神剪</span>
+        </div>
+      </div>
+    </div>
+    <div class="video-card" data-cat="edit" data-src="https://player.bilibili.com/player.html?bvid=BV1JtBuYFEyv&autoplay=0&danmaku=1&poster=1">
+      <div class="iframe-wrap">
+      </div>
+      <div class="card-info">
+        <div class="card-title">【诗情画奕】双向奔赴</div>
+        <div class="card-tags">
+          <span class="tag grow">成长</span>
+          <span class="tag">神剪</span>
+        </div>
+      </div>
+    </div>
+    <div class="video-card" data-cat="edit" data-src="https://player.bilibili.com/player.html?bvid=BV1Pz42117Zh&autoplay=0&danmaku=1&poster=1">
+      <div class="iframe-wrap">
+      </div>
+      <div class="card-info">
+        <div class="card-title">【诗情画奕】携手同行，奔赴更好的我们</div>
+        <div class="card-tags">
+          <span class="tag grow">成长</span>
+          <span class="tag">神剪</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 高甜向 ===== -->
+    <div class="video-card" data-cat="edit" data-src="https://player.bilibili.com/player.html?bvid=BV1ty4y1p7Ce&autoplay=0&danmaku=1&poster=1">
+      <div class="iframe-wrap">
+      </div>
+      <div class="card-info">
+        <div class="card-title">【诗情画奕】女友感max的100个心动瞬间</div>
+        <div class="card-tags">
+          <span class="tag sweet">高甜</span>
+          <span class="tag">神剪</span>
+        </div>
+      </div>
+    </div>
+    <div class="video-card" data-cat="edit" data-src="https://player.bilibili.com/player.html?bvid=BV1nq4y1U7xe&autoplay=0&danmaku=1&poster=1">
+      <div class="iframe-wrap">
+      </div>
+      <div class="card-info">
+        <div class="card-title">【诗情画奕】推拉小能手和直球选手</div>
+        <div class="card-tags">
+          <span class="tag sweet">高甜</span>
+          <span class="tag">神剪</span>
+        </div>
+      </div>
+    </div>
+    <div class="video-card" data-cat="edit" data-src="https://player.bilibili.com/player.html?bvid=BV1DX4y1a7x4&autoplay=0&danmaku=1&poster=1">
+      <div class="iframe-wrap">
+      </div>
+      <div class="card-info">
+        <div class="card-title">【诗情画奕】直球年下✖️傲娇年上</div>
+        <div class="card-tags">
+          <span class="tag sweet">高甜</span>
+          <span class="tag">神剪</span>
+        </div>
+      </div>
+    </div>
+    <div class="video-card" data-cat="edit" data-src="https://player.bilibili.com/player.html?bvid=BV1Jb4y167p9&autoplay=0&danmaku=1&poster=1">
+      <div class="iframe-wrap">
+      </div>
+      <div class="card-info">
+        <div class="card-title">【诗情画奕】小情侣撒娇大比拼</div>
+        <div class="card-tags">
+          <span class="tag sweet">高甜</span>
+          <span class="tag">神剪</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 催泪向 ===== -->
+    <div class="video-card" data-cat="edit" data-src="https://player.bilibili.com/player.html?bvid=BV1yf421v7tj&autoplay=0&danmaku=1&poster=1">
+      <div class="iframe-wrap">
+      </div>
+      <div class="card-info">
+        <div class="card-title">【诗情画奕】相爱不会相忘</div>
+        <div class="card-tags">
+          <span class="tag tear">催泪</span>
+          <span class="tag">神剪</span>
+        </div>
+      </div>
+    </div>
+    <div class="video-card" data-cat="edit" data-src="https://player.bilibili.com/player.html?bvid=BV1z2421c7JY&autoplay=0&danmaku=1&poster=1">
+      <div class="iframe-wrap">
+      </div>
+      <div class="card-info">
+        <div class="card-title">【诗情画奕】爱迎万难，也赢万难</div>
+        <div class="card-tags">
+          <span class="tag tear">催泪</span>
+          <span class="tag">神剪</span>
+        </div>
+      </div>
+    </div>
+    <div class="video-card" data-cat="edit" data-src="https://player.bilibili.com/player.html?bvid=BV1GV4y167Yn&autoplay=0&danmaku=1&poster=1">
+      <div class="iframe-wrap">
+      </div>
+      <div class="card-info">
+        <div class="card-title">【诗情画奕】愿得一人心，白首不分离</div>
+        <div class="card-tags">
+          <span class="tag tear">催泪</span>
+          <span class="tag">神剪</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 欢乐搞笑向 ===== -->
+    <div class="video-card" data-cat="edit" data-src="https://player.bilibili.com/player.html?bvid=BV12L411j7NN&autoplay=0&danmaku=1&poster=1">
+      <div class="iframe-wrap">
+      </div>
+      <div class="card-info">
+        <div class="card-title">【诗情画奕】幽默小情侣</div>
+        <div class="card-tags">
+          <span class="tag funny">欢乐</span>
+          <span class="tag">神剪</span>
+        </div>
+      </div>
+    </div>
+    <div class="video-card" data-cat="edit" data-src="https://player.bilibili.com/player.html?bvid=BV1DG411n76H&autoplay=0&danmaku=1&poster=1">
+      <div class="iframe-wrap">
+      </div>
+      <div class="card-info">
+        <div class="card-title">【诗情画奕】爆笑ky名场面</div>
+        <div class="card-tags">
+          <span class="tag funny">欢乐</span>
+          <span class="tag">神剪</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 相处板块｜严格按你给的BV顺序 ===== -->
+    <div class="video-card" data-cat="getalong" data-src="https://player.bilibili.com/player.html?bvid=BV1CypoeUERZ&autoplay=0&danmaku=1&poster=1">
+      <div class="iframe-wrap">
+      </div>
+      <div class="card-info">
+        <div class="card-title">【诗情画奕】宇甜热恋秘诀之“乖乖听老婆话”</div>
+        <div class="card-tags">
+          <span class="tag obey">听话</span>
+          <span class="tag">相处</span>
+        </div>
+      </div>
+    </div>
+    <div class="video-card" data-cat="getalong" data-src="https://player.bilibili.com/player.html?bvid=BV1DbYueDEHD&autoplay=0&danmaku=1&poster=1">
+      <div class="iframe-wrap">
+      </div>
+      <div class="card-info">
+        <div class="card-title">【诗情画奕】宇甜热恋秘诀之“她一定会夸我的”</div>
+        <div class="card-tags">
+          <span class="tag praise">夸奖</span>
+          <span class="tag">相处</span>
+        </div>
+      </div>
+    </div>
+    <div class="video-card" data-cat="getalong" data-src="https://player.bilibili.com/player.html?bvid=BV1u23G6SEdZ&autoplay=0&danmaku=1&poster=1">
+      <div class="iframe-wrap">
+      </div>
+      <div class="card-info">
+        <div class="card-title">【诗情画奕】宇甜热恋秘诀之“她一定会夸我的2.0”</div>
+        <div class="card-tags">
+          <span class="tag praise">夸奖</span>
+          <span class="tag">相处</span>
+        </div>
+      </div>
+    </div>
+    <div class="video-card" data-cat="getalong" data-src="https://player.bilibili.com/player.html?bvid=BV1wa1BYvExF&autoplay=0&danmaku=1&poster=1">
+      <div class="iframe-wrap">
+      </div>
+      <div class="card-info">
+        <div class="card-title">【诗情画奕】宇甜热恋秘诀之“我的眼里只有你”</div>
+        <div class="card-tags">
+          <span class="tag focus">独瞩</span>
+          <span class="tag">相处</span>
+        </div>
+      </div>
+    </div>
+    <div class="video-card" data-cat="getalong" data-src="https://player.bilibili.com/player.html?bvid=BV1v2zaBUErU&autoplay=0&danmaku=1&poster=1">
+      <div class="iframe-wrap">
+      </div>
+      <div class="card-info">
+        <div class="card-title">【诗情画奕】宇甜热恋秘诀之“第一口定律与投喂日常”</div>
+        <div class="card-tags">
+          <span class="tag feed">投喂</span>
+          <span class="tag">相处</span>
+        </div>
+      </div>
+    </div>
+    <div class="video-card" data-cat="getalong" data-src="https://player.bilibili.com/player.html?bvid=BV1pw4m1X7m5&autoplay=0&danmaku=1&poster=1">
+      <div class="iframe-wrap">
+      </div>
+      <div class="card-info">
+        <div class="card-title">【诗情画奕】小情侣占有感大爆发</div>
+        <div class="card-tags">
+          <span class="tag possess">占有</span>
+          <span class="tag">相处</span>
+        </div>
+      </div>
+    </div>
+    <div class="video-card" data-cat="getalong" data-src="https://player.bilibili.com/player.html?bvid=BV1nN4y1f7mo&autoplay=0&danmaku=1&poster=1">
+      <div class="iframe-wrap">
+      </div>
+      <div class="card-info">
+        <div class="card-title">【诗情画奕】小情侣现身说法告诉你怎么哄女朋友</div>
+        <div class="card-tags">
+          <span class="tag tease">哄逗</span>
+          <span class="tag">相处</span>
+        </div>
+      </div>
+    </div>
+    <div class="video-card" data-cat="getalong" data-src="https://player.bilibili.com/player.html?bvid=BV1EwHYeTEmw&autoplay=0&danmaku=1&poster=1">
+      <div class="iframe-wrap">
+      </div>
+      <div class="card-info">
+        <div class="card-title">【诗情画奕】东西不好吃怎么办，塞对象嘴里</div>
+        <div class="card-tags">
+          <span class="tag tease">哄逗</span>
+          <span class="tag">相处</span>
+        </div>
+      </div>
+    </div>
+    <div class="video-card" data-cat="getalong" data-src="https://player.bilibili.com/player.html?bvid=BV1ai421h7nB&autoplay=0&danmaku=1&poster=1">
+      <div class="iframe-wrap">
+      </div>
+      <div class="card-info">
+        <div class="card-title">【诗情画奕】喜欢你们从来都不是一场独角戏</div>
+        <div class="card-info">
+        <div class="card-tags">
+          <span class="tag coconut">&🥥</span>
+          <span class="tag">相处</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<button class="back-top" id="backTop">↑</button>
+
+<script>
+const tabs = document.querySelectorAll('.tab');
+const cards = document.querySelectorAll('.video-card');
+let activeTab = 'edit';
+const loaded = new Set();
+
+function renderTab(){
+  cards.forEach(card=>{
+    const cat = card.dataset.cat;
+    const wrap = card.querySelector('.iframe-wrap');
+    const src = card.dataset.src;
+    if(cat === activeTab){
+      card.style.display = 'block';
+      if(!loaded.has(card)){
+        wrap.innerHTML = `<iframe src="${src}" scrolling="no" allowfullscreen="true"></iframe>`;
+        loaded.add(card);
+      }
+    }else{
+      card.style.display = 'none';
+    }
+  })
+}
+
+tabs.forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    tabs.forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    activeTab = tab.dataset.tab;
+    renderTab();
+  })
+})
+
+const backTopBtn = document.getElementById('backTop');
+window.addEventListener('scroll', ()=>{
+  if(window.scrollY > 300){
+    backTopBtn.classList.add('show');
+  }else{
+    backTopBtn.classList.remove('show');
+  }
+})
+backTopBtn.onclick = ()=>{
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+renderTab();
+</script>
+
+</body>
+</html>
