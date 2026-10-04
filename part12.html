@@ -416,7 +416,7 @@
       <div class="vlog-inner">
         <div class="player-box"><div class="iframe-wrap"></div></div>
         <div class="info-box">
-          <div class="vlog-title">"予你"主题巡演·杭州站回顾VLOG</div>
+          <div class="vlog-title">"予你"主题巡演·杭州站回顾</div>
           <div class="vlog-meta">
             <span class="vlog-date">2024.05.17</span>
             <span class="tag guan">官摄</span>
@@ -430,7 +430,7 @@
       <div class="vlog-inner">
         <div class="player-box"><div class="iframe-wrap"></div></div>
         <div class="info-box">
-          <div class="vlog-title">"予你"主题巡演·上海站回顾VLOG</div>
+          <div class="vlog-title">"予你"主题巡演·上海站回顾</div>
           <div class="vlog-meta">
             <span class="vlog-date">2024.05.29</span>
             <span class="tag guan">官摄</span>
@@ -472,7 +472,7 @@
       <div class="vlog-inner">
         <div class="player-box"><div class="iframe-wrap"></div></div>
         <div class="info-box">
-          <div class="vlog-title">抖音毕业歌会VLOG</div>
+          <div class="vlog-title">抖音毕业歌会</div>
           <div class="vlog-meta">
             <span class="vlog-date">2024.07.13</span>
             <span class="tag guan">官摄</span>
@@ -486,7 +486,7 @@
       <div class="vlog-inner">
         <div class="player-box"><div class="iframe-wrap"></div></div>
         <div class="info-box">
-          <div class="vlog-title">"予你"主题巡演·成都站回顾VLOG</div>
+          <div class="vlog-title">"予你"主题巡演·成都站回顾</div>
           <div class="vlog-meta">
             <span class="vlog-date">2024.08.01</span>
             <span class="tag guan">官摄</span>
@@ -570,7 +570,7 @@
       <div class="vlog-inner">
         <div class="player-box"><div class="iframe-wrap"></div></div>
         <div class="info-box">
-          <div class="vlog-title">"予你"主题巡演·南昌站回顾VLOG</div>
+          <div class="vlog-title">"予你"主题巡演·南昌站回顾</div>
           <div class="vlog-meta">
             <span class="vlog-date">2025.01.03</span>
             <span class="tag guan">官摄</span>
@@ -607,7 +607,6 @@ const subBtns = document.querySelectorAll('.sub-tab-btn');
 const cards = document.querySelectorAll('.vlog-card');
 let currentBig = 'first';
 let currentSub = 'vlog';
-const loaded = new Set();
 
 function render(){
   cards.forEach(card=>{
@@ -617,24 +616,24 @@ function render(){
     const src = card.dataset.src;
     if(big === currentBig && sub === currentSub){
       card.style.display = 'block';
-      if(!loaded.has(card)){
+      // 只有当前可见的卡片才加载iframe
+      if(!wrap.querySelector('iframe')){
         wrap.innerHTML = `<iframe src="${src}" scrolling="no" allowfullscreen="true"></iframe>`;
-        loaded.add(card);
       }
     }else{
       card.style.display = 'none';
+      // 切走就清空iframe，释放内存
+      wrap.innerHTML = '';
     }
   })
 }
 
-// 一级tab切换
 bigBtns.forEach(btn=>{
   btn.addEventListener('click',()=>{
     bigBtns.forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
     currentBig = btn.dataset.big;
     currentSub = 'vlog';
-
     if(currentBig === 'first'){
       subFirst.style.display = 'flex';
       subThird.style.display = 'none';
@@ -642,7 +641,6 @@ bigBtns.forEach(btn=>{
       subFirst.style.display = 'none';
       subThird.style.display = 'flex';
     }
-    // 重置二级tab active
     document.querySelectorAll('.sub-tab-wrap').forEach(wrap=>{
       wrap.querySelectorAll('.sub-tab-btn').forEach((b,i)=>{
         b.classList.toggle('active', i===0);
@@ -652,7 +650,6 @@ bigBtns.forEach(btn=>{
   })
 })
 
-// 二级tab切换
 subBtns.forEach(btn=>{
   btn.addEventListener('click',()=>{
     const parent = btn.parentElement;
@@ -663,7 +660,6 @@ subBtns.forEach(btn=>{
   })
 })
 
-// 回顶部
 const backTopBtn = document.getElementById('backTop');
 window.addEventListener('scroll', ()=>{
   backTopBtn.classList.toggle('show', window.scrollY > 300);
