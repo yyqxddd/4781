@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>从已知的吃醋片段来看，我们几乎可以得出，宝宝狗在恋爱中是一个</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #f4f4f4;
+        font-family: "Microsoft Yahei", SimHei, Arial, sans-serif;
+        font-size: 14px;
+        color: #333;
+        max-width: 100%;
+        max-width: 720px;
+        margin: 24px auto;
+        padding: 0 16px;
+    }
+
+    /* 主楼卡片 */
+    .post-card {
+        background: #ffffff;
+        border: 1px solid #e7e7e7;
+        border-radius: 12px;
+        padding: 24px;
+    }
+
+    /* 标题 */
+    .post-title {
+        font-size: 20px;
+        font-weight: bold;
+        line-height: 1.4;
+        margin-bottom: 14px;
+        color: #111;
+    }
+
+    /* 楼主信息：ID 和日期分行 */
+    .post-author {
+        margin-bottom: 14px;
+    }
+
+    .author-name {
+        display: block;
+        color: #225599;
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 2px;
+    }
+
+    .post-date {
+        display: block;
+        color: #999;
+        font-size: 13px;
+    }
+
+    /* 主楼正文 */
+    .post-content {
+        line-height: 1.7;
+        color: #333;
+        font-size: 14px;
+    }
+
+    .post-content p {
+        margin-bottom: 8px;
+    }
+
+    /* ========= 居中加粗小标题（截图同款） ========= */
+    .center-bold-title{
+        font-weight: bold;
+        text-align: center;
+        margin:10px 0 26px;
+        font-size:14px;
+    }
+
+    /* 主楼底部 */
+    .post-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 16px;
+    }
+
+    /* 主楼赞 */
+    .post-like-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background-color: #fdf3e7;
+        border: 1px solid #f1e3c6;
+        border-radius: 8px;
+        color: #c17440;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 6px 14px;
+        cursor: pointer;
+    }
+
+    .post-like-btn .thumb {
+        font-size: 16px;
+    }
+
+    /* 分割线 */
+    .divider {
+        border: none;
+        border-top: 1px solid #e7e7e7;
+        margin: 24px 0;
+    }
+
+    /* 评论区灰色线框 */
+    .reply-section {
+        border: 1px solid #d9d9d9;
+        border-radius: 10px;
+        background: #fff;
+        overflow: hidden;
+    }
+
+   /* 评论区顶部灰色条 */
+    .reply-header-bar {
+        background-color: #eaeaea;
+        padding: 7px 12px;
+    }
+
+    .reply-header-bar span {
+        color: #555555;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    /* 评论列表 */
+    .reply-list {
+        padding: 4px 16px 12px;
+    }
+
+    /* 单条评论 */
+    .reply-item {
+        padding: 14px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .reply-item:last-child {
+        border-bottom: none;
+    }
+
+    /* ID时间浅紫矩形，100%宽度 */
+    .reply-user-tag {
+        display: flex;
+        align-items: center;
+        background-color: #e8e4f7;
+        border-radius: 6px;
+        padding: 4px 10px;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+
+    .reply-user {
+        color: #225599;
+        font-weight: 600;
+        font-size: 13px;
+        margin-right: 8px;
+        white-space: nowrap;
+    }
+
+    .reply-time {
+        color: #999;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+/* 默认：主楼gif 居中 */
+.post-content .gif-block {
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 6px 0 0;
+    padding: 0;
+}
+/* 回复区gif 左对齐（旧尺寸不变） */
+.reply-item .gif-block {
+    max-width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 6px 0 8px;
+    padding: 0;
+}
+
+.gif-block img {
+    display: block;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    cursor: zoom-in;
+    border-radius: 6px;
+}
+
+/* 【通用/回复区】原图尺寸：横42%｜竖20%｜正方28% */
+.gif-block img[orientation="landscape"] {
+    max-width: 42%;
+}
+.gif-block img[orientation="portrait"] {
+    max-width: 20%;
+}
+.gif-block img[orientation="square"] {
+    max-width: 28%;
+}
+
+/* 单独覆盖【主楼】：只有横图拉满，竖、正方维持小图 */
+.post-content .gif-block img[orientation="landscape"] {
+    max-width: 100%;
+}
+.post-content .gif-block img[orientation="portrait"] {
+    max-width: 100%;
+}
+.post-content .gif-block img[orientation="square"] {
+    max-width: 100%;
+}
+
+/* 【引用块quote】保留你原来缩小一档，不动！ */
+.quote-block .gif-block {
+    margin: 4px 0 !important;
+}
+.quote-block .gif-block img[orientation="landscape"] {
+    max-width: 38%;
+}
+.quote-block .gif-block img[orientation="portrait"] {
+    max-width: 18%;
+}
+.quote-block .gif-block img[orientation="square"] {
+    max-width: 24%;
+}
+
+/* ========== 引用容器：border‑left写外层，竖线包含图片+全部内容 ========== */
+.quote-block {
+    background-color: #f7f7f7;
+    border-left: 3px solid #999; /*灰色竖线在外层，所有内容都在竖线右侧*/
+    padding: 8px 12px;
+    margin: 8px 0 10px;
+    color: #555;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.quote-inner {
+    overflow: hidden;
+    display: inline; /* 行内，文字和span同行 */
+}
+.quote-inner.collapsed {
+    /* 不再用高度截断，JS直接截断文字 */
+}
+
+.quote-expand-btn {
+    display: inline;
+    color:#225599;
+    cursor:pointer;
+    user-select:none;
+    margin-left:4px; /* 文字和按钮之间留一点点间距 */
+}
+.quote-expand-btn.hidden{
+    display:none;
+}
+    /* 回复内容 */
+    .reply-content {
+        line-height: 1.75;
+        color: #333;
+        font-size: 14px;
+        white-space: pre-line;
+    }
+
+    .reply-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 10px;
+    }
+
+    /* 评论区赞 */
+    .reply-like-btn {
+        color: #666;
+        font-size: 13px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+    }
+
+    .reply-like-btn:hover {
+        color: #225599;
+    }
+
+  /* ========== 回顶部按钮样式【新增】 ========== */
+  .back-top{
+    position:fixed;
+    bottom:18px;
+    right:18px;
+    width:33px;
+    height:33px;
+    border-radius:50%;
+    background:#8b5cf6;
+    color:#fff;
+    border:none;
+    font-size:18px;
+    cursor:pointer;
+    box-shadow:0 4px 12px rgba(139,92,246,0.25);
+    opacity:0;
+    visibility:hidden;
+    transition:0.25s;
+    z-index:98;
+  }
+  .back-top.show{
+    opacity:1;
+    visibility:visible;
+  }
+  .back-top:hover{
+    background:#7c3aed;
+  }
+
+    /* 底部分页 */
+    .page-bar {
+        margin-top: 8px;
+        padding: 12px 20px;
+        background: #fff;
+        border: 1px solid #e7e7e7;
+        border-radius: 12px;
+        display: flex;
+        justify-content: center; /* 内容水平居中 */
+        align-items: center;
+        font-size:14px;
+        color: #666;
+    }
+    .page-left{
+        display:flex;
+        gap:12px;
+    }
+
+    .page-bar a {
+        color: #666;
+        text-decoration: none;
+        padding: 4px 8px;
+    }
+
+    .page-bar a:hover {
+        color: #225599;
+    }
+
+    .page-bar .current {
+        color: #225599;
+        font-weight: bold;
+    }
+.page-bar button {
+    color: #666;
+    background: transparent;
+    border: none;
+    padding: 2px 6px;
+    font-size:15px;
+    cursor:pointer;
+}
+.page-bar button:hover {
+    color: #225599;
+}
+.page-bar button:disabled {
+    color:#bbb;
+    cursor:not-allowed;
+}
+.back-nav{
+    display:inline-block;
+    margin-bottom:16px;
+    color:#8b5cf6;
+    text-decoration:none;
+}
+.back-nav:hover{
+    text-decoration:underline;
+}
+.quote-inner a, .reply-content a{
+    color:#0066cc;
+    text-decoration:underline;
+}
+.quote-inner a:hover, .reply-content a:hover{
+    color:#dd4444;
+}
+@media(max-width:720px){
+    body{
+        margin:12px auto;
+        padding:0 6px;
+    }
+    .post-card{
+        padding:16px;
+    }
+    .reply-item{
+        padding:10px 0;
+    }
+    .divider{
+        margin:16px 0;
+    }
+}
+/* 主楼所有orientation图片统一100% */
+.post-content .gif-block img:not([orientation]){
+    max-width: 100%;
+}
+/* 回复所有orientation图片统一35% */
+.reply-item .gif-block img:not([orientation]) {
+    max-width: 35%;
+}
+/* 引用所有orientation图片统一28% */
+.quote-block .gif-block img:not([orientation]) {
+    max-width: 28%;
+}
+</style>
+</head>
+
+<body>
+<a href="../db.html" class="back-nav">← 返回上一页</a>
+<div class="post-card">
+    <!-- 帖子标题 -->
+    <div class="post-title">从已知的吃醋片段来看，我们几乎可以得出，宝宝狗在恋爱中是一个</div>
+
+    <!-- 楼主信息 -->
+    <div class="post-author">
+        <span class="author-name">楼主</span>
+        <span class="post-date">2023-09-02 23:46:21 四川</span>
+    </div>
+
+    <!-- 主楼内容【严格按截图图片顺序重排】 -->
+    <div class="post-content">
+        <p>严谨一点。</p>
+        <p>是一个较为偏执的人。</p>
+        <p>而偏执的核心来源于：占有欲过剩，不太适从，不自觉变得尖锐。</p>
+<br>
+        <p>分两部分来看。宝狗很清楚什么是对自己有威胁的元素，和对自己没有威胁的元素。</p>
+        <p>先说没有威胁的元素，比如猫，曾经对除夕、丢子吃醋，顶多只是多说几句，一句近似抱怨带撒娇的“它现在比我重要了”已示心中微微不满，但小猫咪终归只是小猫咪，动物不像人一样会对她造成威胁，大不了悄悄推下去就是了，zui硬一下这part很快就会过去。</p>
+        <p>而有威胁的元素就有意思多了。宝狗的情绪反应主要有几种呈现方式：问，追问，逼问，明知故问。</p>
+<br>
+        <p>而身体反应也有最主要的呈现方式：垮脸</p>
+        <p>举几个典型的例子。</p>
+        <p>zsy说感谢336的smy带我看电影。</p>
+        <div class="gif-block">
+            <img src="db7.1.jpeg" alt="1" onclick="openImg(this.src)">
+        </div>
+<br>
+        <p>狗的表情从一开始的体面微笑瞬间切换到疑惑zhou眉，整个个人直播停滞到这个问题上，她垮脸追问，什么时候？有没有自己？这个问题我想她作为看电影的当事人，心里不是没有答案。但最想听到的答案却是相方嘴里的。</p>
+        <p>在对方坦然回答“有啊”的时候，顺应她的问题直接抛出，既然有，“那你为什么不顺便感谢我？”</p>
+        <p>这一点其实也能对应上曾经相方夸队友帅，她追问上去，为什么不夸我？</p>
+        <div class="gif-block">
+            <img src="db7.2.jpeg" alt="2" onclick="openImg(this.src)">
+        </div>
+        <div class="gif-block">
+            <img src="db7.3.jpeg" alt="3" onclick="openImg(this.src)">
+        </div>
+<br>
+        <p>好了说回336看电影这个片段。在zsy解释到，因为当时看电影兴趣比较大的是smy时。宝狗忽略了（或者是选择性聋了一秒）这一解释。</p>
+        <p>然后她继续停滞10秒，当所有人以为这一part因为粥的圆满解释从而可以顺利结束话题时。她继续追问到：</p>
+        <div class="gif-block">
+            <img src="db7.4.jpeg" alt="4" onclick="openImg(this.src)">
+        </div>
+<br>
+        <p>不难看出，网易有点打破砂锅问到底的性格在身上的。</p>
+        <p>直到这里，需要得到非常肯定、周密的回答，才会踏实地结束这个话题。</p>
+        <p>类似的情节还有相方提到室友“楠姐”</p>
+        <div class="gif-block">
+            <img src="db7.5.jpeg" alt="5" onclick="openImg(this.src)">
+        </div>
+        <div class="gif-block">
+            <img src="db7.6.jpeg" alt="6" onclick="openImg(this.src)">
+        </div>
+        <p>已知zsy在话题开头已经清晰说明，只认识室友楠姐三个人。</p>
+        <div class="gif-block">
+            <img src="db7.7.jpeg" alt="7" onclick="openImg(this.src)">
+        </div>
+        <div class="gif-block">
+            <img src="db7.8.jpeg" alt="8" onclick="openImg(this.src)">
+        </div>
+        <div class="gif-block">
+            <img src="db7.9.jpeg" alt="9" onclick="openImg(this.src)">
+        </div>
+<br>
+        <p>这里的心理活动我们可以推测一下，网易想要知道这个楠姐的具体信息。而并不真的在乎这个楠姐真的是谁。所以装傻充愣的问出一句很没有水准的一句话，楠姐是谁？（即便对方一开始就已经说明了）</p>
+        <p>知道是室友，是哪个室友，这个室友有什么特征，她和你之间有什么样的互动？</p>
+        <p>还是那句话，占有欲过剩的宝宝狗，往往需要一个很完美的回答。所以她不介意自己追问、逼问，不惜把这样打破砂锅问到底的性格暴露在镜头前。只为自己可以心安。这其实也是虚势的表现。</p>
+        <p>吃醋的时候，宝宝狗甚至也无法掩饰自己肢体上的虚势。</p>
+        <p>比如突然的抖腿。</p>
+        <div class="gif-block">
+            <img src="db7.10.gif" alt="10" onclick="openImg(this.src)">
+        </div>
+<br>
+        <p>前一秒还是静止的状态，后一秒听到足够造成威胁的话，身体自然而然地开始警觉状态，双手抱臂开始抖腿。</p>
+        <p>试想一下，抛开一直有抖腿习惯的人不提，被条件触发下，突然的抖腿一般代表什么？紧张、焦灼、疑惑。</p>
+        <p>虚势。</p>
+        <p>这样的虚势对应嘴里说出来的话就不难理解了——你喊谁老公呢？</p>
+        <p>写到这里，只是举了几个非常典型，大家都熟知的例子。</p>
+        <p>用这些来总结偏执还不够，那就必须提到著名的狂飙事件了。</p>
+        <p>已知过年时粥粥因为狂飙而不小心弧了宝宝狗一会会儿。烙饼便不止在一个地方提起以后绝对不会看狂飙这件事。</p>
+        <p>这些看起来很离谱的反应，反而印证了烙丙的反射性应激。她记仇，特别记对方因为某个事物而搁置自己的仇。</p>
+        <p>她也非常警觉，相方提到相亲的字眼，就会瞬间竖起尾巴。被陌生人要微信，就会直接炸毛。看起来很甜蜜的表象之下，其实都凸现了她的领地占有欲。</p>
+        <p>她的占有涉及隐私，将手越过同事的红线，又伸到了对方的个人领地。</p>
+       <div class="gif-block">
+            <img src="db7.11.jpeg" alt="11" onclick="openImg(this.src)">
+        </div>
+        <div class="center-bold-title">问</div>
+        <p>在寻常人看来是很正常的打字操作，是别人的私事，在她这里就会变成下意识的询问。要问，得问清楚，知道是在回翻牌后，就哦一声。结束这个过程。</p>
+        <p>btw虽然可以把手伸进去别人的领地，但对相方触碰到自己的领地红线这件事却非常敏感。</p>
+        <p>比如，提到前队友的手写信。</p>
+        <div class="gif-block">
+            <img src="db7.12.gif" alt="12" onclick="openImg(this.src)">
+        </div>
+<br>
+        <p>垮脸。白眼。“你非要…”</p>
+        <p>这仍然是偏执的表现。</p>
+        <p>雷区就是雷区，有严格的标准，不能踩，踩了就会警铃大作，安全感瞬失，偏执发作。</p>
+        <p>写了半天不知道写了啥，不过综上所述，一句话总结，这玩意儿你让我演，反正我是演不出来的。</p>
+    </div>
+
+    <!-- 主楼右下角赞 -->
+    <div class="post-footer">
+        <button class="post-like-btn">
+            <span>赞 (73)</span>
+        </button>
+    </div>
+</div>
+
+<hr class="divider" />
+
+<div class="reply-section">
+    <div class="reply-header-bar">
+        <span>回复</span>
+    </div>
+    <div class="reply-list">
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户1</span>
+        <span class="reply-time">2023-09-02 23:47:31 浙江</span>
+    </div>
+    <div class="reply-content">吃醋是真好嗑啊</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (21)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户2</span>
+        <span class="reply-time">2023-09-02 23:48:27 浙江</span>
+    </div>
+    <div class="reply-content">这种帖子摩多摩多</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (17)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户3</span>
+        <span class="reply-time">2023-09-02 23:48:52 浙江</span>
+    </div>
+    <div class="reply-content">沃趣这么长？！？</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (8)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户4</span>
+        <span class="reply-time">2023-09-02 23:48:53 江西</span>
+    </div>
+    <div class="reply-content">我会磕死每一次吃醋</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (22)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户5</span>
+        <span class="reply-time">2023-09-02 23:49:27 湖北</span>
+    </div>
+    <div class="reply-content">其实我觉得公主吃醋也很好品，可惜她不喜欢表现出来</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (53)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户6</span>
+        <span class="reply-time">2023-09-02 23:50:10 安徽</span>
+    </div>
+    <div class="reply-content">多来点🍬帖</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户7</span>
+        <span class="reply-time">2023-09-02 23:50:24 福建</span>
+    </div>
+    <div class="reply-content">我没文化只能说老师好会嗑😍</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户8</span>
+        <span class="reply-time">2023-09-02 23:50:27 陕西</span>
+    </div>
+    <div class="reply-content">麻烦你下次写个公主吃醋的，感觉公主吃醋更绝</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (39)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户9</span>
+        <span class="reply-time">2023-09-02 23:50:52 广西</span>
+    </div>
+    <div class="reply-content">好贴，端好碗等着了😘</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户10</span>
+        <span class="reply-time">2023-09-02 23:51:04 浙江</span>
+    </div>
+    <div class="reply-content">好磕 爱磕 多来点🥰</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户7</span>
+        <span class="reply-time">2023-09-02 23:51:13 福建</span>
+    </div>
+    <div class="reply-content">妈呀，最后多发了一句忘了删，怎么不能重新修改啊 忘了<br>上面有那个笔的图标可以改</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户11</span>
+        <span class="reply-time">2023-09-02 23:51:13 四川</span>
+    </div>
+    <div class="reply-content">好帖，我大吃一口</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2023-09-02 23:51:35 四川</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner">
+        其实我觉得公主吃醋也很好品，可惜她不喜欢表现出来
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">我想侧重一下烙饼的吃醋，因为我逐帧看了公主的吃醋，发现她没有烙饼尖锐和有棱角</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (35)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户12</span>
+        <span class="reply-time">2023-09-02 23:51:37 安徽</span>
+    </div>
+    <div class="reply-content">我组难得的文化贴😚</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户13</span>
+        <span class="reply-time">2023-09-02 23:51:46 湖北</span>
+    </div>
+    <div class="reply-content">好磕，多写</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户14</span>
+        <span class="reply-time">2023-09-02 23:51:50 广东</span>
+    </div>
+    <div class="reply-content">能在写个公主的吗劳斯😋</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户15</span>
+        <span class="reply-time">2023-09-02 23:52:08 江苏</span>
+    </div>
+    <div class="reply-content">管理请进来加精</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户16</span>
+        <span class="reply-time">2023-09-02 23:52:18 福建</span>
+    </div>
+    <div class="reply-content">莫多么多</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户17</span>
+        <span class="reply-time">2023-09-02 23:52:36 北京</span>
+    </div>
+    <div class="reply-content">爱看，多写</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户18</span>
+        <span class="reply-time">2023-09-02 23:52:38 江西</span>
+    </div>
+    <div class="reply-content">每吃一次醋，我就磕亖一次</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户4</span>
+        <span class="reply-time">2023-09-02 23:53:22 江西</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner">
+        我想侧重一下烙饼的吃醋，因为我逐帧看了公主的吃醋，发现她没有烙饼尖锐和有棱角
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">但是公主吃醋又是另一种感觉，啊啊啊啊啊我文盲不知道怎么描述</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (19)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户15</span>
+        <span class="reply-time">2023-09-02 23:53:50 江苏</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner">
+        但是公主吃醋又是另一种感觉，啊啊啊啊啊我文盲不知道怎么描述
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">那你来✍🏻吧</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户19</span>
+        <span class="reply-time">2023-09-02 23:54:21 广东</span>
+    </div>
+    <div class="reply-content">写 快写 我意犹未尽 今晚我就要看到公主解析视角</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (19)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户20</span>
+        <span class="reply-time">2023-09-02 23:54:32 浙江</span>
+    </div>
+    <div class="reply-content">还有上回直播玩游戏公主说五字写的是手写信那里，磕死</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (8)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户21</span>
+        <span class="reply-time">2023-09-02 23:54:46 安徽</span>
+    </div>
+    <div class="reply-content">爱看 多写</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户15</span>
+        <span class="reply-time">2023-09-02 23:55:12 江苏</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner">
+        我想侧重一下烙饼的吃醋，因为我逐帧看了公主的吃醋，发现她没有烙饼尖锐和有棱角
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">但是公主吃醋也很好玩，烙饼第一时间就能感受到。而且公主的醋要细品</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (34)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户22</span>
+        <span class="reply-time">2023-09-02 23:55:16 广西</span>
+    </div>
+    <div class="reply-content">爱看 多写</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户21</span>
+        <span class="reply-time">2023-09-02 23:55:35 安徽</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner">
+        但是公主吃醋也很好玩，烙饼第一时间就能感受到。而且公主的醋要细品
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">没错 她吃醋真的要细品</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (7)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户23</span>
+        <span class="reply-time">2023-09-02 23:56:14 广东</span>
+    </div>
+    <div class="reply-content">好嗑，爱看，多写🫶🏻</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户11</span>
+        <span class="reply-time">2023-09-02 23:56:28 四川</span>
+    </div>
+    <div class="reply-content">这不加精？</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2023-09-02 23:56:52 四川</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner">
+        还有上回直播玩游戏公主说五字写的是手写信那里，磕死
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">素的</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户24</span>
+        <span class="reply-time">2023-09-02 23:57:16 重庆</span>
+    </div>
+    <div class="reply-content">其实我觉得在恋爱中适当的占有欲真的能为这段感觉增添一些很不一样的感受，会更让人觉得有趣</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (32)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户4</span>
+        <span class="reply-time">2023-09-02 23:57:39 江西</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner">
+        但是公主吃醋也很好玩，烙饼第一时间就能感受到。而且公主的醋要细品
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">对，要细品，之前那个连麦说网易经常和别人连麦</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户25</span>
+        <span class="reply-time">2023-09-02 23:59:44 湖南</span>
+    </div>
+    <div class="reply-content">网易说金曲跟四个女人跳舞，粥食欲变脸超级明显</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (11)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户26</span>
+        <span class="reply-time">2023-09-03 00:00:01 四川</span>
+    </div>
+    <div class="reply-content">豪爱看</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户27</span>
+        <span class="reply-time">2023-09-03 00:00:07 广西</span>
+    </div>
+    <div class="reply-content">雨雨吃醋挺有意思的，她说过她是好面子的人，所以很多事应该不会让自己表现得太明显，但是她小表情很多，不开心开始拧巴的样子真的很有趣</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (21)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户28</span>
+        <span class="reply-time">2023-09-03 00:00:52 山西</span>
+    </div>
+    <div class="reply-content">精品👏</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户29</span>
+        <span class="reply-time">2023-09-03 00:01:02 江苏</span>
+    </div>
+    <div class="reply-content">多写点</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户30</span>
+        <span class="reply-time">2023-09-03 00:01:36 广西</span>
+    </div>
+    <div class="reply-content">公主吃醋娇娇哒</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户31</span>
+        <span class="reply-time">2023-09-03 00:02:21 广东</span>
+    </div>
+    <div class="reply-content">你字多你赢了好会讲</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户32</span>
+        <span class="reply-time">2023-09-03 00:04:15 安徽</span>
+    </div>
+    <div class="reply-content">磕晕在楼里 好久没这样的分析贴了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户33</span>
+        <span class="reply-time">2023-09-03 00:05:54 江苏</span>
+    </div>
+    <div class="reply-content">吃吃吃</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户34</span>
+        <span class="reply-time">2023-09-03 00:06:41 福建</span>
+    </div>
+    <div class="reply-content">客运了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户35</span>
+        <span class="reply-time">2023-09-03 00:06:42 福建</span>
+    </div>
+    <div class="reply-content">好吃</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户25</span>
+        <span class="reply-time">2023-09-03 00:07:06 湖南</span>
+    </div>
+    <div class="reply-content">老师可以看看隔壁公主吃醋的贴找一下写灵感</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户36</span>
+        <span class="reply-time">2023-09-03 00:07:52 广东</span>
+    </div>
+    <div class="reply-content">磕死我了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户37</span>
+        <span class="reply-time">2023-09-03 00:08:08 辽宁</span>
+    </div>
+    <div class="reply-content">嗑死了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户38</span>
+        <span class="reply-time">2023-09-03 00:09:10 河南</span>
+    </div>
+    <div class="reply-content">爱看 多写</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户15</span>
+        <span class="reply-time">2023-09-03 00:09:28 江苏</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner">
+        对，要细品，之前那个连麦说网易经常和别人连麦
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">哈哈哈，之前zx烙饼说我现在都这样了，勾搭什么啊的时候公主的嘴角啊</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (7)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户4</span>
+        <span class="reply-time">2023-09-03 00:10:18 江西</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner">
+        哈哈哈，之前zx烙饼说我现在都这样了，勾搭什么啊的时候公主的嘴角啊
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">脑子里已经有画面了，压不住的嘴角</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户15</span>
+        <span class="reply-time">2023-09-03 00:10:52 江苏</span>
+    </div>
+    <div class="reply-content">狂飙确实变成了一种代名词</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (2)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户23</span>
+        <span class="reply-time">2023-09-03 00:14:25 福建</span>
+    </div>
+    <div class="reply-content">客运</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户39</span>
+        <span class="reply-time">2023-09-03 00:15:24 江苏</span>
+    </div>
+    <div class="reply-content">网易就是在亲密关系里非常强势的人，这种强势并不是话语权以及地位上的高低，而是好像真的就只有一根筋绷在她对谈恋爱的认知里，你觉得丢丢可怜的时候会觉得我一个人在房间也很可怜吗，你给谁发的消息你今天跟谁约会了，就算是洗澡也不至于洗了四十分钟吧，情侣间的一些小质疑小猜测全被她的一根筋通通弹回，就像膝跳反应一样无可避免</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (65)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户40</span>
+        <span class="reply-time">2023-09-03 00:25:15 广东</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+        网易就是在亲密关系里非常强势的人，这种强势并不是话语权以及地位上的高低，而是好像真的就只有一根筋绷在她对谈恋爱的认知里，你觉得丢丢可怜的时候会觉得我一个人在房间也很可怜吗，你给谁发的消息你今天跟谁约会了，就算是洗澡也不至于洗了四十分钟吧，情侣间的一些小质疑小猜测全被她的一根筋通通弹回，就像膝跳反应一样无可避免
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">爱了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户41</span>
+        <span class="reply-time">2023-09-03 00:30:07 四川</span>
+    </div>
+    <div class="reply-content">我嗑晕</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户42</span>
+        <span class="reply-time">2023-09-03 00:39:31 广东</span>
+    </div>
+    <div class="reply-content">大文豪，公主吃醋的贴我也要看<br>举例，网易说小时候有漂亮姐姐牵她手过马路那段，公主就表现得很明显</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户25</span>
+        <span class="reply-time">2023-09-03 00:44:15 湖南</span>
+    </div>
+    <div class="reply-content">没有你的粥食欲吃醋贴，野猪狗的心是不完整的，需要你拼完整，辛苦了老师🌹</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户36</span>
+        <span class="reply-time">2023-09-03 00:46:01 广东</span>
+    </div>
+    <div class="reply-content">天惹网易的吃醋就很好磕…</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (12)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户43</span>
+        <span class="reply-time">2023-09-03 00:48:03 福建</span>
+    </div>
+    <div class="reply-content">明明是年下，但是流露出强势的反差感真的很好磕</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户44</span>
+        <span class="reply-time">2023-09-03 00:50:57 北京</span>
+    </div>
+    <div class="reply-content">领地意识真的很浓 偶尔透露出来的强势磕晕我 而且我感觉她老婆也享受她这种偶尔的强势直球 更能体现出来“她真的好爱我”</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (18)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户45</span>
+        <span class="reply-time">2023-09-03 00:51:58 广东</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+        网易就是在亲密关系里非常强势的人，这种强势并不是话语权以及地位上的高低，而是好像真的就只有一根筋绷在她对谈恋爱的认知里，你觉得丢丢可怜的时候会觉得我一个人在房间也很可怜吗，你给谁发的消息你今天跟谁约会了，就算是洗澡也不至于洗了四十分钟吧，情侣间的一些小质疑小猜测全被她的一根筋通通弹回，就像膝跳反应一样无可避免
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">确实，之前等飞机那个情感电台也看得出来，对于很多问题她都会很直接的表达出来</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (13)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户39</span>
+        <span class="reply-time">2023-09-03 01:00:09 江苏</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+        确实，之前等飞机那个情感电台也看得出来，对于很多问题她都会很直接的表达出来
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">网易这么一个敏感的很容易overthinking的人，居然对谈恋爱的认知是没有灰色地带的，好像不会考虑喜欢/不喜欢以外的任何一种可能，对于很多感情问题都是强烈的肯定或者否定，好像不会想，你今天是不是少喜欢我一点了这种问题，她感知到没有安全感的瞬间时，只会想好害怕失去你。（你在干嘛在睡觉那我们谈个屁恋爱，你忽冷忽热我是吃不消的需要你稳定热情，冷淡期是什么呢还有这么一说你们谁先不喜欢的？）</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (36)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户45</span>
+        <span class="reply-time">2023-09-03 01:02:49 广东</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+        网易这么一个敏感的很容易overthinking的人，居然对谈恋爱的认知是没有灰色地带的，好像不会考虑喜欢/不喜欢以外的任何一种可能，对于很多感情问题都是强烈的肯定或者否定，好像不会想，你今天是不是少喜欢我一点了这种问题，她感知到没有安全感的瞬间时，只会想好害怕失去你。（你在干嘛在睡觉那我们谈个屁恋爱，你忽冷忽热我是吃不消的需要你稳定热情，冷淡期是什么呢还有这么一说你们谁先不喜欢的？）
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">而且感觉她是一个没那么需要个人空间的，她之前说过不太喜欢一个人呆在房间里，好像是之前zsy去上学时候说的，两个人可以各干各的事，但是lp最好是和自己一个空间里面</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (24)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户46</span>
+        <span class="reply-time">2023-09-03 01:04:09 中国台湾</span>
+    </div>
+    <div class="reply-content">愛了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户47</span>
+        <span class="reply-time">2023-09-03 01:15:31 江苏</span>
+    </div>
+    <div class="reply-content">摩多摩多🤲</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户48</span>
+        <span class="reply-time">2023-09-03 01:29:25 吉林</span>
+    </div>
+    <div class="reply-content">妈呀我磕晕</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户49</span>
+        <span class="reply-time">2023-09-03 02:08:44 福建</span>
+    </div>
+    <div class="reply-content">妈呀我客运</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户50</span>
+        <span class="reply-time">2023-09-03 03:28:50 河南</span>
+    </div>
+    <div class="reply-content">客运了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户51</span>
+        <span class="reply-time">2023-09-03 07:01:21 浙江</span>
+    </div>
+    <div class="reply-content">客运了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户52</span>
+        <span class="reply-time">2023-09-03 07:10:46 河北</span>
+    </div>
+    <div class="reply-content">磕晕了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户53</span>
+        <span class="reply-time">2023-09-03 07:16:22 陕西</span>
+    </div>
+    <div class="reply-content">吃早饭了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户54</span>
+        <span class="reply-time">2023-09-03 10:52:28 广西</span>
+    </div>
+    <div class="reply-content">好厉害</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户55</span>
+        <span class="reply-time">2023-09-03 10:56:58 甘肃</span>
+    </div>
+    <div class="reply-content">爱看吃醋</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户56</span>
+        <span class="reply-time">2023-09-03 10:57:02 广东</span>
+    </div>
+    <div class="reply-content">客运</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户57</span>
+        <span class="reply-time">2023-09-03 11:00:27 安徽</span>
+    </div>
+    <div class="reply-content">客运</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户58</span>
+        <span class="reply-time">2023-09-03 11:43:00 湖南</span>
+    </div>
+    <div class="reply-content">老师多发帖🥹</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户59</span>
+        <span class="reply-time">2023-09-03 11:45:09 广西</span>
+    </div>
+    <div class="reply-content">偏执倒不至于，感觉更多时候可以跟小包说的。明明都走过去了但雨说一句就一定要返回来看看对标，是一种求知欲，想知道对方的一切，早期的雨其实是比较好懂的，比如觉得小王对自己不在意了会直接说或者生气，而且当时光磨合两人之间的事就已经很费劲儿了，顾及不了别的。但越到后面越亲近就能更明显的感受到对在其他的事上雨不爱表达也不容易被看出来，所以这也是我认为的小王会不安，会想“距离再近一点”的原因之一。其实这种不安恰好是她们越来越深入对方内心的表现<br>而且其实雨就算在她雷点上蹦迪，除了脸凶点外，可能马上就吧嗒吧嗒掉泪了，雨耳根软哄一哄再因为小王对自己的在意窃喜一下，这一闹一哄，感情又上一层</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (29)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2023-09-03 12:18:58 四川</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+        偏执倒不至于，感觉更多时候可以跟小包说的。明明都走过去了但雨说一句就一定要返回来看看对标，是一种求知欲，想知道对方的一切，早期的雨其实是比较好懂的，比如觉得小王对自己不在意了会直接说或者生气，而且当时光磨合两人之间的事就已经很费劲儿了，顾及不了别的。但越到后面越亲近就能更明显的感受到对在其他的事上雨不爱表达也不容易被看出来，所以这也是我认为的小王会不安，会想“距离再近一点”的原因之一。其实这种不安恰好是她们越来越深入对方内心的表现
+而且其实雨就算在她雷点上蹦迪，除了脸凶点外，可能马上就吧嗒吧嗒掉泪了，雨耳根软哄一哄再因为小王对自己的在意窃喜一下，这一闹一哄，感情又上一层
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">你说的“求知欲”和我说的“有一点偏执”是两个概念</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户60</span>
+        <span class="reply-time">2023-09-03 13:22:41 江苏</span>
+    </div>
+    <div class="reply-content">好磕好磕</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+    </div>
+</div>
+
+<div class="page-bar">
+    <div class="page-left">
+        <button id="prevPageBtn">前页</button>
+        <a href="db.1.1.html" class="current">1</a>
+        <button id="nextPageBtn">后页</button>
+    </div>
+</div>
+  <button class="back-top" id="backTop">↑</button>
+
+<script>
+//网址转链接
+function urlToLink(text){
+  const reg = /(https?:\/\/[^\s，。！；：""'()【】]+)/gi;
+  return text.replace(reg,`<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>`)
+}
+
+//页面加载完毕，自动缓存每个quote原始文字
+document.addEventListener('DOMContentLoaded',function(){
+  document.querySelectorAll('.quote-inner').forEach(item=>{
+    item.dataset.fullText = item.textContent.trim();
+  })
+
+  //初始化折叠状态
+  document.querySelectorAll('.quote-block').forEach(function(block){
+    const inner = block.querySelector('.quote-inner');
+    const btn = block.querySelector('.quote-expand-btn');
+    if(!btn) return;
+    const fullTxt = inner.dataset.fullText;
+    if(fullTxt.length > 50){
+        let shortTxt = fullTxt.slice(0,50);
+        inner.innerHTML = urlToLink(shortTxt);
+        inner.classList.add("collapsed");
+        btn.style.display = "inline";
+    }else{
+        inner.innerHTML = urlToLink(fullTxt);
+        inner.classList.remove("collapsed");
+        btn.style.display = "none";
+    }
+  })
+
+  // 给reply-content评论正文也自动转链接
+  document.querySelectorAll('.reply-content').forEach(el=>{
+    const rawText = el.textContent;
+    el.innerHTML = urlToLink(rawText);
+  })
+})
+
+function toggleQuote(btn){
+  const wrap = btn.previousElementSibling;
+  const fullTxt = wrap.dataset.fullText;
+  if(wrap.classList.contains("collapsed")){
+    wrap.innerHTML = urlToLink(fullTxt);
+    wrap.classList.remove("collapsed");
+    btn.textContent="收起";
+  }else{
+    let shortTxt = fullTxt.slice(0,50);
+    wrap.innerHTML = urlToLink(shortTxt);
+    wrap.classList.add("collapsed");
+    btn.textContent="...";
+  }
+}
+
+//分页控制【修改：只有1页，前后按钮全部置灰】
+const prevPageBtn = document.getElementById('prevPageBtn');
+const nextPageBtn = document.getElementById('nextPageBtn');
+let currentPageNum = 1;
+const totalPageNum = 1;
+
+function updatePageBtnState(){
+    prevPageBtn.disabled = true; //首页，前页永久灰
+    nextPageBtn.disabled = true; //只有一页，后页永久灰
+}
+
+prevPageBtn.onclick = function(){
+    // 只有一页，点击无动作
+}
+nextPageBtn.onclick = function(){
+    // 只有一页，点击无动作
+}
+updatePageBtnState();
+
+// 自动判断横图/竖图/正方形，加载前先锁尺寸，动态加上懒加载
+document.querySelectorAll('.gif-block img').forEach(img => {
+    img.loading = "lazy"; // 动态懒加载，不用改HTML
+
+    // ✅ 改成向上查找父容器，判断属于哪个区域
+    if(img.closest('.post-content')){
+        img.style.maxWidth = "100%";
+    }else if(img.closest('.reply-item')){
+        img.style.maxWidth = "35%";
+    }else if(img.closest('.quote-block')){
+        img.style.maxWidth = "28%";
+    }
+
+    img.onload = function () {
+        this.style.maxWidth = ""; // 清空行内，交给CSS orientation
+        const w = this.naturalWidth;
+        const h = this.naturalHeight;
+        if (w > h) {
+            this.setAttribute('orientation', 'landscape');
+        } else if (h > w) {
+            this.setAttribute('orientation', 'portrait');
+        } else {
+            this.setAttribute('orientation', 'square');
+        }
+    };
+    img.onerror = function(){
+        this.style.display="none"; // 图片失效直接隐藏裂图
+    }
+});
+
+// 点击放大
+function openImg(src) {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        cursor: zoom-out;
+    `;
+
+    const bigImg = document.createElement('img');
+    bigImg.src = src;
+    bigImg.style.cssText = `
+        max-width: 92vw;
+        max-height: 92vh;
+        border-radius: 6px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    `;
+
+    overlay.appendChild(bigImg);
+    document.body.appendChild(overlay);
+
+    overlay.addEventListener('click', function () {
+        overlay.remove();
+    });
+}
+// ========== 回顶部JS ==========
+const backTopBtn = document.getElementById('backTop');
+window.addEventListener('scroll', ()=>{
+  if(window.scrollY > 300){
+    backTopBtn.classList.add('show');
+  }else{
+    backTopBtn.classList.remove('show');
+  }
+})
+backTopBtn.onclick = ()=>{
+  window.scrollTo({
+    top:0,
+    behavior:'smooth'
+  })
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>有人觉得周诗雨真的很会钓吗</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #f4f4f4;
+        font-family: "Microsoft Yahei", SimHei, Arial, sans-serif;
+        font-size: 14px;
+        color: #333;
+        max-width: 100%;
+        max-width: 720px;
+        margin: 24px auto;
+        padding: 0 16px;
+    }
+
+    /* 主楼卡片 */
+    .post-card {
+        background: #ffffff;
+        border: 1px solid #e7e7e7;
+        border-radius: 12px;
+        padding: 24px;
+    }
+
+    /* 标题 */
+    .post-title {
+        font-size: 20px;
+        font-weight: bold;
+        line-height: 1.4;
+        margin-bottom: 14px;
+        color: #111;
+    }
+
+    /* 楼主信息：ID 和日期分行 */
+    .post-author {
+        margin-bottom: 14px;
+    }
+
+    .author-name {
+        display: block;
+        color: #225599;
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 2px;
+    }
+
+    .post-date {
+        display: block;
+        color: #999;
+        font-size: 13px;
+    }
+
+    /* 主楼正文 */
+    .post-content {
+        line-height: 1.7;
+        color: #333;
+        font-size: 14px;
+    }
+
+    .post-content p {
+        margin-bottom: 8px;
+    }
+
+    /* ========= 居中加粗小标题（截图同款） ========= */
+    .center-bold-title{
+        font-weight: bold;
+        text-align: center;
+        margin:10px 0 26px;
+        font-size:14px;
+    }
+
+    /* 主楼底部 */
+    .post-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 16px;
+    }
+
+    /* 主楼赞 */
+    .post-like-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background-color: #fdf3e7;
+        border: 1px solid #f1e3c6;
+        border-radius: 8px;
+        color: #c17440;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 6px 14px;
+        cursor: pointer;
+    }
+
+    .post-like-btn .thumb {
+        font-size: 16px;
+    }
+
+    /* 分割线 */
+    .divider {
+        border: none;
+        border-top: 1px solid #e7e7e7;
+        margin: 24px 0;
+    }
+
+    /* 评论区灰色线框 */
+    .reply-section {
+        border: 1px solid #d9d9d9;
+        border-radius: 10px;
+        background: #fff;
+        overflow: hidden;
+    }
+
+   /* 评论区顶部灰色条 */
+    .reply-header-bar {
+        background-color: #eaeaea;
+        padding: 7px 12px;
+    }
+
+    .reply-header-bar span {
+        color: #555555;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    /* 评论列表 */
+    .reply-list {
+        padding: 4px 16px 12px;
+    }
+
+    /* 单条评论 */
+    .reply-item {
+        padding: 14px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .reply-item:last-child {
+        border-bottom: none;
+    }
+
+    /* ID时间浅紫矩形，100%宽度 */
+    .reply-user-tag {
+        display: flex;
+        align-items: center;
+        background-color: #e8e4f7;
+        border-radius: 6px;
+        padding: 4px 10px;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+
+    .reply-user {
+        color: #225599;
+        font-weight: 600;
+        font-size: 13px;
+        margin-right: 8px;
+        white-space: nowrap;
+    }
+
+    .reply-time {
+        color: #999;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+/* 默认：主楼gif 居中 */
+.post-content .gif-block {
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 6px 0 0;
+    padding: 0;
+}
+/* 回复区gif 左对齐（旧尺寸不变） */
+.reply-item .gif-block {
+    max-width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 6px 0 8px;
+    padding: 0;
+}
+
+.gif-block img {
+    display: block;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    cursor: zoom-in;
+    border-radius: 6px;
+}
+
+/* 【通用/回复区】原图尺寸：横42%｜竖20%｜正方28% */
+.gif-block img[orientation="landscape"] {
+    max-width: 42%;
+}
+.gif-block img[orientation="portrait"] {
+    max-width: 20%;
+}
+.gif-block img[orientation="square"] {
+    max-width: 28%;
+}
+
+/* 单独覆盖【主楼】：只有横图拉满，竖、正方维持小图 */
+.post-content .gif-block img[orientation="landscape"] {
+    max-width: 100%;
+}
+.post-content .gif-block img[orientation="portrait"] {
+    max-width: 100%;
+}
+.post-content .gif-block img[orientation="square"] {
+    max-width: 100%;
+}
+
+/* 【引用块quote】保留你原来缩小一档，不动！ */
+.quote-block .gif-block {
+    margin: 4px 0 !important;
+}
+.quote-block .gif-block img[orientation="landscape"] {
+    max-width: 38%;
+}
+.quote-block .gif-block img[orientation="portrait"] {
+    max-width: 18%;
+}
+.quote-block .gif-block img[orientation="square"] {
+    max-width: 24%;
+}
+
+/* ========== 引用容器：border‑left写外层，竖线包含图片+全部内容 ========== */
+.quote-block {
+    background-color: #f7f7f7;
+    border-left: 3px solid #999; /*灰色竖线在外层，所有内容都在竖线右侧*/
+    padding: 8px 12px;
+    margin: 8px 0 10px;
+    color: #555;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.quote-inner {
+    overflow: hidden;
+    display: inline; /* 行内，文字和span同行 */
+}
+.quote-inner.collapsed {
+    /* 不再用高度截断，JS直接截断文字 */
+}
+
+.quote-expand-btn {
+    display: inline;
+    color:#225599;
+    cursor:pointer;
+    user-select:none;
+    margin-left:4px; /* 文字和按钮之间留一点点间距 */
+}
+.quote-expand-btn.hidden{
+    display:none;
+}
+    /* 回复内容 */
+    .reply-content {
+        line-height: 1.75;
+        color: #333;
+        font-size: 14px;
+        white-space: pre-line;
+    }
+
+    .reply-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 10px;
+    }
+
+    /* 评论区赞 */
+    .reply-like-btn {
+        color: #666;
+        font-size: 13px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+    }
+
+    .reply-like-btn:hover {
+        color: #225599;
+    }
+
+  /* ========== 回顶部按钮样式【新增】 ========== */
+  .back-top{
+    position:fixed;
+    bottom:18px;
+    right:18px;
+    width:33px;
+    height:33px;
+    border-radius:50%;
+    background:#8b5cf6;
+    color:#fff;
+    border:none;
+    font-size:18px;
+    cursor:pointer;
+    box-shadow:0 4px 12px rgba(139,92,246,0.25);
+    opacity:0;
+    visibility:hidden;
+    transition:0.25s;
+    z-index:98;
+  }
+  .back-top.show{
+    opacity:1;
+    visibility:visible;
+  }
+  .back-top:hover{
+    background:#7c3aed;
+  }
+
+    /* 底部分页 */
+    .page-bar {
+        margin-top: 8px;
+        padding: 12px 20px;
+        background: #fff;
+        border: 1px solid #e7e7e7;
+        border-radius: 12px;
+        display: flex;
+        justify-content: center; /* 内容水平居中 */
+        align-items: center;
+        font-size:14px;
+        color: #666;
+    }
+    .page-left{
+        display:flex;
+        gap:12px;
+    }
+
+    .page-bar a {
+        color: #666;
+        text-decoration: none;
+        padding: 4px 8px;
+    }
+
+    .page-bar a:hover {
+        color: #225599;
+    }
+
+    .page-bar .current {
+        color: #225599;
+        font-weight: bold;
+    }
+.page-bar button {
+    color: #666;
+    background: transparent;
+    border: none;
+    padding: 2px 6px;
+    font-size:15px;
+    cursor:pointer;
+}
+.page-bar button:hover {
+    color: #225599;
+}
+.page-bar button:disabled {
+    color:#bbb;
+    cursor:not-allowed;
+}
+.back-nav{
+    display:inline-block;
+    margin-bottom:16px;
+    color:#8b5cf6;
+    text-decoration:none;
+}
+.back-nav:hover{
+    text-decoration:underline;
+}
+.quote-inner a, .reply-content a{
+    color:#0066cc;
+    text-decoration:underline;
+}
+.quote-inner a:hover, .reply-content a:hover{
+    color:#dd4444;
+}
+@media(max-width:720px){
+    body{
+        margin:12px auto;
+        padding:0 6px;
+    }
+    .post-card{
+        padding:16px;
+    }
+    .reply-item{
+        padding:10px 0;
+    }
+    .divider{
+        margin:16px 0;
+    }
+}
+/* 主楼所有orientation图片统一100% */
+.post-content .gif-block img:not([orientation]){
+    max-width: 100%;
+}
+/* 回复所有orientation图片统一35% */
+.reply-item .gif-block img:not([orientation]) {
+    max-width: 35%;
+}
+/* 引用所有orientation图片统一28% */
+.quote-block .gif-block img:not([orientation]) {
+    max-width: 28%;
+}
+</style>
+</head>
+
+<body>
+<a href="../db.html" class="back-nav">← 返回上一页</a>
+<div class="post-card">
+    <!-- 帖子标题 -->
+    <div class="post-title">有人觉得周诗雨真的很会钓吗</div>
+
+    <!-- 楼主信息 -->
+    <div class="post-author">
+        <span class="author-name">楼主</span>
+        <span class="post-date">2022-10-06 00:27:25 广西</span>
+    </div>
+
+    <!-- 主楼内容【严格按截图图片顺序重排】 -->
+    <div class="post-content">
+        <p>指在恋爱里</p>
+        <div class="gif-block">
+            <img src="db6.1.jpeg" alt="1" onclick="openImg(this.src)">
+        </div>
+       <div class="gif-block">
+            <img src="db6.2.jpeg" alt="2" onclick="openImg(this.src)">
+        </div>
+<br>
+        <p>熟练运用各种推拉&疑问手法</p>
+        <p>包括但不仅限于“你说呢？”“你问丢丢啊”“你有多喜欢我？”“我是你除了亲人外最重要的人对吧？”</p>
+        <p>还有六小时直播那次，看着王奕直勾勾地问：“那我把毛衣脱了？”毛衣脱了里面就是一件盖不住什么的小吊带。王奕直接恶狠狠一个白眼回过去，周诗雨别提笑的多开心了，当时我就觉得这两个崽种真是天生一对。</p>
+        <p>公主特别喜欢抛问题给别人，把所有情绪反应都留给对方来做，可能这也是一种她来印证“你是不是真的在意我”的方式之一，有一股子愿者上钩的味道。王奕就是那个去咬钩子的人，恋爱里如果两个人都太会就会变得很无趣了。所以一直觉得她们俩的性格真是天造地设，刚好契合得天衣无缝。</p>
+    </div>
+
+    <!-- 主楼右下角赞 -->
+    <div class="post-footer">
+        <button class="post-like-btn">
+            <span>赞 (364)</span>
+        </button>
+    </div>
+</div>
+
+<hr class="divider" />
+
+<div class="reply-section">
+    <div class="reply-header-bar">
+        <span>回复</span>
+    </div>
+    <div class="reply-list">
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 1</span>
+        <span class="reply-time">2022-10-06 00:28:29 江苏</span>
+    </div>
+    <div class="reply-content">好会说👀</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (134)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 2</span>
+        <span class="reply-time">2022-10-06 00:29:00 浙江</span>
+    </div>
+    <div class="reply-content">kswl</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (12)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 3</span>
+        <span class="reply-time">2022-10-06 00:29:58 广西</span>
+    </div>
+    <div class="reply-content">我觉得，我有段时间补档过4781，公主真挺有手段的(褒义)，是值得学习的那种</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (442)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 4</span>
+        <span class="reply-time">2022-10-06 00:31:58 吉林</span>
+    </div>
+    <div class="reply-content">ttl 谈恋爱学4781的话 得一个直球 一个会推拉</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (335)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 5</span>
+        <span class="reply-time">2022-10-06 00:32:25 广西</span>
+    </div>
+    <div class="reply-content">这种情况在恋爱中真的会很甜蜜啊！所以也是她被称为女友感很强的原因吧</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (365)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 3</span>
+        <span class="reply-time">2022-10-06 00:34:48 广西</span>
+    </div>
+    <div class="reply-content">不过她俩性格确实挺互补，各方面的互补，让我觉得有点神奇，挺少见到性格如此互补的人😂</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (284)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2022-10-06 00:34:52 广西</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner">
+        我觉得，我有段时间补档过4781，公主真挺有手段的(褒义)，是值得学习的那种
+        </div>
+    </div>
+    <div class="reply-content">非常！她不是一般地会啊，很懂得怎么拿捏人和让人心甘情愿地去爱她呵护她，真的是很了不起的恋商，感觉值得全天下钕同学习。</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (313)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 3</span>
+        <span class="reply-time">2022-10-06 00:38:15 广西</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+        非常！她不是一般地会啊，很懂得怎么拿捏人和让人心甘情愿地去爱她呵护她，真的是很了不起的恋商，感觉值得全天下钕同学习。
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">她就是很会啊，那个度把握得特别好，而且很会调教对象。说真的，想谈恋爱的都可以学学😂</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (224)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 7</span>
+        <span class="reply-time">2022-10-06 00:38:15 湖南</span>
+    </div>
+    <div class="reply-content">她也不是对谁都这样  wy的直球也只打给公主  4781的特殊对应🥰很明显</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (328)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 8</span>
+        <span class="reply-time">2022-10-06 00:39:42 江西</span>
+    </div>
+    <div class="reply-content">你好会形容！</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (10)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 9</span>
+        <span class="reply-time">2022-10-06 00:40:38 四川</span>
+    </div>
+    <div class="reply-content">这俩崽种天生一对哈哈哈哈哈</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (141)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 10</span>
+        <span class="reply-time">2022-10-06 00:41:11 湖北</span>
+    </div>
+    <div class="reply-content">好会说</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 11</span>
+        <span class="reply-time">2022-10-06 00:46:58 河南</span>
+    </div>
+    <div class="reply-content">确实好会，她对象好幸福😍</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (34)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2022-10-06 00:48:58 广西</span>
+    </div>
+<div class="gif-block">
+<img src="db6.3.gif" alt="" onclick="openImg(this.src)">
+</div>
+    <div class="reply-content">还有这个 “你要吻我啊？”说完王奕就笑得很不好意思地去靠她的头，真是会谈得要命🥺</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (188)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 4</span>
+        <span class="reply-time">2022-10-06 00:49:11 吉林</span>
+    </div>
+    <div class="reply-content">zsy真的好会感觉换谁都上钩 而wy的直球和中二刚好让这段关系充满新鲜感🥰磕鼠</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (235)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 27</span>
+        <span class="reply-time">2022-10-06 01:07:56 湖南</span>
+    </div>
+    <div class="reply-content">公主真的很会谈，今晚新鲜的“谁啊”“我是什么风格”“我也好久没有听到别人给我念信了诶 但是最好是这种两年没有写过的然后写一下(逐渐提高音量)”</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (227)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 12</span>
+        <span class="reply-time">2022-10-06 01:08:34 浙江</span>
+    </div>
+    <div class="reply-content">要不当初网易怎么会破防在小号发：喜欢上侄女就是我的不对了。就是公主大人太会推拉了。🤭</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (244)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 13</span>
+        <span class="reply-time">2022-10-06 01:11:15 江西</span>
+    </div>
+    <div class="reply-content">当初最爱看公主调教随意wy🥳</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (134)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 14</span>
+        <span class="reply-time">2022-10-06 01:16:02 广西</span>
+    </div>
+    <div class="reply-content">感觉👸可太会了，钓鱼的绳该松该紧她可太有把握了😎</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (141)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 15</span>
+        <span class="reply-time">2022-10-06 01:21:52 福建</span>
+    </div>
+    <div class="reply-content">好想跟这种人谈一次恋爱😭</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (80)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 16</span>
+        <span class="reply-time">2022-10-06 01:21:58 四川</span>
+    </div>
+    <div class="reply-content">太有女友感了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (44)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 17</span>
+        <span class="reply-time">2022-10-06 01:25:29 湖北</span>
+    </div>
+    <div class="reply-content">“当时我就觉得这两个崽种真是天生一对”，你礼貌吗🤣</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (100)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2022-10-06 01:38:04 广西</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner">
+        要不当初网易怎么会破防在小号发：喜欢上侄女就是我的不对了。就是公主大人太会推拉了。🤭
+        </div>
+    </div>
+    <div class="reply-content">因为公主当初是倒追啊，刚盯上王奕的时候正巧是她心有所属的时候。更别提公主的性格就是很容易没有安全感，所以要一次又一次去刺激对方，然后通过吃醋之类的对方的情绪波动来证实“你喜欢我”这个命题。王奕恰好每次都能给她想要的情绪波动，要不怎么说天生一对呢，破防才是对的，破防之后就是喜闻乐见的互诉衷肠表白心意环节啦🥰</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (232)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 18</span>
+        <span class="reply-time">2022-10-06 01:45:02 四川</span>
+    </div>
+    <div class="reply-content">全给lz懂完了 每天学习恋爱技巧😉</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (26)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 12</span>
+        <span class="reply-time">2022-10-06 01:46:18 浙江</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+        因为公主当初是倒追啊，刚盯上王奕的时候正巧是她心有所属的时候。更别提公主的性格就是很容易没有安全感，所以要一次又一次去刺激对方，然后通过吃醋之类的对方的情绪波动来证实"你喜欢我"这个命题。王奕恰好每次都能给她想要的情绪波动，要不怎么说天生一对呢，破防才是对的，破防之后就是喜闻乐见的互诉衷肠表白心意环节啦🥰
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">是这样的，我一直觉得公主虽然是个很有女性魅力但又很没安全感很缺爱的人，这种矛盾感我很喜欢。</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (168)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">来瓶冰可乐</span>
+        <span class="reply-time">2022-10-06 01:46:48 湖北</span>
+    </div>
+    <div class="reply-content">kswl</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 19</span>
+        <span class="reply-time">2022-10-06 01:48:40 安徽</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+        因为公主当初是倒追啊，刚盯上王奕的时候正巧是她心有所属的时候。更别提公主的性格就是很容易没有安全感，所以要一次又一次去刺激对方，然后通过吃醋之类的对方的情绪波动来证实"你喜欢我"这个命题。王奕恰好每次都能给她想要的情绪波动，要不怎么说天生一对呢，破防才是对的，破防之后就是喜闻乐见的互诉衷肠表白心意环节啦🥰
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">但是以公主的性格才不会倒追呢 她那个时候满嘴跑火车 说的喜欢过的人估计她自己都记不过来 她那种傲娇的性格 就算喜欢也不会倒追的 最多暗示一下</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (200)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 20</span>
+        <span class="reply-time">2022-10-06 01:57:32 辽宁</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+        因为公主当初是倒追啊，刚盯上王奕的时候正巧是她心有所属的时候。更别提公主的性格就是很容易没有安全感，所以要一次又一次去刺激对方，然后通过吃醋之类的对方的情绪波动来证实"你喜欢我"这个命题。王奕恰好每次都能给她想要的情绪波动，要不怎么说天生一对呢，破防才是对的，破防之后就是喜闻乐见的互诉衷肠表白心意环节啦🥰
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">公主不会倒追  会逼你说出口</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (257)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2022-10-06 01:57:34 广西</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+        但是以公主的性格才不会倒追呢 她那个时候满嘴跑火车 说的喜欢过的人估计她自己都记不过来 她那种傲娇的性格 就算喜欢也不会倒追的 最多暗示一下
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">她倒追的方式高明得很，总之肯定不是我们以及倒追的对象能看得出来的那种“倒追”，说白了还是钓，等别人上钩</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (179)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 12</span>
+        <span class="reply-time">2022-10-06 01:59:27 浙江</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+        她倒追的方式高明得很，总之肯定不是我们以及倒追的对象能看得出来的那种"倒追"，说白了还是钓，等别人上钩
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">这让我想到那句略咯噔的话：高端的猎手往往以猎物的姿态出现。😂</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (154)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 21</span>
+        <span class="reply-time">2022-10-06 02:03:45 四川</span>
+    </div>
+    <div class="reply-content">感觉公主就是那种 先是猫然后是老虎最后是被雨淋湿的小狗🤤🤤</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (137)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 22</span>
+        <span class="reply-time">2022-10-06 02:05:27 重庆</span>
+    </div>
+    <div class="reply-content">你好会磕啊我丢，4781有你还能再火几年hhh</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (85)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 23</span>
+        <span class="reply-time">2022-10-06 02:39:33 湖北</span>
+    </div>
+    <div class="reply-content">会说你就多说点，这两口子真的绝配。</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (62)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2022-10-06 05:21:07 广西</span>
+    </div>
+    <div class="reply-content">还有一个厉害的地方在于，公主很会运用自己的身体。每次穿暴露点王奕就开始移不开眼想摸摸想抱抱想藏起来。公主这种白幼瘦顶点应该狠狠踩在王奕这个老二次元审美上，据多方面叙述也能得出周诗雨衣柜里很多“情趣衣服”和各种“肚兜”的结论，真是由内而外从上到下拿捏住老公了😉</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (272)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 24</span>
+        <span class="reply-time">2022-10-06 06:13:05 吉林</span>
+    </div>
+    <div class="reply-content">kswl</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 25</span>
+        <span class="reply-time">2022-10-06 07:22:32 黑龙江</span>
+    </div>
+    <div class="reply-content">太好磕了，绝配啊</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (6)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 26</span>
+        <span class="reply-time">2022-10-06 09:24:15 江苏</span>
+    </div>
+    <div class="reply-content">好喜欢公主这种步步引导的感觉，太会了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (63)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 27</span>
+        <span class="reply-time">2022-10-06 09:28:04 湖南</span>
+    </div>
+    <div class="reply-content">dd这个收藏是评论三倍多的帖子🤭</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (31)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 28</span>
+        <span class="reply-time">2022-10-06 10:54:34 云南</span>
+    </div>
+    <div class="reply-content">好会磕啊</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 29</span>
+        <span class="reply-time">2022-10-06 10:55:24 河北</span>
+    </div>
+    <div class="reply-content">会说多说点🤤</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 30</span>
+        <span class="reply-time">2022-10-06 10:55:32 广东</span>
+    </div>
+    <div class="reply-content">看久了就知道，zsy很少直接回答一些直球问题，喜欢反问。有种想要确定对方是否也和自己的内心想法一样的感觉，就像昨天的“你是什么我就是什么”。大概是没有安全感，害怕对方喜欢自己没有自己喜欢对方多，害怕错付，所以在推拉中一遍又一遍确认对方对自己的喜欢。</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (184)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2022-10-06 11:35:10 广西</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner collapsed">
+        看久了就知道，zsy很少直接回答一些直球问题，喜欢反问。有种想要确定对方是否也和自己的内心想法一样的感觉，就像昨天的"你是什么我就是什么"。大概是没有安全感，害怕对方喜欢自己没有自己喜欢对方多，害怕错付，所以在推拉中一遍又一遍确认对方对自己的喜欢。
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">就是这个道理，所以为什么说她是小猫呢，小猫的任务就是巧妙地让你一天比一天更喜欢她😋</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (124)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 31</span>
+        <span class="reply-time">2022-10-06 13:50:57 浙江</span>
+    </div>
+    <div class="reply-content">这个收藏量hhhh</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 32</span>
+        <span class="reply-time">2022-10-06 14:05:33 上海</span>
+    </div>
+    <div class="reply-content">奕者上钩</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (49)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 33</span>
+        <span class="reply-time">2022-10-06 17:49:29 广东</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner">
+        还有一个厉害的地方在于，公主很会运用自己的身体。每次穿暴露点王奕就开始移不开眼想摸摸想抱抱
+        </div>
+    </div>
+    <div class="reply-content">圣 诞 战 袍</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (104)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 34</span>
+        <span class="reply-time">2022-10-06 18:16:49 江苏</span>
+    </div>
+    <div class="reply-content">你会，跟着你嗑</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 20</span>
+        <span class="reply-time">2022-10-06 18:47:24 辽宁</span>
+    </div>
+    <div class="reply-content">老天可以给我一个我女儿这样的女朋友吗 求求您了 阿米豆腐</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (53)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2022-10-06 21:01:32 广西</span>
+    </div>
+<div class="gif-block">
+<img src="db6.4.jpeg" alt="" onclick="openImg(this.src)">
+</div>
+    <div class="reply-content">诱受.....诱受......表面上楚楚可怜，其实心里比谁都期盼着被用力对待🤤</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (107)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 35</span>
+        <span class="reply-time">2022-10-06 21:04:48 江苏</span>
+    </div>
+    <div class="reply-content">这楼看得我小脸通红</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (30)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 36</span>
+        <span class="reply-time">2022-10-06 21:59:32 湖北</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner">
+        zsy真的好会感觉换谁都上钩 而wy的直球和中二刚好让这段关系充满新鲜感🥰磕鼠
+        </div>
+    </div>
+    <div class="reply-content">谁都会上钩的前题是zsy喜欢这条鱼</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (128)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 37</span>
+        <span class="reply-time">2022-10-07 03:01:59 江苏</span>
+    </div>
+    <div class="reply-content">会云多云😻</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (5)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 38</span>
+        <span class="reply-time">2022-10-07 07:24:54 广东</span>
+    </div>
+    <div class="reply-content">这楼看得我心跳加速</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (21)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 39</span>
+        <span class="reply-time">2022-10-07 07:44:41 广东</span>
+    </div>
+    <div class="reply-content">kswl</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 40</span>
+        <span class="reply-time">2022-10-07 07:58:33 山东</span>
+    </div>
+    <div class="reply-content">这楼是恋爱宝典吧（x</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (3)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 41</span>
+        <span class="reply-time">2022-10-07 08:17:09 广东</span>
+    </div>
+    <div class="reply-content">蛮会撩</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 28</span>
+        <span class="reply-time">2022-10-07 08:50:11 云南</span>
+    </div>
+    <div class="reply-content">好会好会</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 42</span>
+        <span class="reply-time">2022-10-07 09:14:54 江西</span>
+    </div>
+    <div class="reply-content">我喜欢这种</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 43</span>
+        <span class="reply-time">2022-10-07 14:28:00 海南</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner">
+        还有一个厉害的地方在于，公主很会运用自己的身体。每次穿暴露点王奕就开始移不开眼想摸摸想抱抱
+        </div>
+    </div>
+    <div class="reply-content">你微博多少？多写点，我去关注你</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 3</span>
+        <span class="reply-time">2022-10-07 14:33:19 广西</span>
+    </div>
+    <div class="quote-block">
+<div class="gif-block">
+<img src="db6.4.jpeg" alt="" onclick="openImg(this.src)">
+</div>
+        <div class="quote-inner">
+        诱受.....诱受......表面上楚楚可怜，其实心里比谁都期盼着被用力对待🤤
+        </div>
+    </div>
+    <div class="reply-content">公主典型的brat，4781在广州那次的直播太明显了，非要去撩她老公，惹得她老公去弄她才开心</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (108)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 44</span>
+        <span class="reply-time">2022-10-07 15:42:53 河南</span>
+    </div>
+    <div class="reply-content">好会说</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 45</span>
+        <span class="reply-time">2022-10-07 15:48:57 湖南</span>
+    </div>
+    <div class="reply-content">她俩真的好配，怎么会有这么互补的两人的</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (27)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2022-10-11 00:42:07 广西</span>
+    </div>
+<div class="gif-block">
+<img src="db6.5.jpeg" alt="" onclick="openImg(this.src)">
+</div>
+    <div class="reply-content">傲娇的具象化是一切代称都是“有人”“某些人” 。“有一个人拍照技术怎么这么差呀”“那是因为有人没给我拍出好看的照片”“有个王某人想吃”，而在周诗雨口中所有的“某人”，其实都只是那一个人。或许“某人”的同义词是最重要的人。</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (98)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 46</span>
+        <span class="reply-time">2022-10-11 08:48:58 安徽</span>
+    </div>
+    <div class="reply-content">kswl</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 47</span>
+        <span class="reply-time">2022-10-11 08:59:50 江西</span>
+    </div>
+    <div class="reply-content">再看一遍还是很好磕😭</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 48</span>
+        <span class="reply-time">2022-10-11 09:25:33 浙江</span>
+    </div>
+    <div class="reply-content">kswl</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 49</span>
+        <span class="reply-time">2022-10-11 09:26:17 四川</span>
+    </div>
+    <div class="quote-block">
+        <div class="quote-inner">
+        我觉得，我有段时间补档过4781，公主真挺有手段的(褒义)，是值得学习的那种
+        </div>
+    </div>
+    <div class="reply-content">嗑晕</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 12</span>
+        <span class="reply-time">2022-10-11 09:36:17 浙江</span>
+    </div>
+    <div class="reply-content">昨晚直播真的太娇了，还有她老公小气鼠了，脱给她穿？妈妈们看看怎么了。😠</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (58)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 28</span>
+        <span class="reply-time">2022-10-11 12:50:44 云南</span>
+    </div>
+    <div class="reply-content">跟着磕</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">momo</span>
+        <span class="reply-time">2022-10-11 13:02:34 江苏</span>
+    </div>
+    <div class="reply-content">怎么还加精了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 50</span>
+        <span class="reply-time">2022-10-11 13:26:42 江西</span>
+    </div>
+    <div class="quote-block">
+<div class="gif-block">
+<img src="db6.5.jpeg" alt="" onclick="openImg(this.src)">
+</div>
+        <div class="quote-inner collapsed">
+        傲娇的具象化是一切代称都是"有人""某些人" 。"有一个人拍照技术怎么这么差呀""那是因为有人没给我拍出好看的照片""有个王某人想吃"，而在周诗雨口中所有的"某人"，其实都只是那一个人。或许"某人"的同义词是最重要的人。
+        </div>
+        <span class="quote-expand-btn" onclick="toggleQuote(this)">...</span>
+    </div>
+    <div class="reply-content">昨晚那句“有一个人拍照技术怎么这么差呀～”简直娇的让人起鸡皮疙瘩，公主真的很会撒娇</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (53)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 27</span>
+        <span class="reply-time">2022-10-11 15:39:11 湖南</span>
+    </div>
+    <div class="reply-content">wy确实也被挑起来了 说了“再说一遍试试” 可惜公主见好就收了 不然还能看到cql打情骂俏</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (50)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 51</span>
+        <span class="reply-time">2023-01-19 07:03:28 江苏</span>
+    </div>
+    <div class="reply-content">zsy🥵🥵🥵</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (8)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 52</span>
+        <span class="reply-time">2023-01-20 02:14:46 上海</span>
+    </div>
+    <div class="reply-content">同意</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 53</span>
+        <span class="reply-time">2023-01-20 03:17:09 马来西亚</span>
+    </div>
+    <div class="reply-content">你会磕，跟你混🤩</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 54</span>
+        <span class="reply-time">2023-01-20 12:02:14 江西</span>
+    </div>
+    <div class="reply-content">每个评论都认真看的帖子 6</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 55</span>
+        <span class="reply-time">2023-01-25 14:57:57 广东</span>
+    </div>
+    <div class="reply-content">好会说，天造地设的一对</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (2)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 56</span>
+        <span class="reply-time">2023-01-25 15:08:12 广东</span>
+    </div>
+    <div class="reply-content">会磕，多写点</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 57</span>
+        <span class="reply-time">2023-01-26 01:14:15 辽宁</span>
+    </div>
+<div class="gif-block">
+<img src="db6.6.jpeg" alt="" onclick="openImg(this.src)">
+</div>
+    <div class="reply-content">公主真的太会钓了！啊啊啊啊</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (75)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 58</span>
+        <span class="reply-time">2023-01-26 11:40:05 浙江</span>
+    </div>
+    <div class="reply-content">为什么同是白羊座，我一点也不会啊😩傻不愣登的</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (2)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 59</span>
+        <span class="reply-time">2023-01-26 13:31:09 江苏</span>
+    </div>
+    <div class="reply-content">好会谈恋爱</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (1)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 60</span>
+        <span class="reply-time">2023-05-19 16:46:26 贵州</span>
+    </div>
+    <div class="reply-content">重温好帖🤤</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 61</span>
+        <span class="reply-time">2023-05-19 18:01:50 广东</span>
+    </div>
+    <div class="reply-content">刷到再磕一遍😉</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 56</span>
+        <span class="reply-time">2023-05-19 18:13:10 广东</span>
+    </div>
+    <div class="reply-content">磕鼠我了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 62</span>
+        <span class="reply-time">2023-05-19 18:13:54 江苏</span>
+    </div>
+    <div class="reply-content">重温😋</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 63</span>
+        <span class="reply-time">2023-09-19 00:44:17 安徽</span>
+    </div>
+    <div class="reply-content">翻到了 重温🫰🏻</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 64</span>
+        <span class="reply-time">2023-10-02 09:27:18 湖南</span>
+    </div>
+    <div class="reply-content">回复108收藏1022 你们都偷着学呢是吧</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 (11)</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户 65</span>
+        <span class="reply-time">2024-06-30 15:52:45 北京</span>
+    </div>
+    <div class="reply-content">好磕好磕</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞 </button>
+    </div>
+</div>
+
+    </div>
+</div>
+
+<div class="page-bar">
+    <div class="page-left">
+        <button id="prevPageBtn">前页</button>
+        <a href="db.1.1.html" class="current">1</a>
+        <button id="nextPageBtn">后页</button>
+    </div>
+</div>
+  <button class="back-top" id="backTop">↑</button>
+
+<script>
+//网址转链接
+function urlToLink(text){
+  const reg = /(https?:\/\/[^\s，。！；：""'()【】]+)/gi;
+  return text.replace(reg,`<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>`)
+}
+
+//页面加载完毕，自动缓存每个quote原始文字
+document.addEventListener('DOMContentLoaded',function(){
+  document.querySelectorAll('.quote-inner').forEach(item=>{
+    item.dataset.fullText = item.textContent.trim();
+  })
+
+  //初始化折叠状态
+  document.querySelectorAll('.quote-block').forEach(function(block){
+    const inner = block.querySelector('.quote-inner');
+    const btn = block.querySelector('.quote-expand-btn');
+    if(!btn) return;
+    const fullTxt = inner.dataset.fullText;
+    if(fullTxt.length > 50){
+        let shortTxt = fullTxt.slice(0,50);
+        inner.innerHTML = urlToLink(shortTxt);
+        inner.classList.add("collapsed");
+        btn.style.display = "inline";
+    }else{
+        inner.innerHTML = urlToLink(fullTxt);
+        inner.classList.remove("collapsed");
+        btn.style.display = "none";
+    }
+  })
+
+  // 给reply-content评论正文也自动转链接
+  document.querySelectorAll('.reply-content').forEach(el=>{
+    const rawText = el.textContent;
+    el.innerHTML = urlToLink(rawText);
+  })
+})
+
+function toggleQuote(btn){
+  const wrap = btn.previousElementSibling;
+  const fullTxt = wrap.dataset.fullText;
+  if(wrap.classList.contains("collapsed")){
+    wrap.innerHTML = urlToLink(fullTxt);
+    wrap.classList.remove("collapsed");
+    btn.textContent="收起";
+  }else{
+    let shortTxt = fullTxt.slice(0,50);
+    wrap.innerHTML = urlToLink(shortTxt);
+    wrap.classList.add("collapsed");
+    btn.textContent="...";
+  }
+}
+
+//分页控制【修改：只有1页，前后按钮全部置灰】
+const prevPageBtn = document.getElementById('prevPageBtn');
+const nextPageBtn = document.getElementById('nextPageBtn');
+let currentPageNum = 1;
+const totalPageNum = 1;
+
+function updatePageBtnState(){
+    prevPageBtn.disabled = true; //首页，前页永久灰
+    nextPageBtn.disabled = true; //只有一页，后页永久灰
+}
+
+prevPageBtn.onclick = function(){
+    // 只有一页，点击无动作
+}
+nextPageBtn.onclick = function(){
+    // 只有一页，点击无动作
+}
+updatePageBtnState();
+
+// 自动判断横图/竖图/正方形，加载前先锁尺寸，动态加上懒加载
+document.querySelectorAll('.gif-block img').forEach(img => {
+    img.loading = "lazy"; // 动态懒加载，不用改HTML
+
+    // ✅ 改成向上查找父容器，判断属于哪个区域
+    if(img.closest('.post-content')){
+        img.style.maxWidth = "100%";
+    }else if(img.closest('.reply-item')){
+        img.style.maxWidth = "35%";
+    }else if(img.closest('.quote-block')){
+        img.style.maxWidth = "28%";
+    }
+
+    img.onload = function () {
+        this.style.maxWidth = ""; // 清空行内，交给CSS orientation
+        const w = this.naturalWidth;
+        const h = this.naturalHeight;
+        if (w > h) {
+            this.setAttribute('orientation', 'landscape');
+        } else if (h > w) {
+            this.setAttribute('orientation', 'portrait');
+        } else {
+            this.setAttribute('orientation', 'square');
+        }
+    };
+    img.onerror = function(){
+        this.style.display="none"; // 图片失效直接隐藏裂图
+    }
+});
+
+// 点击放大
+function openImg(src) {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        cursor: zoom-out;
+    `;
+
+    const bigImg = document.createElement('img');
+    bigImg.src = src;
+    bigImg.style.cssText = `
+        max-width: 92vw;
+        max-height: 92vh;
+        border-radius: 6px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    `;
+
+    overlay.appendChild(bigImg);
+    document.body.appendChild(overlay);
+
+    overlay.addEventListener('click', function () {
+        overlay.remove();
+    });
+}
+// ========== 回顶部JS ==========
+const backTopBtn = document.getElementById('backTop');
+window.addEventListener('scroll', ()=>{
+  if(window.scrollY > 300){
+    backTopBtn.classList.add('show');
+  }else{
+    backTopBtn.classList.remove('show');
+  }
+})
+backTopBtn.onclick = ()=>{
+  window.scrollTo({
+    top:0,
+    behavior:'smooth'
+  })
+}
+</script>
+</body>
+</html>

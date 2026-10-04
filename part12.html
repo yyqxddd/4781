@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VLOG｜诗情画奕的备忘录</title>
+<style>
+ * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+    background: #f3eef9;
+    color: #333;
+    line-height: 1.7;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+  }
+
+  .back-home {
+    display: inline-block;
+    text-decoration: none;
+    color: #8b5cf6;
+    margin-bottom: 20px;
+    font-size: 15px;
+  }
+  .back-home:hover {
+    text-decoration: underline;
+  }
+
+  /* 一级Tab */
+  .tab-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+  .tab-pill {
+    display: inline-flex;
+    background: #e9e1f8;
+    border-radius: 999px;
+    padding: 5px;
+    gap: 5px;
+  }
+  .tab-pill button {
+    padding: 9px 28px;
+    border-radius: 999px;
+    border: none;
+    background: transparent;
+    color: #8b5cf6;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: 500;
+  }
+  .tab-pill button.active {
+    background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 3px 10px rgba(139, 92, 246, 0.35);
+  }
+
+  /* 二级Tab 小一号 */
+  .sub-tab-wrap {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .sub-tab-btn {
+    padding: 4px 14px;
+    border-radius: 999px;
+    border: 1px solid #ddd4ee;
+    background: #f8f5fe;
+    color: #8b5cf6;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .sub-tab-btn:hover {
+    background: #e9e1f8;
+  }
+  .sub-tab-btn.active {
+    background: #8b5cf6;
+    color: #fff;
+    border-color: #8b5cf6;
+  }
+
+  /* VLOG列表 */
+  .vlog-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .vlog-card {
+    background: #f8f5fe;
+    border: 1px solid #e2d9f3;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: 0.25s;
+  }
+  .vlog-card:hover {
+    border-color: #c4b5fd;
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.12);
+  }
+
+  .vlog-inner {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 0;
+  }
+
+  .player-box {
+    position: relative;
+    background: #ede8f7;
+  }
+  .player-box .iframe-wrap {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+  }
+  .player-box iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .info-box {
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+  }
+  .vlog-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #222;
+    line-height: 1.5;
+  }
+  .vlog-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .vlog-date {
+    font-size: 13px;
+    color: #999;
+  }
+  .tag {
+    font-size: 12px;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-weight: 500;
+  }
+  .tag.guan { background: #e0e7ff; color: #4338ca; }
+  .tag.gong { background: #fce7f3; color: #db2777; }
+  .tag.wai { background: #cffafe; color: #0e7490; }
+  .tag.tag-vlog { background: #e9e1f8; color: #6d45b5; }
+  .tag.tag-diary { background: #d1fae5; color: #047857; }
+  .tag.tag-behind { background: #fff1d7; color: #b46b00; }
+
+  .back-top {
+    position: fixed;
+    bottom: 18px;
+    right: 18px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #8b5cf6;
+    color: #fff;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(139,92,246,0.25);
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.25s;
+    z-index: 98;
+  }
+  .back-top.show { opacity: 1; visibility: visible; }
+  .back-top:hover { background: #7c3aed; }
+
+  @media (max-width: 720px) {
+    .vlog-inner { grid-template-columns: 1fr; }
+    .info-box { padding: 16px 18px; }
+    .tab-pill button { padding: 8px 20px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a class="back-home" href="index.html">← 返回存档首页</a>
+
+  <!-- 一级Tab -->
+  <div class="tab-wrap">
+    <div class="tab-pill">
+      <button class="active" data-big="first">第一视角</button>
+      <button data-big="third">第三视角</button>
+    </div>
+  </div>
+
+  <!-- 二级Tab：第一视角（VLOG / 视频日记） -->
+  <div class="sub-tab-wrap" id="subFirst">
+    <button class="sub-tab-btn active" data-sub="vlog">VLOG</button>
+    <button class="sub-tab-btn" data-sub="diary">视频日记</button>
+  </div>
+
+  <!-- 二级Tab：第三视角（VLOG / 花絮） -->
+  <div class="sub-tab-wrap" id="subThird" style="display:none;">
+    <button class="sub-tab-btn active" data-sub="vlog">VLOG</button>
+    <button class="sub-tab-btn" data-sub="behind">花絮</button>
+  </div>
+
+  <!-- VLOG列表 -->
+  <div class="vlog-list" id="vlogList">
+
+    <!-- ===== 第一视角 / 视频日记 ===== -->
+    <div class="vlog-card" data-big="first" data-sub="diary" data-src="https://player.bilibili.com/player.html?bvid=BV13y4y1P7zf&p=1&autoplay=0&danmaku=1&poster=1" style="display:none;">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">《失忆》MV拍摄1</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2023.10.20</span>
+            <span class="tag guan">官摄</span>
+            <span class="tag tag-diary">视频日记</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vlog-card" data-big="first" data-sub="diary" data-src="https://player.bilibili.com/player.html?bvid=BV13y4y1P7zf&p=2&autoplay=0&danmaku=1&poster=1" style="display:none;">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">《失忆》MV拍摄2</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2023.10.21</span>
+            <span class="tag guan">官摄</span>
+            <span class="tag tag-diary">视频日记</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vlog-card" data-big="first" data-sub="diary" data-src="https://player.bilibili.com/player.html?bvid=BV13y4y1P7zf&p=3&autoplay=0&danmaku=1&poster=1" style="display:none;">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">《失忆》MV拍摄3</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2023.10.22</span>
+            <span class="tag guan">官摄</span>
+            <span class="tag tag-diary">视频日记</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 第一视角 / VLOG ===== -->
+    <div class="vlog-card" data-big="first" data-sub="vlog" data-src="https://player.bilibili.com/player.html?bvid=BV162AheXEs9&autoplay=0&danmaku=1&poster=1">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">最佳拍档第三季一日心愿</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2025.02.19</span>
+            <span class="tag guan">官摄</span>
+            <span class="tag tag-vlog">VLOG</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vlog-card" data-big="first" data-sub="vlog" data-src="https://player.bilibili.com/player.html?bvid=BV1KvBXB9EK6&p=1&autoplay=0&danmaku=1&poster=1">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">#vlog日常 希望你拥有幸福的十分钟</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2025.03.15</span>
+            <span class="tag gong">共创</span>
+            <span class="tag tag-vlog">VLOG</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vlog-card" data-big="first" data-sub="vlog" data-src="https://player.bilibili.com/player.html?bvid=BV1jeTg6LE9N&p=1&autoplay=0&danmaku=1&poster=1">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">#马尔代夫 #米其林大厨</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2026.06.28</span>
+            <span class="tag gong">共创</span>
+            <span class="tag tag-vlog">VLOG</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 第三视角 / 花絮 ===== -->
+    <div class="vlog-card" data-big="third" data-sub="behind" data-src="https://player.bilibili.com/player.html?bvid=BV1ka411378t&autoplay=0&danmaku=1&poster=1" style="display:none;">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">天使主题写真拍摄</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2022.09.09</span>
+            <span class="tag wai">外摄</span>
+            <span class="tag tag-behind">花絮</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vlog-card" data-big="third" data-sub="behind" data-src="https://player.bilibili.com/player.html?bvid=BV1aG41127Ri&autoplay=0&danmaku=1&poster=1" style="display:none;">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">《失忆》MV拍摄</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2023.10.20</span>
+            <span class="tag guan">官摄</span>
+            <span class="tag tag-behind">花絮</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vlog-card" data-big="third" data-sub="vlog" data-src="https://player.bilibili.com/player.html?bvid=BV1Gg4y1d7nr&autoplay=0&danmaku=1&poster=1" style="display:none;">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">《失忆》MV拍摄</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2023.10.23</span>
+            <span class="tag guan">官摄</span>
+            <span class="tag tag-vlog">VLOG</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vlog-card" data-big="third" data-sub="behind" data-src="https://player.bilibili.com/player.html?bvid=BV1Z84y197gq&p=1&autoplay=0&danmaku=1&poster=1" style="display:none;">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">Link领克杂志拍摄</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2023.10.24</span>
+            <span class="tag guan">官摄</span>
+            <span class="tag tag-behind">花絮</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vlog-card" data-big="third" data-sub="behind" data-src="https://player.bilibili.com/player.html?bvid=BV1Sw4m1m7Ch&autoplay=0&danmaku=1&poster=1" style="display:none;">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">"予你"主题巡演·"青春DV"版拍摄</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2024.04.12</span>
+            <span class="tag guan">官摄</span>
+            <span class="tag tag-behind">花絮</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vlog-card" data-big="third" data-sub="behind" data-src="https://player.bilibili.com/player.html?bvid=BV1Xp421Q7sr&autoplay=0&danmaku=1&poster=1" style="display:none;">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">"予你"主题巡演·"具象浪漫"版拍摄</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2024.04.15</span>
+            <span class="tag guan">官摄</span>
+            <span class="tag tag-behind">花絮</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vlog-card" data-big="third" data-sub="behind" data-src="https://player.bilibili.com/player.html?bvid=BV1PE421T7uN&autoplay=0&danmaku=1&poster=1" style="display:none;">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">"予你"主题巡演·"涂鸦人生"版拍摄</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2024.04.23</span>
+            <span class="tag guan">官摄</span>
+            <span class="tag tag-behind">花絮</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vlog-card" data-big="third" data-sub="vlog" data-src="https://player.bilibili.com/player.html?bvid=BV1G7421f7Pj&autoplay=0&danmaku=1&poster=1" style="display:none;">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">"予你"主题巡演·杭州站回顾VLOG</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2024.05.17</span>
+            <span class="tag guan">官摄</span>
+            <span class="tag tag-vlog">VLOG</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vlog-card" data-big="third" data-sub="vlog" data-src="https://player.bilibili.com/player.html?bvid=BV1TD421G7v8&autoplay=0&danmaku=1&poster=1" style="display:none;">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">"予你"主题巡演·上海站回顾VLOG</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2024.05.29</span>
+            <span class="tag guan">官摄</span>
+            <span class="tag tag-vlog">VLOG</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vlog-card" data-big="third" data-sub="behind" data-src="https://player.bilibili.com/player.html?bvid=BV1SJ4m1T7ZL&p=1&autoplay=0&danmaku=1&poster=1" style="display:none;">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">"予你"主题巡演·成都站平面拍摄</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2024.07.04</span>
+            <span class="tag guan">官摄</span>
+            <span class="tag tag-behind">花絮</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vlog-card" data-big="third" data-sub="behind" data-src="https://player.bilibili.com/player.html?bvid=BV1Uz421z71n&autoplay=0&danmaku=1&poster=1" style="display:none;">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">"予你"主题巡演·海报拍摄</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2024.07.06</span>
+            <span class="tag guan">官摄</span>
+            <span class="tag tag-behind">花絮</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vlog-card" data-big="third" data-sub="vlog" data-src="https://player.bilibili.com/player.html?bvid=BV1cJ4m1M76R&p=3&autoplay=0&danmaku=1&poster=1" style="display:none;">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">抖音毕业歌会VLOG</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2024.07.13</span>
+            <span class="tag guan">官摄</span>
+            <span class="tag tag-vlog">VLOG</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vlog-card" data-big="third" data-sub="vlog" data-src="https://player.bilibili.com/player.html?bvid=BV1Ei421S7BL&p=3&autoplay=0&danmaku=1&poster=1" style="display:none;">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">"予你"主题巡演·成都站回顾VLOG</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2024.08.01</span>
+            <span class="tag guan">官摄</span>
+            <span class="tag tag-vlog">VLOG</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vlog-card" data-big="third" data-sub="vlog" data-src="https://player.bilibili.com/player.html?bvid=BV1WysUeeEiU&autoplay=0&danmaku=1&poster=1" style="display:none;">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">明潮千帆音乐节</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2024.09.23</span>
+            <span class="tag guan">官摄</span>
+            <span class="tag tag-vlog">VLOG</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vlog-card" data-big="third" data-sub="behind" data-src="https://player.bilibili.com/player.html?bvid=BV1jaBXYjEe5&autoplay=0&danmaku=1&poster=1" style="display:none;">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">台偶cover拍摄</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2024.11.27</span>
+            <span class="tag guan">官摄</span>
+            <span class="tag tag-behind">花絮</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vlog-card" data-big="third" data-sub="vlog" data-src="https://player.bilibili.com/player.html?bvid=BV1FLzRYfE5q&autoplay=0&danmaku=1&poster=1" style="display:none;">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">"双人舞"分享会</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2024.12.04</span>
+            <span class="tag guan">官摄</span>
+            <span class="tag tag-vlog">VLOG</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vlog-card" data-big="third" data-sub="behind" data-src="https://player.bilibili.com/player.html?bvid=BV1VXCqYLErw&autoplay=0&danmaku=1&poster=1" style="display:none;">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">《双人舞》MV拍摄</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2024.12.28</span>
+            <span class="tag guan">官摄</span>
+            <span class="tag tag-behind">花絮</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vlog-card" data-big="third" data-sub="behind" data-src="https://player.bilibili.com/player.html?bvid=BV13oCqYkExW&autoplay=0&danmaku=1&poster=1" style="display:none;">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">"予你"主题巡演·南昌站平面拍摄</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2024.12.28</span>
+            <span class="tag guan">官摄</span>
+            <span class="tag tag-behind">花絮</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vlog-card" data-big="third" data-sub="vlog" data-src="https://player.bilibili.com/player.html?bvid=BV1Ak61YVE5E&autoplay=0&danmaku=1&poster=1" style="display:none;">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">"予你"主题巡演·南昌站回顾VLOG</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2025.01.03</span>
+            <span class="tag guan">官摄</span>
+            <span class="tag tag-vlog">VLOG</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vlog-card" data-big="third" data-sub="vlog" data-src="https://player.bilibili.com/player.html?bvid=BV1mBZmYvEUL&autoplay=0&danmaku=1&poster=1" style="display:none;">
+      <div class="vlog-inner">
+        <div class="player-box"><div class="iframe-wrap"></div></div>
+        <div class="info-box">
+          <div class="vlog-title">无限x巡回演唱会南宁站</div>
+          <div class="vlog-meta">
+            <span class="vlog-date">2025.04.03</span>
+            <span class="tag guan">官摄</span>
+            <span class="tag tag-vlog">VLOG</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<button class="back-top" id="backTop">↑</button>
+
+<script>
+const bigBtns = document.querySelectorAll('.tab-pill button');
+const subFirst = document.getElementById('subFirst');
+const subThird = document.getElementById('subThird');
+const subBtns = document.querySelectorAll('.sub-tab-btn');
+const cards = document.querySelectorAll('.vlog-card');
+let currentBig = 'first';
+let currentSub = 'vlog';
+const loaded = new Set();
+
+function render(){
+  cards.forEach(card=>{
+    const big = card.dataset.big;
+    const sub = card.dataset.sub;
+    const wrap = card.querySelector('.iframe-wrap');
+    const src = card.dataset.src;
+    if(big === currentBig && sub === currentSub){
+      card.style.display = 'block';
+      if(!loaded.has(card)){
+        wrap.innerHTML = `<iframe src="${src}" scrolling="no" allowfullscreen="true"></iframe>`;
+        loaded.add(card);
+      }
+    }else{
+      card.style.display = 'none';
+    }
+  })
+}
+
+// 一级tab切换
+bigBtns.forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    bigBtns.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentBig = btn.dataset.big;
+    currentSub = 'vlog';
+
+    if(currentBig === 'first'){
+      subFirst.style.display = 'flex';
+      subThird.style.display = 'none';
+    }else{
+      subFirst.style.display = 'none';
+      subThird.style.display = 'flex';
+    }
+    // 重置二级tab active
+    document.querySelectorAll('.sub-tab-wrap').forEach(wrap=>{
+      wrap.querySelectorAll('.sub-tab-btn').forEach((b,i)=>{
+        b.classList.toggle('active', i===0);
+      })
+    })
+    render();
+  })
+})
+
+// 二级tab切换
+subBtns.forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const parent = btn.parentElement;
+    parent.querySelectorAll('.sub-tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentSub = btn.dataset.sub;
+    render();
+  })
+})
+
+// 回顶部
+const backTopBtn = document.getElementById('backTop');
+window.addEventListener('scroll', ()=>{
+  backTopBtn.classList.toggle('show', window.scrollY > 300);
+})
+backTopBtn.onclick = ()=>{
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+render();
+</script>
+
+</body>
+</html>
