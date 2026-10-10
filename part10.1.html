@@ -1,0 +1,1770 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>诗情画奕 时间线存档</title>
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+  background: #f3eef9;
+  color: #333;
+  line-height: 1.7;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 30px 16px 60px;
+}
+
+.back-home {
+  display: inline-block;
+  text-decoration: none;
+  color: #8b5cf6;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+.back-home:hover {
+  text-decoration: underline;
+}
+
+/* Tab标签栏 */
+.tab-bar{
+  display:flex;
+  border-bottom:1px solid #e2d9f3;
+  margin-bottom:24px;
+  gap:0;
+  overflow-x:auto;
+}
+.tab-item{
+  padding:10px 20px;
+  cursor:pointer;
+  border-bottom:3px solid transparent;
+  font-size:16px;
+  white-space:nowrap;
+  border-right:1px solid #ddd4ee;
+}
+.tab-item:last-child{
+  border-right:none;
+}
+.tab-item.active{
+  border-bottom-color:#8b5cf6;
+  color:#8b5cf6;
+  font-weight:bold;
+}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
+.content-box {
+  background: #f8f5fe;
+  border: 1px solid #e2d9f3;
+  border-radius: 12px;
+  padding: 28px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+
+/* ========== 时间线核心 ========== */
+.timeline-wrap {
+  position: relative;
+  padding-left:32px;
+}
+.timeline-wrap::before {
+  content:"";
+  position:absolute;
+  left:8px;
+  top:0;
+  bottom:0;
+  width:2px;
+  background:#a78bfa;
+}
+
+.timeline-date-group {
+  position:relative;
+  margin-bottom:30px;
+}
+.timeline-date-group::before {
+  content:"";
+  position:absolute;
+  left:-36px;
+  top:3px;
+  width:16px;
+  height:16px;
+  border-radius:50%;
+  background:#8b5cf6;
+  border:3px solid #f8f5fe;
+  z-index:2;
+}
+.timeline-date {
+  font-size:17px;
+  color:#8b5cf6;
+  font-weight:bold;
+  margin-bottom:14px;
+}
+
+/* 单条事件 卡片改为紫色调 */
+.timeline-item {
+  background:#f8f5fe;
+  border-radius:10px;
+  padding:16px;
+  margin-bottom:12px;
+  border:1px solid #ddd4ee;
+}
+.timeline-item:last-child{
+  margin-bottom:0;
+}
+
+/* 新布局：标题在上，图片+灰字横向并排 */
+.item-title{
+  font-size:16px;
+  font-weight:bold;
+  margin-bottom:10px;
+  color:#222;
+}
+.item-row{
+  display:grid;
+  grid-template-columns: 180px 1fr;
+  gap:16px;
+  align-items: center;
+}
+.item-img{
+  width:180px;
+  border-radius:8px;
+  border:1px solid #ddd4ee;
+  background:#f4f0fc;
+  cursor:pointer;
+  transition:0.2s;
+  align-self:center;
+}
+.item-img:hover{
+  opacity:0.85;
+}
+.item-note{
+  font-size:13px;
+  color:#999;
+  line-height:1.6;
+}
+/* 图片下方区域：按钮 + 链接 */
+.item-bottom{
+  margin-top:12px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.note-btn{
+  padding:7px 12px;
+  background:#b19cd9;
+  color:white;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:14px;
+}
+.note-btn:hover{
+  background:#9d84c2;
+}
+.item-link{
+  font-size:14px;
+  color:#8b5cf6;
+}
+
+/* 图片放大弹窗 */
+.img-mask{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.75);
+  z-index:999;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.img-mask.active{
+  display:flex;
+}
+.img-mask img{
+  max-width:90%;
+  max-height:90vh;
+  border-radius:8px;
+}
+
+/* 文字弹窗 */
+.popup-mask{
+  display:none;
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,0.5);
+  z-index:1000;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.popup-mask.active{
+  display:flex;
+}
+.popup-box{
+  background:#ffffff;
+  color:#333;
+  max-width:700px;
+  width:100%;
+  max-height:80vh;
+  overflow-y:auto;
+  padding:24px;
+  border-radius:12px;
+  position:relative;
+}
+.popup-title{
+  font-size:17px;
+  color:#8b5cf6;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+.popup-text{
+  font-size:15px;
+  line-height:1.8;
+  color:#444;
+}
+.close-btn{
+  position:absolute;
+  top:12px;right:16px;
+  font-size:24px;
+  cursor:pointer;
+  color:#666;
+}
+
+/* 回顶部圆形按钮 */
+  .back-top{
+    position:fixed;
+    bottom:18px;
+    right:18px;
+    width:33px;
+    height:33px;
+    border-radius:50%;
+    background:#8b5cf6;
+    color:#fff;
+    border:none;
+    font-size:18px;
+    cursor:pointer;
+    box-shadow:0 4px 12px rgba(139,92,246,0.25);
+    opacity:0;
+    visibility:hidden;
+    transition:0.25s;
+    z-index:98;
+  }
+  .back-top.show{
+    opacity:1;
+    visibility:visible;
+  }
+  .back-top:hover{
+    background:#7c3aed;
+  }
+/* B站播放器样式 */
+.bili-player iframe {
+  width:100%;
+  height:100%;
+  aspect-ratio:16/9;
+  border-radius:8px;
+  border:1px solid #ddd4ee;
+}
+.bili-player{
+  width:100%;
+}
+
+/* 移动端适配 */
+@media (max-width:720px){
+  .content-box{
+    padding:20px 16px;
+  }
+  .timeline-wrap{
+    padding-left:24px;
+  }
+  .timeline-date-group::before{
+    left:-28px;
+    width:14px;
+    height:14px;
+  }
+  .item-row{
+    grid-template-columns: 130px 1fr;
+    gap:12px;
+    align-items: center;
+  }
+  .item-img{
+    width:130px;
+    align-self:center;
+  }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="part10.html" class="back-home">← 返回上一页</a>
+
+  <div class="tab-bar">
+    <div class="tab-item active" onclick="switchTab('tab2018')">2018</div>
+    <div class="tab-item" onclick="switchTab('tab2019')">2019</div>
+  </div>
+
+
+<!-- 2018 -->
+<div id="tab2018" class="tab-content active">
+  <div class="timeline-wrap">
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.02.08</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕微博</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180208.jpeg" onclick="openImg(this.src)">
+          <div class="item-note">🌧️1⃣️合照</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.03.23</div>
+      <div class="timeline-item">
+        <div class="item-title">Team FT《梦想的旗帜》出道首演</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180323.png" onclick="openImg(this.src)">
+          <div class="item-note">🌧️亮相，MC1和1⃣️同框</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.03.24</div>
+      <div class="timeline-item">
+        <div class="item-title">周诗雨首条微博</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180324.png" onclick="openImg(this.src)">
+          <div class="item-note">🌧️1⃣️队伍大合照</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.03.25</div>
+      <div class="timeline-item">
+        <div class="item-title">周诗雨首次直播</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180325.png" onclick="openImg(this.src)">
+          <div class="item-note">提及1⃣️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2018.03.25"
+            data-text="同事：周老师像王奕<br>🌧️：我跟王奕是...老师也说我有点像王奕，王奕本人也说我有点像她<br>同事：王奕本人都认证了<br>🌧️：我们今天才讨论了这个问题，我们俩素颜的时候是真的有点像，因为我们俩耳朵都大大的<br>同事：粥粥你比王奕好看。好的我要转告王奕<br>🌧️：怎么回事。王奕好看，王奕可爱">📝</button>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-title">王奕直播</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180325.1.png" onclick="openImg(this.src)">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2018.03.25"
+            data-text="1⃣️：在后台的时候，粥粥说王奕你有个站位站错了，就是我们彩排的时候嘛，我说好的，结果我下次跳的时候我又站错了。之前彩排的时候我就和粥粥说，我说粥粥我要是等会再站错的话你就打我，我就知道了，她说好的。然后我果然站错了，她真的就打我了。真的是如我所愿，她真的打我<br>弹幕：好多人都说你和周周长得像是吗<br>1⃣️：其实我觉得还好吧，只是仪态有一点点像。我比她高一点，而且粥粥有很明显的苹果肌，我没有，我只有酒窝<br>弹幕：有没有绰号<br>1⃣️：粥粥就是周老师嘛，就是周诗雨">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.04.03</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕直播</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180403.png" onclick="openImg(this.src)">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2018.04.03"
+            data-text="1⃣️：粥粥倒是真像我？<br>同事：我也觉得粥粥倒是真的挺像你的，有的时候像<br>1⃣️：粥粥不像我好吗，有的时候也不像好吗<br>同事：像！<br>1⃣️：一点都不像！">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.04.06</div>
+      <div class="timeline-item">
+        <div class="item-title">Team FT《梦想的旗帜》公演</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180406.png" onclick="openImg(this.src)">
+          <div class="item-note">两个不熟的人同框</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.04.09</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕直播</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180409.png" onclick="openImg(this.src)">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2018.04.03"
+            data-text="1⃣️：选粥粥？昨天我还在跟粥粥说呢，我说我们俩肩膀怎么办呀<br>弹幕问是不是嫌弃她<br>1⃣️：我没有嫌弃她。我跟粥粥两个人肩膀都是这样子的（耸肩）">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.04.11</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕微博</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180411.png" onclick="openImg(this.src)">
+          <div class="item-note">🌧️生日，1⃣️发博祝福</div>
+        </div>
+        <div class="item-bottom">
+          <a href="https://weibo.com/6359405623/4227409026845737" class="item-link">🔗</a>
+        </div>
+      </div>
+    </div>
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.04.15</div>
+      <div class="timeline-item">
+        <div class="item-title">Team FT《梦想的旗帜》公演</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180415.jpeg" onclick="openImg(this.src)">
+          <div class="item-note">🌧️1⃣️同台mc</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.04.19</div>
+      <div class="timeline-item">
+        <div class="item-title">Team FT《梦想的旗帜》公演</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180419.png" onclick="openImg(this.src)">
+          <div class="item-note">🌧️拉1⃣️裙摆</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.04.22</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕直播</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180422.png" onclick="openImg(this.src)">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2018.04.22"
+            data-text="1⃣️：为什么一看到我就想到粥粥呢？哪里像了，为什么老是说我和粥粥像呢？粥粥跟我脸型都不一样的好不好，我跟她都不是一款的，只是有一点点微妙的...只是身材和骨头都长得有点奇特而已，跟人家不一样。说到耳朵的话，我跟粥粥的耳朵还真不像，我的耳朵比她要大。而且虽然她也是招风耳，但是我是一只招一只不招，这个是非常严肃的，这是我独有的，不要老是说谁谁谁和我像，这是我的特色，不要说哦<br><br>有弹幕表示自己是cpf<br>1⃣️：什么鬼，什么cp饭，这年头还有人站cp饭啊，不是cp早就过时了吗。那我得去找个cp了，找谁好呢？<br>这个人强调了好几次说要让我找粥粥，害怕，让我找粥粥做cp<br>同事：那你们两个就是那种双胞胎cp了<br>1⃣️：那王溪源怎么办，我把她的粥粥抢走了。你们不要带坏我，我毕竟才读幼儿园呢，人家都说了幼儿园炒什么cp。别别别，别乱站cp，朋友们<br>弹幕给取cp名&quot;奕周情侣&quot;<br>1⃣️：噢，一周情侣啊，这我看过<br>弹幕：周周是谁<br>1⃣️：有人说粥粥是谁，安静了，说了半天的粥粥，他说粥粥是谁">
+            📝
+            </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.04.30</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕微博</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180430.png" onclick="openImg(this.src)">
+          <div class="item-note">🌧️评论</div>
+        </div>
+        <div class="item-bottom">
+          <a href="https://weibo.com/6359405623/4234609602919621" class="item-link">🔗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.05.03</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕微博</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180503.png" onclick="openImg(this.src)">
+          <div class="item-note">1.🌧️1⃣️、王欣颜甜甜合照<br>2.🌧️评论</div>
+        </div>
+        <div class="item-bottom">
+          <a href="https://weibo.com/6359405623/4234609602919621" class="item-link">🔗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.05.04</div>
+      <div class="timeline-item">
+        <div class="item-title">Team FT《梦想的旗帜》公演</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180504.png" onclick="openImg(this.src)">
+          <div class="item-note">1⃣️🌧️、王欣颜甜甜同台表演《糖》</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.05.04</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕微博</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180505.png" onclick="openImg(this.src)">
+          <div class="item-note">🌧️评论</div>
+        </div>
+        <div class="item-bottom">
+          <a href="https://weibo.com/6359405623/4236098647221996" class="item-link">🔗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.05.20</div>
+      <div class="timeline-item">
+        <div class="item-title">Team FT《梦想的旗帜》公演</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180520.png" onclick="openImg(this.src)">
+          <div class="item-note">1⃣️🌧️、王欣颜甜甜、陈盼同台表演《水手服》</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.06.04</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕电台</div>
+        <div class="item-row">
+          <div class="item-note">1⃣️🌧️互动</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2018.06.04"
+            data-text="🌧️：要找一个很高很高的人跳(双人舞)，起码要比我高。只有wy比我高了，但是wy 算了吧<br>1⃣️：我也想跳，但是我俩都是一个风格的还是算了吧<br>🌧️：wy你可以蒙着面,装酷
+<br><br>
+弹幕说小王和大美琪像双胞胎<br>🌧️：你和大美琪像双胞胎吗？<br>1⃣️：有人说我跟大美琪像双胞胎吗，没有啊<br>🌧️：什么鬼<br>1⃣️：你是不是在看<br>🌧️：对<br>同事：她双胞胎不是周诗雨吗<br>🌧️：对啊！明明是跟我<br>1⃣️：对啊。我是第一次听说诶，让我有点怕怕，好后怕哦<br>🌧️：你怕什么<br>1⃣️：我跟这么多人撞脸了
+<br><br>
+🌧️：我现在还不会，还不会念那个绕口令，我现在还不会念绕口令怎么办啊，都要崩溃了(一阵萌言萌语) 我觉得全世界没有人把这个绕口令念好<br>同事：让饶舌王奕念给你听<br>1⃣️：啊？刘郎念牛郎是吧<br>🌧️：牛郎恋刘娘<br>1⃣️：啊牛郎念牛娘 <br>同事：牛郎念牛凉<br>1⃣️：是这个吧<br>🌧️：对啊<br>1⃣️：怎么说来着<br>大家异口同声：牛郎恋刘娘，刘娘念牛郎<br>1⃣️：牛郎，诶等会，我缓一缓，被这个杨美琪带错了。牛郎念刘娘对吧<br>同事：加快一点<br>1⃣️：牛郎念牛..嘿嘿嘿，什么刚发生什么，我刚被一个被一口气噎着了<br>🌧️：那你再来<br>1⃣️：牛郎念牛娘，对吧<br>🌧️：对<br>同事：刘，不是牛<br>1⃣️：啊不是牛郎吗，本来就是牛郎<br>🌧️：你念着念着，感觉牛郎，感觉怪怪的<br>1⃣️：牛郎念牛额额刘刘郎刘郎念牛囊，牛郎牛囊牛郎牛郎念牛额。啊！<br>弹幕：牛郎是哪个牛郎<br>1⃣️：就是这个牛郎啊<br>🌧️：哈哈哈，特别是这个叫声，太搞笑了<br>1⃣️：对啊，牛郎织女的那个<br>🌧️：牛郎念刘娘，刘娘恋牛郎<br>1⃣️：牛郎念牛囊，牛郎念刘郎牛牛囊<br>🌧️：我真的很害怕这个，还有一个老农老怒老农<br>1⃣️：我以前背过一个 灰公鸡红yi巴红yi巴黑公鸡<br>🌧️：这个不难就是这个这个错一个扣十块钱<br>1⃣️：加油粥粥<br>🌧️：完了我已经准备好工资了
+<br><br>
+🌧️：王奕你头好大<br>1⃣️：我在家里都都号称小头王奕呢<br>🌧️：跟我一样大。你看王奕你还耸肩，我跟你说老师天天压我的肩膀，她说我肩膀长得有问题。你知道为什么吗，她是这样对我说的。你站直了，你坐直了，怎么坐起来还耸肩<br>1⃣️：哎没办法<br>🌧️：你把它放下<br>1⃣️：习惯了，等会让我吃完这口<br>🌧️：这么好吃吗<br>1⃣️：不就是粉吗，还给你<br>🌧️：你说话很像三毛流浪记 那个老板<br>1⃣️：臭婆娘<br>🌧️：好傻啊。等一下等一下坐直了<br>1⃣️：坐直了<br>🌧️：坐直了呀<br>1⃣️：我坐直了,我真的坐直了<br>同事：肩膀要放松<br>1⃣️：我放松了，我成天耸耸肩我开心啊？<br>🌧️：不是你怎么还比我还耸啊你<br>1⃣️：那是因为我耸从小耸到大<br>🌧️：你高低肩见dei<br>1⃣️：啊对哦<br>🌧️：你坐好，你正坐好<br>1⃣️：嗯。我放松得很<br>🌧️：你别放松往下压<br>1⃣️：往下压<br>🌧️：我天呐，王奕你这咋整啊<br>1⃣️：我啊得手术<br>🌧️：天呐你畸形了,等下等下等下你还是有救的,下去(拍拍)<br>1⃣️：下不去，我拍那个黑白照的时候，我拍那个骨头的时候我的肩膀就这样的。真的，我要不要给你看照片，我肩膀就这样的<br>🌧️：等一下你别动,你这高低肩太严重了吧<br>1⃣️：是吗,哪个高啊<br>🌧️：这个高<br>1⃣️：这个高<br>🌧️：不是不是,天呐<br>同事：你怎么跟个医生一样<br>🌧️：不是，看我这放下来是平肩，因为老师说我平肩，我抬起来就很容易耸肩对吧<br>同事：难怪有时候看你感觉有点这样子<br>🌧️：因为我肩膀长得比较平<br>1⃣️：啊<br>🌧️：然后，因为我不溜肩，你这样是溜肩<br>1⃣️：站着会有点耸，因为小时候习惯了<br>🌧️：然后王奕这个就是长得<br>1⃣️：这叫小时候书包背太重啦，背坏啦<br>🌧️：你背过几年书包，你上过几年学啊王奕<br>1⃣️：背坏啦，像你们到了高中就背斜挎包啦
+<br><br>
+1⃣️：一般插班生都比较优秀<br>🌧️：那不是九期整个都很优秀<br>同事：我是八期的收官者<br>1⃣️：我是说一般插进来的<br>🌧️：王奕是插班生<br>1⃣️：对，认真的。对啊我一下子一下子被人家叫前辈我有点精神恍惚。想到九期刚来的时候，因为只跟我们差一期，然后当时第一次当前辈还挺激动呢，然后就跑过来看你们上课，然后结果然后然后结果现在十期生了 毫无兴趣，对十期生毫无兴趣<br>🌧️：为什么<br>1⃣️：那个那个不是有个
+同事：你可别说了王奕，你九期刚来的时候你也没兴趣，也没看你有什么兴趣<br>1⃣️：没有没有没有没有，我们九期宝宝刚来的时候我可激动了呢
+<br><br>
+🌧️：什么叫泡粥啊<br>1⃣️：泡粥就是泡周诗雨啊<br>🌧️：饭泡粥是上海上海话，你说什么呢，虽然我不知道是什么意思<br>1⃣️：啊什么，饭泡？<br>同事：是话很多的意思<br>🌧️：饭泡粥<br>🌧️：昨天那个有有有就握手会有个粉丝问我，说知不知道有哪些成员是来自江苏。我说知道啊，王奕啊
+<br><br>
+🌧️：你知道我脸上有个胎记吗,我脸上有胎记，在头皮上<br>1⃣️：你脸上有个胎记在头皮上，这话说的你不觉得有毛病吗<br>🌧️：我说它右就是我忘记在哪一边了，以前小时候看得到现在好像不知道看不看得到<br>1⃣️：我有个胎记在这里<br>🌧️：给我看看<br>1⃣️：不知道有没有啦。那我刚指错了在这里，什么鬼<br>🌧️：诶我胎记在头发里，等一下诶我胎记呢，天呐我的印记去哪里了,天呐我胎记不见了<br>1⃣️：不见了不就很棒吗<br>🌧️：不是不是，现在突然少了块东西。天呐我终于知道为什么我变秃了，因为我那块胎记不见了<br>同事：你有胎记吗<br>🌧️：在我的这个发际线上<br>1⃣️：那你以前怎么找到的，光头的时候找到的<br>🌧️：不是，因为以前能隐隐约约地看出啊，因为我以前是大光明嘛<br>1⃣️：哦<br>🌧️：天呐。天呐天呐天呐伴随着我二十年的胎记不见了，为什么是因为我…哭了
+<br><br>
+🌧️：早知道我不进团了当饭头好了。真的诶，要是我不进团当饭头的话也挺好的，你想我肯定很受欢迎。如果我是王奕的饭头的话，你是不是肯定很喜欢我<br>1⃣️：为什么<br>🌧️：因为我不是成员,我就是没进团<br>1⃣️：啊你是我饭头啊<br>🌧️：对<br>1⃣️：那肯定啊<br>🌧️：哎呀你看，天天特殊对应，天天甜我<br>同事：谁甜你<br>🌧️：因为我不是我不当成员，我当粉丝的话，那肯定很受欢迎，嘿嘿<br>弹幕：公演就call三个人，call谁<br>🌧️：王奕和王奕和王奕<br>弹幕：谁要接一一的饭头<br>同事： 没有<br>1⃣️：谁说的呀<br>同事：不是涵涵，是周诗雨想当饭头
+<br><br>
+1⃣️：其实告诉你们一个秘密，我，不是姓王嘛<br>同事：又要开始…<br>🌧️：你知道吗，我身上刻着一个“王”字<br>同事：王奕又要开始<br>🌧️：你知道吗，你知道谁给我刻的吗<br>1⃣️：谁啊<br>🌧️：我妈<br>1⃣️：诶不是我说真的，我不是姓王嘛<br>🌧️：嗯<br>1⃣️：哎听着好像有点搞笑，但其实吧，不得不说，我其实是王健林的女儿<br>🌧️：那我这个，刻着这个王字你知道吗，你知道岳飞吗<br>同事：大家都不要理她让她一个人尴尬<br>1⃣️：干嘛，你是岳飞后代<br>🌧️：不是，岳飞你知道他背后有什么字吗，精忠报国<br>1⃣️：啊哈哈哦<br>🌧️：你就联想一下，知道为什么姓王了吧<br>1⃣️：哦原来如此<br>🌧️：啊不，为什么刻王了
+<br><br>
+🌧️：大家都知道王奕姓王八<br>1⃣️：你才王八呢<br>🌧️：小王八
+<br><br>
+弹幕：不要啊，我刚申请奕甜<br>🌧️：什么奕甜!奕，诶不对,这怎么怎么念怎么奇怪，周奕好像感觉像个人名哦<br>1⃣️：哎哟，我以前同学叫周奕<br>🌧️：那就雨奕，奕雨，感觉好那个啊<br>1⃣️：对啊。诶什么东西啊刚刚那个，啊魔方啊
+<br><br>
+🌧️：什么什么什么奕甜超话我不同意的，请开<br>1⃣️：奕甜超话？<br>🌧️：奕 雨奕<br>1⃣️：奕雨奕？<br>🌧️：雨奕吧<br>1⃣️：哦<br>🌧️：雨奕超话，快<br>1⃣️：对啊还不是..<br>🌧️：快开雨奕超话,雨奕<br>1⃣️：我今天看到个雨幻。哦幻雨吗，哦不是雨幻，反正我就看到类似这样
+🌧️：雨奕,请开雨奕超话，嘿嘿，雨奕是真的。你知道吗，诶我跟你说<br>悄悄话ing<br>1⃣️：真的假的?!真的假的<br>🌧️：真的<br>1⃣️：为什么，是说你对谁这样呢<br>🌧️：是说我是<br>1⃣️：哦<br>同事：说你是什么，你非要这样开着电台说悄悄话吗<br>🌧️：不行吗<br>1⃣️：不行吗
+<br><br>
+🌧️：你知道吗，我能直接说吗<br>1⃣️：嗯说吧
+🌧️：说完会不会（傻笑ing）<br>1⃣️：诶你要说啥，哦就是你刚刚说的那个是吧<br>🌧️：不是我刚刚说的，是另外一个事情，因为我看到弹幕突然想起来一件事情，气死我了你知道吗<br>1⃣️：啊你说吧,你说吧<br>🌧️：这件事情好说吗,这样说<br>1⃣️：你说吧<br>🌧️：就是有人说我的,这个粉丝传我的坏话<br>1⃣️：传你的坏话，说你什么，说你性取向 …<br>🌧️：什么性取向!<br>1⃣️：emmm<br>🌧️：哎呀！<br>1⃣️：那传你什么坏话？哦～<br>🌧️：我能直接说吗<br>1⃣️：嗯…这个你我也不知道，这个这我也不知道<br>同事：诶我来给你品鉴品鉴<br>🌧️：他们说我 …<br>1⃣️：我忘了我发了什么了，但是我记得我当时发完我还告诉郭倩芸了<br>🌧️：那我就说了，有粉丝说我私联<br>1⃣️：啊？<br>🌧️：真的，气死我了，什么东西<br>1⃣️：为什么这样说你呢<br>🌧️：我不知道啊<br>同事：为什么，又没有证据<br>1⃣️：你怎么知道？就是握手会吗<br>🌧️：对，告诉我的，气死我了，神经病啊<br>同事：有可能太闲了<br>🌧️：对啊，我可以直接说，什么东西！<br>同事：看你太火了<br>🌧️：什么鬼<br>同事：没有，就是想蹭你热度<br>🌧️：不知道是谁<br>1⃣️：五个字？什么啊<br>🌧️：把我气得呀
+<br><br>
+1⃣️：哎哟有个人老是发我消息弄得我好想看哦<br>🌧️：谁呀<br>1⃣️：甜甜<br>🌧️：别看了
+<br><br>
+🌧️：快开通雨奕超话，我告诉你们哦，雨奕是真的<br>1⃣️：对<br>同事：小幻一会过来打人<br>1⃣️：对哦，我害怕<br>🌧️：干什么<br>1⃣️：你知道吗，自从感觉谁谁谁是cp，然后我都不敢跟其中一个人关系太好，我怕看到眼神杀<br>🌧️：不是，我们不是cp。瞎说什么呢，我们不是cp<br>1⃣️：哦原来你们不是啊<br>🌧️：不是<br>1⃣️：我一直以为<br>同事：不是cp那不就是情侣你们<br>🌧️：不是，雨奕才是真的，我和王奕是真的<br>1⃣️：对啊，幻雨怎么处理，雨奕的雨是谁<br>同事：周诗雨是渣女<br>🌧️：小幻mc的时候都亲绵羊了1⃣️：哎呀，不要嫉妒不要嫉妒<br>🌧️：我没有<br>1⃣️：大家都是为了生活，别说了<br>🌧️：什么<br>🌧️：朝朝，啊不，周诗雨和王奕是真的<br>1⃣️：你刚说朝朝，朝朝谁啊不认识<br>🌧️：王奕怎么跟谁都是真的<br>1⃣️：想当初我可是钢铁直男<br>🌧️：真的吗<br>1⃣️：对啊，之前熊沁娴就是坐我的腿上，我说额那个我有点受不了。我当时就直接说了，我说我有点受不了<br>弹幕说小王现在也是钢铁直男<br>1⃣️：对，我现在也是钢铁，只是只是..<br>🌧️：小幻浪得很呀<br>同事：对啊，跟周诗雨一模一样<br>🌧️：哪有她都浪到分团各地了<br>同事：怪不得你们俩轮番吵呢<br>🌧️：什么，你说我多一心一意啊，我非常的专情<br>同事：你是哪来的脸说这种话<br>🌧️：什么，那我就要跟王奕夜蝶了<br>小王惊恐x
+<br><br>
+弹幕：王奕和张馨月或朱小丹cp名怎么说<br>1⃣️：啊？怎么我..呃cp名叫王丹哈哈哈，王馨<br>🌧️：都是假的都是假的
+">📝</button>
+      </div>
+    </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.06.06</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕微博</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180606.png" onclick="openImg(this.src)">
+          <div class="item-note">🌧️评论</div>
+        </div>
+        <div class="item-bottom">
+          <a href="https://weibo.com/6359405623/4247710297038267" class="item-link">🔗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.06.10</div>
+      <div class="timeline-item">
+        <div class="item-title">周诗雨电台</div>
+        <div class="item-row">
+          <div class="item-note">提及1⃣️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2018.06.10"
+            data-text="弹幕说在看王奕<br>🌧️：没关系啊看王奕，王奕很可爱呀。昨天吃了王奕的烤鸭。王奕很甜，王奕超级甜。对，我跟王奕长得很像，但是我们耳朵长得也不太一样。我们之前上课的时候，老师都说我们长得很像，甚至叫我就叫王奕的名字<br>弹幕：FT王奕最高吗<br>🌧️：不知道，FT谁最高我不知道">📝</button>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-title">周诗雨微博</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180610.1.png" onclick="openImg(this.src)">
+          <div class="item-note">🌧️1⃣️合照</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.06.11</div>
+      <div class="timeline-item">
+        <div class="item-title">周诗雨电台</div>
+        <div class="item-row">
+          <div class="item-note">1⃣️🌧️互动</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2018.06.11"
+            data-text="小王敲门<br>🌧️：进，怎么又有人，是谁<br>1⃣️：我，因为我听到你在电台，你猜我怎么知道的<br>🌧️：你怎么知道的啊<br>1⃣️：马凡在听你的电台<br>🌧️：那马凡是不是发弹幕了<br>1⃣️：对啊<br>🌧️：她到底发什么，我什么都没看见<br>1⃣️：我不知道，我只知道她在那里笑<br>🌧️：啊笑什么<br>1⃣️：咯咯咯咯地笑。盼盼呢<br>🌧️：盼盼在床上啊，你是不是傻了<br>1⃣️：睡着了吗<br>🌧️：是，她就是临时躺着睡着了，她还没卸妆呢。怎么了，你是不是想我了<br>1⃣️：还好吧<br>🌧️：什么叫还好吧，你怎么回事<br>1⃣️：好吧，其实就是想你了<br>🌧️：我也想你<br>1⃣️🌧️：拜拜">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.06.13</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕直播</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180613.png" onclick="openImg(this.src)">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2018.06.13"
+            data-text="1⃣️：她（money）真的长大好多，现在<br>同事：那天带到粥粥那，让她管一下，粥粥很乐意，管完回来之后大家都不要她，都嫌弃她<br>1⃣️：对，说她像个狗一样到处乱窜<br>弹幕：粥粥不喜欢猫吗<br>1⃣️：她喜欢，她之前就说我想你的猫了。然后我说，那你来，你把她抱走，我顺便去看个电影。结果我后来回去了，我说甜甜帮我问下粥粥那个猫怎么样了。甜甜就说，粥粥说那不是猫，是狗">📝</button>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-title">王奕电台</div>
+        <div class="item-row">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2018.06.13"
+            data-text="小王打了个嗝<br>1⃣️：毕竟这不是直播，其实直播打嗝的话也不会被发现，声音很小，但电台只录声音。哦天呐<br>弹幕：周周抠脚<br>1⃣️：哈哈哈哈，那我宁可打嗝，我也不想..<br>同事：不是，是周周在电台的时候，她抠脚让粉丝听出来吗，这也太厉害了吧<br>1⃣️：不是抠脚，其实是剪脚趾甲<br>同事：我真的以为是抠脚，我对不起她<br>弹幕：是张茜<br>1⃣️：是茜茜吗，到底是谁抠脚，茜茜抠脚我是不信的<br><br>弹幕：周周要和你跳夜蝶<br>1⃣️：什么鬼，告辞告辞<br>同事：什么东西<br>1⃣️：粥粥要跟我跳夜蝶，告辞，我学不会<br>同事：什么时候<br>1⃣️：不知道，应该电台说的吧<br>同事：我不允许，这被禁止的，不懂吗，懂不懂规矩啊现在的小姑娘">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.06.14</div>
+      <div class="timeline-item">
+        <div class="item-title">Team FT《梦想的旗帜》公演</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180614.png" onclick="openImg(this.src)">
+          <div class="item-note">🌧️1⃣️公演谢幕牵手</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-title">站哥返图</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180614.1.jpeg" onclick="openImg(this.src)">
+          <div class="item-note">1</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.06.18</div>
+      <div class="timeline-item">
+        <div class="item-title">Team FT《梦想的旗帜》公演</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180618.png" onclick="openImg(this.src)">
+          <div class="item-note">🌧️1⃣️mc互动</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2018.06.18"
+            data-text="🌧️：刚进团的时候，她就一直骗我说马凡是中芭的<br>1⃣️：什么？马凡什么？<br>🌧️：中央芭蕾舞学院<br>1⃣️：噢">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.07.01</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕微博</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180701.png" onclick="openImg(this.src)">
+          <div class="item-note">🌧️评论</div>
+        </div>
+        <div class="item-bottom">
+          <a href="https://weibo.com/6359405623/4257105579482516" class="item-link">🔗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.07.29</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕电台</div>
+        <div class="item-row">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2018.07.29"
+            data-text="弹幕：跳抱抱<br>1⃣️：跳抱抱？看周诗雨的抱抱就行了吧">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.08.01</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕电台</div>
+        <div class="item-row">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2018.08.01"
+            data-text="同事发了张图<br>1⃣️：我看到了那个图，在你发我之前，粥粥就给我看了。我当时觉得内心就…直接说了一个，出坑边缘再见吧">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.08.04</div>
+      <div class="timeline-item">
+        <div class="item-title">周诗雨抖音</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180804.png" onclick="openImg(this.src)">
+          <div class="item-note">1⃣️出镜</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.08.18</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕电台</div>
+        <div class="item-row">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2018.08.18"
+            data-text="1⃣️：周诗雨后的拍照技术我不太相信她，算了算了<br>同事：周诗雨是p得好，我们已经diss过她的拍照技术了 等她练好了我再找她吧">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.08.26</div>
+      <div class="timeline-item">
+        <div class="item-title">周诗雨微博</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180826.png" onclick="openImg(this.src)">
+          <div class="item-note">拍到1⃣️</div>
+        </div>
+        <div class="item-bottom">
+          <a href="https://weibo.com/6502570880/4277304899410222" class="item-link">🔗</a>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-title">王奕电台</div>
+        <div class="item-row">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2018.08.26"
+            data-text="弹幕：wy和zsy谁的耳朵大<br>1⃣️：我觉得应该是我大吧，但是粥粥的耳朵是大的对称的，我的是不对称的">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2018.08.30</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕电台</div>
+        <div class="item-row">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2018.08.30"
+            data-text="弹幕：你想跟谁组cp<br>1⃣️：哎呀真的硬要说的话，我得好好想想。算了，我怕伤了喜欢我的人<br>弹幕：雨奕 1⃣️：噢说到雨奕你们知道吗，今天舞蹈老师给我们排位置，对着周诗雨说，来王奕往这边站一点。而且好几次了，其实说实话跟老师已经算比较熟的了，就是也排了一个月的公演了，每次都在叫我们名字，总是拿粥粥叫王奕。然后我们排练回来的时候说，诶刚刚那是周诗雨还是王奕啊，就分不清我们俩<br>同事：你们的体态还有点像<br>1⃣️：对，我第一次见粥粥的时候，就我看粥粥的肩膀，就是背影，跟我自己真的挺像的。总是会认错<br>弹幕：周周说没洗头的就是王奕<br>1⃣️：屁嘞，还没洗头的就是王奕，王奕每次头发都是蓬松的好不好，她自己不洗头还怪我咯。诶对她比我矮<br>弹幕：和周周当室友<br>1⃣️：我跟粥粥是不会成为室友的，她要跟别人住的<br>弹幕：我认错了<br>1⃣️：对，你还认错了，哼<br><br>弹幕提到多啦A梦<br>1⃣️：我们多啦A梦可好玩了，我最讨厌大雄了。其实我有时候觉得粥粥就是素颜，然后扎个马尾，整个头光溜溜的，特别像大雄，还带副眼镜，哈哈哈">📝</button>
+        </div>
+      </div>
+    </div>
+
+<div class="timeline-date-group">
+  <div class="timeline-date">2018.09.02</div>
+  <!-- 第一条：公演 -->
+  <div class="timeline-item">
+    <div class="item-title">Team FT《双面偶像》公演</div>
+    <div class="item-row">
+      <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180902.png" onclick="openImg(this.src)">
+      <div class="item-note">1⃣️🌧️mc互动</div>
+    </div>
+    <div class="item-bottom">
+      <button class="note-btn" onclick="openPopup(this)"
+        data-title="2018.09.02"
+        data-text="🌧️：天呐我简直是个艺术家<br>1⃣️：不得了了，下次我要找你约拍了周诗雨">📝</button>
+    </div>
+  </div>
+  <!-- 第二条：公演 -->
+  <div class="timeline-item">
+    <div class="item-title">Team FT《双面偶像》公演</div>
+    <div class="item-row">
+      <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180902.1.png" onclick="openImg(this.src)">
+      <div class="item-note">🌧️1⃣️同台MC</div>
+    </div>
+    <div class="item-bottom">
+      <button class="note-btn" onclick="openPopup(this)"
+        data-title="2018.09.02"
+        data-text="🌧️：但周诗雨就等于王奕<br>1⃣️：这个时候我要拎出来说了。就周诗雨吧，就是老师觉得我跟周诗雨长得像，每次都对着周诗雨说，来王奕往右边去一点<br>同事：喊王奕的时候还是王奕<br>1⃣️：对，所以说周诗雨这个人就不存在<br>🌧️：不，你知道吗，今天第一首歌，王奕拿着吉他，拿着周诗雨的吉他，连名字都不认识了<br>1⃣️：不是，这是一个意外，这怪staff姐姐，不怪我 同事：哎王奕，昨天你电台怎么说的那个，存在感说一遍<br>1⃣️：啊？什么存在感<br>同事：就是叫错名字的时候<br>1⃣️：就毫无存在感周诗雨嘛<br>小雨假哭ing<br>1⃣️：不要哭周诗雨<br>同事：她眼睛都红了，你们还欺负她">📝</button>
+    </div>
+  </div>
+  <!-- 第三条：王奕直播 -->
+  <div class="timeline-item">
+    <div class="item-title">王奕直播</div>
+    <div class="item-row">
+      <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180902.2.png" onclick="openImg(this.src)">
+      <div class="item-note">1⃣️🌧️互动</div>
+    </div>
+            <div class="item-bottom">
+              <button class="note-btn" onclick="openPopup(this)"
+                data-title="2018.09.02"
+                data-text="1⃣️：要跟我跳9to9？啊不，我今天就是要跟周诗雨跳。双胞胎呀，双胞胎怎么..也行啦<br><br>小雨路过ing<br>1⃣️：哎呀粥粥我看你眼睛。好了吗<br>🌧️：你看呢<br>1⃣️：我看看。天呐你眼睛真的好红啊<br>🌧️：我黑眼眶都变成蓝色了<br>1⃣️：真的啊。天呐你这眼睛真的太红了，赶紧睡觉吧。你现在眼睛难受吗<br>🌧️：我红眼睛其实有点看不太清<br>1⃣️：那你就是酸吗<br>🌧️：有一点<br>1⃣️：那你就是睡得太少了。我觉得你明天早上睁眼，说不定眼睛会很干。你早上醒来眼睛会干吗<br>🌧️：不会<br>1⃣️：啊那还好。像我每次早上醒来眼睛都会很干，因为我有点干眼症<br>🌧️：我没有，我泪眼<br>1⃣️：我今天看到你讲mc的时候，那眼睛流泪的，太夸张了<br>弹幕说周诗雨会瞎的<br>1⃣️：什么叫周诗雨会瞎啊，别瞎说<br>🌧️：你在直播啊<br>1⃣️：对，我在直播啊<br>🌧️：啊！我刚刚说什么了<br>1⃣️：你刚刚没说啊，你刚刚就说眼睛都变蓝了。你早点去睡觉吧，我觉得你睡得太少了，你赶紧头发吹好去睡觉吧<br>（画外音）同事：周诗雨这扁平的身材王奕都摸不出来，哈哈哈<br>1⃣️：粥粥你在房间里说自己早睡了<br>🌧️：没有啊，我只是说了晚安而已<br>1⃣️：真的你赶紧去睡觉吧，不跟你开玩笑了。希望你明天眼睛能够雪亮亮<br>弹幕：不要告诉周诗雨我在这<br>1⃣️：她早就走了<br><br> 弹幕：自摸你就火了<br>1⃣️：不！自摸就糊了，粥粥说的<br>弹幕：摸耳朵就知道是你了<br>1⃣️：不啊，粥粥也是大耳朵啊。哦也是，这个FT就没有粥粥这个人，有两个王奕呢<br>弹幕：周周好惨<br>1⃣️：哎呀也是。没办法嘛，长得像王奕，没办法没办法。其实这么说的话，你们怎么不说粥粥像别人呢<br><br>1⃣️：周诗雨是真的拍照黑洞，我今天还说周诗雨我要找你约拍了，不复存在了这句话。而且周诗雨她还跟我说王奕我想找你拍那种穿衣服穿得特别少的那种照片，把我吓到了，那种照片叫什么来着？<br>弹幕：guo照<br>1⃣️：哦叫guo照吗，我当时没有听清楚，我就以为她要给我拍裸照。而且她说王奕我要给你拍裸照，我当时惊呆了。我说我不能不穿衣服，然后她说你穿那种吊带也是可以的。我就想到那种很可怕的那种照片，我就想周诗雨想干嘛。真的太可怕了，带坏我这种小孩<br>同事：周诗雨拍照太可怕了，你别找她拍<br>1⃣️：我不找她，我上次以为她要给我拍裸照<br>弹幕：她想红<br>1⃣️：就委屈了我这种人啊。对，我一直觉得周老师很有问题。算了，今天她眼睛红我就不说了">📝</button>
+            </div>
+  </div>
+</div>
+
+       <div class="timeline-date-group">
+          <div class="timeline-date">2018.09.03</div>
+          <div class="timeline-item">
+            <div class="item-title">王奕电台</div>
+            <div class="item-row">
+              <div class="item-note">1⃣️🌧️互动</div>
+            </div>
+            <div class="item-bottom">
+              <button class="note-btn" onclick="openPopup(this)"
+                data-title="2018.09.03"
+                data-text="小雨敲门ing<br>1⃣️：请进。哎呀粥粥我在直播<br>🌧️：啊<br>1⃣️：不是视频直播<br>🌧️：啊吓死我了<br>1⃣️：我看你眼睛好点没，是不是结膜炎<br>🌧️：不知道我没去医院<br>1⃣️：你没去啊，甜甜今天去医院了，她是结膜炎<br>🌧️：而且我感觉就是，你看它这个蓝了，不仅蓝了，还发黄了<br>1⃣️：你走到有光的地方。噢是诶，你的眼白怎么回事啊，你现在还舒服吗<br>🌧️：不知道<br>1⃣️：你为什么没去医院<br>🌧️：因为一觉醒来已经错过了时间<br>1⃣️：噢，你是不是设好了早上七点钟闹钟，然后下午才起<br>🌧️：没有我一个闹钟也没设，我就想睡觉<br>1⃣️：那你眼睛和昨天有区别吗，就是难受吗今天<br>🌧️：我也不清楚，反正就是看不清，我本来也近视<br>1⃣️：还看不清，那你戴眼镜呢<br>🌧️：我也不知道，你没看到我眼睛变小了吗<br>1⃣️：我没有感觉到你眼睛变小了<br>同事：我感觉她眼球变大了呢<br>1⃣️：你是说她眼球肿了吗<br>🌧️：不是，你有没有觉得我就像戴了个隐形眼镜吧，边框还变蓝了<br>1⃣️：你这右眼就是…就是有一个东西难以形容，就那个颜色你知道吗，就又有点青，但是又有点透，有点蓝还有点黄<br>同事：多好，还自带美瞳<br><br>🌧️：你给我买纸了吗<br>同事：我忘了<br>1⃣️：所以说你就是过来要个纸的<br>🌧️：是的，我们宿舍没纸了<br>1⃣️：哦餐巾纸啊，来，拿去拿去拿去<br><br>弹幕：心疼粥粥<br>1⃣️：对，我也心疼粥粥<br><br>小雨进门<br>🌧️：嗨，又是我<br>1⃣️：嗯？你怎么了<br>🌧️：我来开电台<br>1⃣️：你来我房间开电台<br>🌧️：什么你房间，这是你房间吗<br>1⃣️：哎干嘛，我曾经也是当过这的主人呢<br>🌧️：你什么时候<br>1⃣️：在你们来之前<br>🌧️：那关我什么事啊<br>1⃣️：我见过这个房间曾经的辉煌，曾经这里睡过。你知道吗，以前这里是一个玫瑰花香的房间，然后开了这个小夜灯一片就很那个什么<br>🌧️：好臭，把你们厕所门关起来了<br>1⃣️：现在是什么味道，不不不，它不是厕所味。就是这个房间现在已经变成了一种它自带的体香，你知道吧">📝</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-date-group">
+          <div class="timeline-date">2018.09.04</div>
+          <div class="timeline-item">
+            <div class="item-title">王奕直播</div>
+            <div class="item-row">
+              <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180904.png" onclick="openImg(this.src)">
+              <div class="item-note">提及🌧️</div>
+            </div>
+            <div class="item-bottom">
+              <button class="note-btn" onclick="openPopup(this)"
+                data-title="2018.09.04"
+                data-text="1⃣️：昨天周诗雨说，她说她比我大四岁。我说怎么可能，周诗雨和马凡同年<br>同事：周诗雨怎么能比你大四岁呢<br>1⃣️：她知道比我大四岁，她自己说的<br>同事：她是98年的<br>1⃣️：98年？那几岁，三岁。她自己说比我大四岁">📝</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-date-group">
+          <div class="timeline-date">2018.09.05</div>
+          <div class="timeline-item">
+            <div class="item-title">王奕直播</div>
+            <div class="item-row">
+              <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180905.png" onclick="openImg(this.src)">
+              <div class="item-note">提及🌧️</div>
+            </div>
+            <div class="item-bottom">
+              <button class="note-btn" onclick="openPopup(this)"
+                data-title="2018.09.05"
+                data-text="小王看公演ing<br>1⃣️:哎呀周诗雨跳的感觉怪怪的。这个时候就能发现，虽然两个王奕长得很像，也总是会搞错，但是其中一个王奕还跳舞比较好的呢">📝</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-date-group">
+          <div class="timeline-date">2018.09.21</div>
+          <div class="timeline-item">
+            <div class="item-title">王奕直播</div>
+            <div class="item-row">
+              <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180921.png" onclick="openImg(this.src)">
+              <div class="item-note">提及🌧️</div>
+            </div>
+            <div class="item-bottom">
+              <button class="note-btn" onclick="openPopup(this)"
+                data-title="2018.09.21"
+                data-text="1⃣️:不得不说我当时和周诗雨一起去录unit的时候，我都跑得很远很远。听着她那个声线吊在那，我呼吸有点困难<br><br>弹幕：周诗雨晚上好<br>1⃣️：再见再见，不欢迎你，王奕的房间不欢迎你，居然说周诗雨，伤心了。就耳朵像而已<br>弹幕：甜的是周周<br>1⃣️：真的，王奕开始走钓系了，甜就让粥粥甜去吧">📝</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-date-group">
+          <div class="timeline-date">2018.09.22</div>
+          <div class="timeline-item">
+            <div class="item-title">王奕直播</div>
+            <div class="item-row">
+              <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180922.png" onclick="openImg(this.src)">
+              <div class="item-note">提及🌧️</div>
+            </div>
+            <div class="item-bottom">
+              <button class="note-btn" onclick="openPopup(this)"
+                data-title="2018.09.22"
+                data-text="1⃣️：我跟你们说，我肯定跳得比周诗雨好。真的，我现在都开始走钓系偶像的风格了。<br>小王微信找小雨ing<br>1⃣️：那我问一问粥粥吧。周诗雨她（ID）叫什么<br>同事：不周<br>1⃣️：哎呀不行。如果找粥粥的话，首先要老师来<br>弹幕：和周周跳美杜莎<br>1⃣️：粥粥今天跳美杜莎啊，我要看看她跳的。等会直播结束再看">📝</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-date-group">
+          <div class="timeline-date">2018.09.30</div>
+          <div class="timeline-item">
+            <div class="item-title">王奕直播</div>
+            <div class="item-row">
+              <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180930.png" onclick="openImg(this.src)">
+              <div class="item-note">提及🌧️</div>
+            </div>
+            <div class="item-bottom">
+              <button class="note-btn" onclick="openPopup(this)"
+                data-title="2018.09.30"
+                data-text="1⃣️：对，FT只有两个王奕，怎么可能会有周诗雨，周诗雨是谁。周诗雨是有刘海的，而且周诗雨一点都不钓系好吗，王奕今天是钓系偶像">📝</button>
+            </div>
+          </div>
+        </div>
+
+<div class="timeline-date-group">
+  <div class="timeline-date">2018.10.19</div>
+  <!-- 第一条：公演 -->
+  <div class="timeline-item">
+    <div class="item-title">Team FT《双面偶像》公演</div>
+    <div class="item-row">
+      <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20181019.png" onclick="openImg(this.src)">
+      <div class="item-note">1⃣️🌧️、李玉倩同台表演《美杜莎的温柔》</div>
+    </div>
+  </div>
+  <div class="timeline-item">
+    <div class="item-title">王奕直播</div>
+    <div class="item-row">
+      <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20181019.1.png" onclick="openImg(this.src)">
+      <div class="item-note">提及🌧️</div>
+    </div>
+    <div class="item-bottom">
+      <button class="note-btn" onclick="openPopup(this)"
+        data-title="2018.10.19"
+        data-text="1⃣️：我想下次和周诗雨一起跳9to9呢">📝</button>
+    </div>
+  </div>
+</div>
+
+        <div class="timeline-date-group">
+          <div class="timeline-date">2018.10.31</div>
+          <div class="timeline-item">
+            <div class="item-title">王奕微博</div>
+            <div class="item-row">
+              <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20181031.png" onclick="openImg(this.src)">
+              <div class="item-note">🌧️评论</div>
+            </div>
+            <div class="item-bottom">
+              <a href="https://weibo.com/6359405623/4301328206832898" class="item-link">🔗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+ <!-- 2019 -->
+<div id="tab2019" class="tab-content">
+  <div class="timeline-wrap">
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.01.14</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕直播</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20190114.png" onclick="openImg(this.src)">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2019.01.14"
+            data-text="1⃣️：对呀，是做好了，但是没有人给我拍照。然后我姐姐就说她要买一个相机，回来给我拍。<br>弹幕：找周诗雨拍<br>1⃣️：但是我在家怎么找周诗雨拍">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.07.29</div>
+      <div class="timeline-item">
+        <div class="item-title">第六届总选握手会</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20190729.png" onclick="openImg(this.src)">
+          <div class="item-note">后续反复提到🌧️觉得1⃣️这天惊为天人。</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2020.6.17"
+            data-text="🌧️：我是握手会看到的王奕，哇哦惊为天人，当时她跟沈梦瑶站在一起，在那个门口。然后我们下车正好看见她和沈梦瑶，她就站在旁边，一头长发，巨漂亮。我说哇哦，王奕怎么变这么漂亮"
+            data-title2="2023.05.30"
+            data-text2="🌧️：惊为天人那不是初印象，那是后面的印象。是有一次总选的时候<br>1⃣️：我知道，然后说看到了我，路过了，觉得我好漂亮。我当时染的红头发，觉得我漂亮死了<br>🌧️：红头发吗？我怎么记得是绿头发<br>1⃣️：我没有染过绿头发参加过总选<br>🌧️：我记得是绿头发，就深色的，不是红的<br>1⃣️：那就是黑，纯黑<br>🌧️：反正就是当时觉得，喔唷好漂亮啊，王奕好漂亮呀！">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.07.30</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕直播</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20190730.png" onclick="openImg(this.src)">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2019.07.30"
+            data-text="1⃣️：昨天，我、甜甜、盼盼、粥粥（周诗雨），然后沈梦瑶，我们5个">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.08.13</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕电台</div>
+        <div class="item-row">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2019.08.13"
+            data-text="1⃣️：说到周诗雨，她昨天给我发消息，跟我说打牌吗？然后又问我甜甜去哪了？我说，她不是在房间吗？隔了一个晚上，她早晨回我，啊我昨天睡着了">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.09.11</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕电台</div>
+        <div class="item-row">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2019.09.11"
+            data-text="在聊配眼镜<br>1⃣️：我不是跟周诗雨她们一起配的嘛？周诗雨她本来250多，然后她说她现在200多，她降了，她说人家说因为她看的电子产品少<br><br>在聊猫<br>1⃣️：怎么说呢？自从看到了困困，觉得困困最可爱，困困那个照片是被我拍成这样了。它当时在打哈欠，然后我又懒得再拍一张了，就保存了。<br>本来我那天觉得困困已经蛮大的了，因为我平时就是抱坨坨，觉得没什么感觉。然后那天困困来我们三楼，然后跟坨坨一对比，哎，小了一圈">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.09.15</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕微博</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20190915.jpeg" onclick="openImg(this.src)">
+          <div class="item-note">1⃣️🌧️、王欣颜甜甜合照</div>
+        </div>
+        <div class="item-bottom">
+          <a href="https://weibo.com/6359405623/4416926178387748" class="item-link">🔗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.09.16</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕周诗雨直播</div>
+        <div class="item-row">
+          <div class="bili-player">
+<iframe src="" data-src="https://player.bilibili.com/player.html?bvid=BV1Gg411g7Hq&autoplay=0&danmaku=0" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+          </div>
+          <div class="item-note">1.一起遇到前辈<br>2.互称老公老婆<br>3.jxl大小乔认证</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.09.17</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕直播</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20190917.png" onclick="openImg(this.src)">
+          <div class="item-note">提及困困</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2019.09.17"
+            data-text="弹幕：困困跟除夕比<br>1⃣️：emm...<br>smy：不是一个物种的呀<br>1⃣️：对呀，不能比。在困困那种品种的布偶里面，困困是第一，在重点布偶里面坨坨是第一，然后呢，在金渐层里面，除夕是第一，你们懂了吗？">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.09.27</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕直播</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20190927.png" onclick="openImg(this.src)">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2019.09.27"
+            data-text="1⃣️：我应该去锻炼，那天周诗雨还约我去锻炼呢<br>弹幕询问<br>1⃣️：对啊，就她那天找我">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.09.28</div>
+      <div class="timeline-item">
+        <div class="item-title">周诗雨直播</div>
+        <div class="item-row">
+          <div class="bili-player">
+<iframe src="" data-src="https://player.bilibili.com/player.html?bvid=BV1g8411V71Y&autoplay=0&danmaku=0" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+          </div>
+          <div class="item-note">1⃣️飘屏互动</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.10.01</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕电台</div>
+        <div class="item-row">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2019.10.01"
+            data-text="1⃣️：本来想截个图给周诗雨炫耀一番，她今天跟我炫耀她跟那个什么自拍，还跟我说她给她系领带什么什么<br><br>弹幕问困困<br>1⃣️：困困，我上次抓它的时候，跑得也贼快。有一次跑到舞蹈房了，然后还有一次被那个兔子吸引了，跑过去看看兔子，就可好玩了">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.10.03</div>
+      <div class="timeline-item">
+        <div class="item-title">周诗雨电台</div>
+        <div class="item-row">
+          <div class="item-note">提及1⃣️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2019.10.03"
+            data-text="🌧️：为什么我和王奕越来越像了，是夫妻相吗?（狂笑ing）看h公演发现我和王奕单马尾真的和我有点像，没关系我们夫妻相">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.10.04</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕电台</div>
+        <div class="item-row">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2019.10.04"
+            data-text="1⃣️：然后今天周诗雨跟我说，因为我当时不是顶着周诗雨的头像嘛，甜甜当时回复我，她说因为你顶着周诗雨的头像，我不知道该怎么回复你。然后今天周诗雨跟我说，是因为她看到了，心里默默的回复我了，意思就是说她懒得回我，你们知道吗，所以我记到了现在">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.10.09</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕直播</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20191009.png" onclick="openImg(this.src)">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2019.10.09"
+            data-text="弹幕：冷漠脸<br>1⃣️：认真的吗？昨天谁说来着？周诗雨说。我跟她聊天，她说你好冷漠，然后我说，啊？没有啊">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.10.13</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕直播</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20191013.png" onclick="openImg(this.src)">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2019.10.13"
+            data-text="1⃣️：周诗雨什么时候回来？<br>同事：公演完<br>1⃣️：对了，我跟你说，你那天不是没回我吗？<br>同事：哪天？<br>1⃣️：就那一天，还有哪天，你总共就只没回我一次了<br>同事：啊？那次是你发了很多条微信<br>1⃣️：对啊，然后周诗雨跟我说，你跟她说你是懒得回我<br>同事：没有，我给她说，我自己毛病就是已读不回<br>1⃣️：对啊">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.10.14</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕电台</div>
+        <div class="item-row">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2019.10.14"
+            data-text="弹幕：这么冷漠<br>1⃣️：没有吧，我觉得很正常啊。不过我有时候跟周诗雨聊天，她都觉得我很冷漠。然后我就回，啊？我没有啊。我说你没钱就跟我说，啵啵。她已经说说了不止一次，周诗雨<br>喜欢甜甜的那种<br>smy:什么？喜欢甜甜的那种？<br>1⃣️：对，可能是喜欢甜甜的那种，不是甜甜（wxytt）的那种<br>smy:我想你怎么突然表白王欣颜甜甜了呢<br>1⃣️：不是，哎哟怎么会这样<br>smy:我想抽奖抽着抽着，听到了什么鬼<br>1⃣️：哎哟怎么会这样，说的不是周诗雨吗<br>smy:什么？周诗雨喜欢？<br>1⃣️：没有没有，这个误会越搞越大">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.10.17</div>
+      <div class="timeline-item">
+        <div class="item-title">Team NII《时之卷》公演</div>
+        <div class="item-row">
+          <div class="bili-player">
+<iframe src="" data-src="https://player.bilibili.com/player.html?bvid=BV14y4y1y7F2&autoplay=0&danmaku=0" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+          </div>
+          <div class="item-note">🌧️梦到和1⃣️在王欣颜甜甜面前那个</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-title">周诗雨直播</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20191017.png" onclick="openImg(this.src)">
+          <div class="item-note">1⃣️飘屏互动</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2019.10.17"
+            data-text="🌧️：Hello！王奕。Hello！一一。Hello！一一老婆<br><br>弹幕在说今天mc做的梦<br>🌧️：不是我故意的，我只是说到这个mc话题，只能想到这个。我搜了半天聊天记录，说我以前做过什么梦呢，都没有什么梦，只能想起这个梦">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.10.19</div>
+      <div class="timeline-item">
+        <div class="item-title">周诗雨直播</div>
+        <div class="item-row">
+          <div class="bili-player">
+<iframe src="" data-src="https://player.bilibili.com/player.html?bvid=BV1RY4y157Zy&autoplay=0&danmaku=0" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+          </div>
+          <div class="item-note">1.一起熬夜看公演<br>2.一起看电影</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.10.23</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕直播</div>
+        <div class="item-row">
+          <div class="bili-player">
+<iframe src="" data-src="https://player.bilibili.com/player.html?bvid=BV1CZ4y1q7XZ&autoplay=0&danmaku=0" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+          </div>
+          <div class="item-note">1.1⃣️🌧️制服困困<br>2.🌧️投喂1⃣️</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.10.24</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕直播</div>
+        <div class="item-row">
+          <div class="bili-player">
+<iframe src="" data-src="https://player.bilibili.com/player.html?bvid=BV1b34y157RZ&autoplay=0&danmaku=0" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+          </div>
+          <div class="item-note">1⃣️看🌧️公演</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.10.28</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕电台</div>
+        <div class="item-row">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2019.10.28"
+            data-text="1⃣️：前两天周诗雨给我看了一个韩剧，然后我觉得特别好看。但是我现在找不到了，我不知道它叫什么了<br><br>弹幕在聊刘亦菲<br>1⃣️：对啊，刘亦菲好好看哦。那天周诗雨跟我一起看那个以前的那种，跟胡歌演的那个，我忘了叫什么了，反正好好看，仙女本人">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.10.30</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕直播</div>
+        <div class="item-row">
+          <div class="bili-player">
+<iframe src="" data-src="https://player.bilibili.com/player.html?bvid=BV133411376h&autoplay=0&danmaku=0" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+          </div>
+          <div class="item-note">1⃣️在🌧️房间直播互动</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.10.31</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕周诗雨微博</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20191031.jpeg" onclick="openImg(this.src)">
+          <div class="item-note">一起去迪士尼</div>
+        </div>
+        <div class="item-bottom">
+          <a href="https://weibo.com/6359405623/4433571441352232" class="item-link">🔗</a><a href="https://weibo.com/6502570880/4433589020051948" class="item-link">🔗</a>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-title">周诗雨王奕直播</div>
+        <div class="item-row">
+          <div class="bili-player">
+<iframe src="" data-src="https://player.bilibili.com/player.html?bvid=BV1VY411u7Jd&autoplay=0&danmaku=0" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+          </div>
+          <div class="item-note">1.一起去迪士尼的趣事<br>2.浩瀚宇宙第一次出现在🌧️直播间</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.11.01</div>
+      <div class="timeline-item">
+        <div class="item-title">周诗雨直播</div>
+        <div class="item-row">
+          <div class="bili-player">
+<iframe src="" data-src="https://player.bilibili.com/player.html?bvid=BV1Tr4y1t7kt&autoplay=0&danmaku=0" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+          </div>
+          <div class="item-note">🌧️1⃣️互动</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.11.06</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕电台</div>
+        <div class="item-row">
+          <div class="bili-player">
+<iframe src="" data-src="https://player.bilibili.com/player.html?bvid=BV1pF411c7jJ&autoplay=0&danmaku=0" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+          </div>
+          <div class="item-note">1⃣️🌧️大战天猫精灵</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.11.07</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕口袋</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20191107.png" onclick="openImg(this.src)">
+          <div class="item-note">🌧️1⃣️互动</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-title">王奕直播</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20191107.1.png" onclick="openImg(this.src)">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2019.11.07"
+            data-text="1⃣️：明天约好了跟粥粥出去，我今天被周诗雨给鸽了">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.11.10</div>
+      <div class="timeline-item">
+        <div class="item-title">周诗雨直播</div>
+        <div class="item-row">
+          <div class="bili-player">
+<iframe src="" data-src="https://player.bilibili.com/player.html?bvid=BV1t54y1o7Ka&autoplay=0&danmaku=0" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+          </div>
+          <div class="item-note">🌧️1⃣️互动</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.11.11</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕口袋</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20191111.png" onclick="openImg(this.src)">
+          <div class="item-note">提及🌧️</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.11.14</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕朋友圈</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20191114.jpg" onclick="openImg(this.src)">
+          <div class="item-note">发🌧️照片</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.11.18</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕朋友圈</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20191118.jpg" onclick="openImg(this.src)">
+          <div class="item-note">晒困困</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.12.03</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕电台</div>
+        <div class="item-row">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2019.12.03"
+            data-text="1⃣️：我上次跟周诗雨两个人在迪士尼不知道在逛什么，我们俩都没有怎么玩什么设施。哦后来好像去看了一个小飞侠，然后本来拿了那个极速光轮的票。诶不对，小飞侠好像没去，忘了<br>弹幕在说拍抖音<br>1⃣️：对，是她想出来拍抖音，然后我给她拍了好几次。我因为穿那个裤子裙子太长了，每次都翻车">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.12.10</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕口袋</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20191210.png" onclick="openImg(this.src)">
+          <div class="item-note">🌧️1⃣️互动</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.12.11</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕直播</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20191211.png" onclick="openImg(this.src)">
+          <div class="item-note">提及🌧️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2019.12.11"
+            data-text="弹幕在说迪士尼年卡<br>1⃣️：年卡涨价？不是年卡1500吗？我办的时候是因为我是有万圣节的，所以我不记得<br>弹幕在说迪士尼人工降雪<br>1⃣️：对，但是周诗雨她最近都没空，她估计看不到雪了">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.12.15</div>
+      <div class="item-title">Team NII《N.E.W》颜沁生日公演</div>
+      <div class="item-row">
+        <div class="bili-player">
+<iframe src="" data-src="https://player.bilibili.com/player.html?bvid=BV137HCzjEDK&autoplay=0&danmaku=0" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+        </div>
+        <div class="item-note">🌧️选择1⃣️当理想型</div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.12.16</div>
+      <div class="timeline-item">
+        <div class="item-title">张昕b站</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20191216.png" onclick="openImg(this.src)">
+          <div class="item-note">🌧️1⃣️一起坐飞机</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-title">周诗雨直播</div>
+        <div class="item-row">
+          <div class="bili-player">
+<iframe src="" data-src="https://player.bilibili.com/player.html?bvid=BV1UT4y1q7Y9&autoplay=0&danmaku=0" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+          </div>
+          <div class="item-note">1.1⃣️背景是别人的写真<br>2.一起睡</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.12.19</div>
+      <div class="timeline-item">
+        <div class="item-title">蒋舒婷口袋</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20191219.png" onclick="openImg(this.src)">
+          <div class="item-note">诗情画奕的由来</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.12.20</div>
+      <div class="timeline-item">
+        <div class="item-title">蒋舒婷电台</div>
+        <div class="item-row">
+          <div class="item-note">提及🌧️1⃣️</div>
+        </div>
+        <div class="item-bottom">
+          <button class="note-btn" onclick="openPopup(this)"
+            data-title="2019.12.20"
+            data-text="弹幕：b50彩排有哪些太甜了的瞬间<br>jst：太甜了的瞬间啊？哦！就是那个..诗情画奕嘛，太甜了。就是那个周诗雨和王奕，你不觉得她们俩很像吗？只有我一个人这样觉得吗？天呐，她们俩坐在一起的时候真的太像了吧。我天！要不是王奕剪了个短发我真以为..她们俩首先都很白，都很瘦，身高又一样，而且都长得挺好看，就是让人搞不清">📝</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.12.21</div>
+      <div class="timeline-item">
+        <div class="item-title">袋王带你逛后台</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20191221.png" onclick="openImg(this.src)">
+          <div class="item-note">第六届b50后台🌧️1⃣️互动</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-title">万丽娜b站</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20191221.1.png" onclick="openImg(this.src)">
+          <div class="item-note">🌧️1⃣️互动</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-title">王奕微博</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20191221.jpeg" onclick="openImg(this.src)">
+          <div class="item-note">1⃣️🌧️合照</div>
+        </div>
+        <div class="item-bottom">
+          <a href="https://weibo.com/6359405623/4452061665665000" class="item-link">🔗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.12.22</div>
+      <div class="timeline-item">
+        <div class="item-title">张昕b站</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20191222.png" onclick="openImg(this.src)">
+          <div class="item-note">1⃣️落泪，🌧️在一旁</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="item-title">周诗雨微博</div>
+        <div class="item-row">
+          <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20191222.jpeg" onclick="openImg(this.src)">
+          <div class="item-note">1.🌧️和1⃣️易拉宝合照2.🌧️1⃣️、费沁源合照</div>
+        </div>
+        <div class="item-bottom">
+          <a href="https://weibo.com/6502570880/4452402733902165" class="item-link">🔗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.12.24</div>
+      <div class="timeline-item">
+        <div class="item-title">周诗雨直播</div>
+        <div class="item-row">
+          <div class="bili-player">
+<iframe src="" data-src="https://player.bilibili.com/player.html?bvid=BV1NY4y1z7B9&autoplay=0&danmaku=0" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+          </div>
+          <div class="item-note">1.一起吃烧烤<br>2.一起睡</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.12.25</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕直播</div>
+        <div class="item-row">
+          <div class="bili-player">
+<iframe src="" data-src="https://player.bilibili.com/player.html?bvid=BV1RN4y137ZD&autoplay=0&danmaku=0" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+          </div>
+          <div class="item-note">1.1⃣️知道🌧️说理想型的反应<br>2.1⃣️说🌧️连水瓶都打不开</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.12.26</div>
+      <div class="timeline-item">
+        <div class="item-title">王奕电台</div>
+        <div class="item-row">
+          <div class="bili-player">
+<iframe src="" data-src="https://player.bilibili.com/player.html?bvid=BV1WK4y1A7KG&autoplay=0&danmaku=0" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+          </div>
+          <div class="item-note">1.喝一杯水可不可以<br>2.想有什么兴趣<br>3.互相ky</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.12.28</div>
+      <div class="timeline-item">
+        <div class="item-title">周诗雨直播</div>
+        <div class="item-row">
+          <div class="bili-player">
+<iframe src="" data-src="https://player.bilibili.com/player.html?bvid=BV19Z4y1b73c&autoplay=0&danmaku=0" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+          </div>
+          <div class="item-note">1.1⃣️帮忙照顾困困<br>2.和1⃣️手臂一样长</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-date-group">
+      <div class="timeline-date">2019.12.31</div>
+      <div class="timeline-item">
+        <div class="item-title">跨年公演</div>
+        <div class="item-row">
+          <div class="bili-player">
+<iframe src="" data-src="https://player.bilibili.com/player.html?bvid=BV1ygpA6kECR&autoplay=0&danmaku=0" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+          </div>
+          <div class="item-note">1.同台mc<br>2.🌧️1⃣️第一个双人舞台</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- 回顶部圆形按钮 -->
+  <button class="back-top" id="backTop">↑</button>
+
+<!-- 图片放大弹窗 -->
+<div class="img-mask" onclick="closeImg()">
+  <img id="previewImg">
+</div>
+
+<!-- 文字版弹窗 -->
+<div class="popup-mask" onclick="closePopupMask(event)">
+  <div class="popup-box">
+    <span class="close-btn" onclick="closePopup()">×</span>
+    <div class="popup-title" id="popup-title"></div>
+    <div class="popup-text" id="popup-text"></div>
+  </div>
+</div>
+
+<script>
+// Tab切换
+function switchTab(tabId){
+  const tabContents = document.querySelectorAll('.tab-content');
+  const tabItems = document.querySelectorAll('.tab-item');
+  tabContents.forEach(item=>item.classList.remove('active'));
+  tabItems.forEach(item=>item.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// 图片放大
+const imgMask = document.querySelector('.img-mask');
+const previewImg = document.getElementById('previewImg');
+function openImg(src){
+  if(!src) {
+    alert('暂未上传图片');
+    return;
+  }
+  previewImg.src = src;
+  imgMask.classList.add('active');
+}
+function closeImg(){
+  imgMask.classList.remove('active');
+}
+
+// 文字版弹窗
+const popupMask = document.querySelector('.popup-mask');
+const popupTitle = document.getElementById('popup-title');
+const popupText = document.getElementById('popup-text');
+
+function openPopup(btn){
+  const t1 = btn.dataset.title;
+  const txt1 = btn.dataset.text;
+  const t2 = btn.dataset.title2;
+  const txt2 = btn.dataset.text2;
+
+  let htmlStr = `
+    <div style="margin-bottom:8px;">
+      <h4 style="color:#8b5cf6;margin:0 0 6px;font-size:16px;">${t1}</h4>
+      <p style="margin:0;">${txt1}</p>
+    </div>
+  `;
+  if(t2 && txt2){
+    htmlStr += `
+    <hr style="margin:16px 0;border:0;border-top:1px solid #e2d9f3;">
+    <div>
+      <h4 style="color:#8b5cf6;margin:0 0 6px;font-size:16px;">${t2}</h4>
+      <p style="margin:0;">${txt2}</p>
+    </div>
+    `;
+  }
+
+  popupTitle.textContent = "";
+  popupText.innerHTML = htmlStr;
+  popupMask.classList.add('active');
+}
+function closePopup(){
+  popupMask.classList.remove('active');
+}
+function closePopupMask(e){
+  if(e.target === popupMask) closePopup();
+}
+document.addEventListener('DOMContentLoaded', function(){
+  const iframes = document.querySelectorAll('.bili-player iframe[data-src]');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const iframe = entry.target;
+        iframe.src = iframe.dataset.src;
+        observer.unobserve(iframe);
+      }
+    })
+  }, {rootMargin: "100px"});
+  iframes.forEach(iframe => observer.observe(iframe));
+})
+// 回顶部按钮显示逻辑
+const backTopBtn = document.getElementById('backTop');
+window.addEventListener('scroll', ()=>{
+  if(window.scrollY > 300){
+    backTopBtn.classList.add('show');
+  }else{
+    backTopBtn.classList.remove('show');
+  }
+})
+backTopBtn.onclick = ()=>{
+  window.scrollTo({
+    top:0,
+    behavior:'smooth'
+  })
+}
+</script>
+</body>
+</html>
