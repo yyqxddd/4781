@@ -9,6 +9,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
@@ -35,7 +36,6 @@
     text-decoration: underline;
   }
 
-  /* 主布局：左侧分类 + 右侧视频列表 */
   .main-layout {
     display: grid;
     grid-template-columns: 240px 1fr;
@@ -43,7 +43,6 @@
     align-items: start;
   }
 
-  /* 左侧分类导航 */
   .side-nav {
     background: #f8f5fe;
     border: 1px solid #e2d9f3;
@@ -115,7 +114,6 @@
     color: #fff;
   }
 
-  /* 右侧视频区 */
   .video-panel {
     background: #f8f5fe;
     border: 1px solid #e2d9f3;
@@ -137,7 +135,6 @@
     color: #999;
   }
 
-  /* 视频列表 */
   .video-list {
     display: flex;
     flex-direction: column;
@@ -233,7 +230,6 @@
     padding: 0 16px 16px;
   }
 
-  /* 回顶部 */
   .back-top {
     position: fixed;
     bottom: 18px;
@@ -260,43 +256,72 @@
     background: #7c3aed;
   }
 
-  /* ========== 移动端修正 ========== */
+  /* ========== 手机端：整体缩小一档，就是你要的效果 ========== */
   @media (max-width: 860px) {
+    html {
+      font-size: 14px;
+    }
     .main-layout {
       grid-template-columns: 1fr;
     }
-
     .side-nav {
       position: static;
+      padding:12px 10px;
     }
-
     .side-nav-list {
       flex-direction: row;
       overflow-x: auto;
-      gap: 6px;
+      gap:4px;
       justify-content: flex-start;
-      padding: 8px 0;
+      padding: 6px 0;
       scroll-padding-inline: 1rem;
     }
-    /* 前后占位，实现tab居中效果，所有tab、圆点完全保留 */
     .side-nav-list::before,
     .side-nav-list::after {
       content: "";
       flex: 0 0 calc(50vw - 50%);
     }
-
     .side-nav-item {
       white-space: nowrap;
       flex-shrink: 0;
       width: auto;
+      padding:8px 10px;
+      font-size:13px;
+      gap:6px;
     }
-
+    .side-nav-item .count{
+      font-size:11px;
+      padding:1px 6px;
+    }
+    .video-panel{
+      padding:14px;
+    }
+    .panel-subtitle{
+      font-size:12px;
+    }
+    .video-list{
+      gap:14px;
+    }
     .video-main {
       grid-template-columns: 1fr;
+      gap:12px;
+      padding:12px;
     }
-
-    .video-info {
-      text-align: left;
+    .video-title{
+      font-size:15px;
+    }
+    .video-date, .video-desc{
+      font-size:12px;
+    }
+    .iframe-wrap{
+      border-radius:10px;
+    }
+    .back-top{
+      width:34px;
+      height:34px;
+      font-size:16px;
+      bottom:14px;
+      right:14px;
     }
   }
 </style>
@@ -308,7 +333,6 @@
 
   <div class="main-layout" style="margin-top:16px;">
 
-    <!-- 左侧分类导航 -->
     <aside class="side-nav">
       <ul class="side-nav-list">
         <li class="side-nav-item active" data-cat="live">
@@ -329,7 +353,7 @@
         <li class="side-nav-item" data-cat="airport">
           <span class="dot"></span>
           <span>✈️ 机场</span>
-          <span class="count">9</span>
+          <span class="count">10</span>
         </li>
       </ul>
     </aside>
@@ -343,7 +367,6 @@
 
       <div class="video-list" id="videoList">
 
-        <!-- 直播 1 -->
         <div class="video-row" data-cat="live">
           <div class="video-main">
             <div class="iframe-wrap">
@@ -357,7 +380,6 @@
           </div>
         </div>
 
-        <!-- 直播 2 -->
         <div class="video-row" data-cat="live">
           <div class="video-main">
             <div class="iframe-wrap">
@@ -435,7 +457,7 @@
           </div>
         </div>
 
-       <div class="video-row" data-cat="live">
+        <div class="video-row" data-cat="live">
           <div class="video-main">
             <div class="iframe-wrap">
               <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1yM4m127ad&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
@@ -448,7 +470,7 @@
           </div>
         </div>
 
-       <div class="video-row" data-cat="live">
+        <div class="video-row" data-cat="live">
           <div class="video-main">
             <div class="iframe-wrap">
               <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1fDHxenEWu&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
@@ -461,7 +483,7 @@
           </div>
         </div>
 
-       <div class="video-row" data-cat="live">
+        <div class="video-row" data-cat="live">
           <div class="video-main">
             <div class="iframe-wrap">
               <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1v3HdebEQ7&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
@@ -474,7 +496,7 @@
           </div>
         </div>
 
-       <div class="video-row" data-cat="live">
+        <div class="video-row" data-cat="live">
           <div class="video-main">
             <div class="iframe-wrap">
               <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1Kq2DYCExL&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
@@ -487,7 +509,7 @@
           </div>
         </div>
 
-       <div class="video-row" data-cat="live">
+        <div class="video-row" data-cat="live">
           <div class="video-main">
             <div class="iframe-wrap">
               <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1WoSeYiEfu&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
@@ -500,7 +522,7 @@
           </div>
         </div>
 
-       <div class="video-row" data-cat="live">
+        <div class="video-row" data-cat="live">
           <div class="video-main">
             <div class="iframe-wrap">
               <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1DPKNeTE1G&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
@@ -513,7 +535,7 @@
           </div>
         </div>
 
-       <div class="video-row" data-cat="live">
+        <div class="video-row" data-cat="live">
           <div class="video-main">
             <div class="iframe-wrap">
               <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1vKAiexEu8&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
@@ -526,7 +548,7 @@
           </div>
         </div>
 
-       <div class="video-row" data-cat="live">
+        <div class="video-row" data-cat="live">
           <div class="video-main">
             <div class="iframe-wrap">
               <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1ZuPAeMEWZ&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
@@ -539,8 +561,6 @@
           </div>
         </div>
 
-
-        <!-- MC 1 -->
         <div class="video-row" data-cat="mc" style="display:none;">
           <div class="video-main">
             <div class="iframe-wrap">
@@ -632,8 +652,6 @@
           </div>
         </div>
 
-
-        <!-- VLOG 1 -->
         <div class="video-row" data-cat="vlog" style="display:none;">
           <div class="video-main">
             <div class="iframe-wrap">
@@ -647,7 +665,7 @@
           </div>
         </div>
 
-       <div class="video-row" data-cat="vlog" style="display:none;">
+        <div class="video-row" data-cat="vlog" style="display:none;">
           <div class="video-main">
             <div class="iframe-wrap">
               <iframe data-src="https://player.bilibili.com/player.html?bvid=BV19Z4y1T7LM&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
@@ -660,7 +678,7 @@
           </div>
         </div>
 
-       <div class="video-row" data-cat="vlog" style="display:none;">
+        <div class="video-row" data-cat="vlog" style="display:none;">
           <div class="video-main">
             <div class="iframe-wrap">
               <iframe data-src="https://player.bilibili.com/player.html?bvid=BV16e411f7SV&p=1&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
@@ -673,7 +691,7 @@
           </div>
         </div>
 
-       <div class="video-row" data-cat="vlog" style="display:none;">
+        <div class="video-row" data-cat="vlog" style="display:none;">
           <div class="video-main">
             <div class="iframe-wrap">
               <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1TK421y7mN&p=1&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
@@ -686,7 +704,7 @@
           </div>
         </div>
 
-       <div class="video-row" data-cat="vlog" style="display:none;">
+        <div class="video-row" data-cat="vlog" style="display:none;">
           <div class="video-main">
             <div class="iframe-wrap">
               <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1KvBXB9EK6&p=1&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
@@ -699,7 +717,7 @@
           </div>
         </div>
 
-       <div class="video-row" data-cat="vlog" style="display:none;">
+        <div class="video-row" data-cat="vlog" style="display:none;">
           <div class="video-main">
             <div class="iframe-wrap">
               <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1nxfSBRE7d&p=1&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
@@ -712,7 +730,7 @@
           </div>
         </div>
 
-       <div class="video-row" data-cat="vlog" style="display:none;">
+        <div class="video-row" data-cat="vlog" style="display:none;">
           <div class="video-main">
             <div class="iframe-wrap">
               <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1jeTg6LE9N&p=1&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
@@ -725,7 +743,6 @@
           </div>
         </div>
 
-        <!-- 机场 1 -->
         <div class="video-row" data-cat="airport" style="display:none;">
           <div class="video-main">
             <div class="iframe-wrap">
@@ -765,7 +782,7 @@
           </div>
         </div>
 
-       <div class="video-row" data-cat="airport" style="display:none;">
+        <div class="video-row" data-cat="airport" style="display:none;">
           <div class="video-main">
             <div class="iframe-wrap">
               <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1Du411g7AU&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
@@ -778,7 +795,7 @@
           </div>
         </div>
 
-       <div class="video-row" data-cat="airport" style="display:none;">
+        <div class="video-row" data-cat="airport" style="display:none;">
           <div class="video-main">
             <div class="iframe-wrap">
               <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1xg4y1m7rT&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
@@ -791,7 +808,7 @@
           </div>
         </div>
 
-       <div class="video-row" data-cat="airport" style="display:none;">
+        <div class="video-row" data-cat="airport" style="display:none;">
           <div class="video-main">
             <div class="iframe-wrap">
               <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1CZ421y7av&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
@@ -804,7 +821,7 @@
           </div>
         </div>
 
-       <div class="video-row" data-cat="airport" style="display:none;">
+        <div class="video-row" data-cat="airport" style="display:none;">
           <div class="video-main">
             <div class="iframe-wrap">
               <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1HuHTeiEjK&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
@@ -817,7 +834,7 @@
           </div>
         </div>
 
-       <div class="video-row" data-cat="airport" style="display:none;">
+        <div class="video-row" data-cat="airport" style="display:none;">
           <div class="video-main">
             <div class="iframe-wrap">
               <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1UbtheaELo&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
@@ -830,7 +847,7 @@
           </div>
         </div>
 
-       <div class="video-row" data-cat="airport" style="display:none;">
+        <div class="video-row" data-cat="airport" style="display:none;">
           <div class="video-main">
             <div class="iframe-wrap">
               <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1ds1xYDE4j&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
@@ -843,7 +860,7 @@
           </div>
         </div>
 
-       <div class="video-row" data-cat="airport" style="display:none;">
+        <div class="video-row" data-cat="airport" style="display:none;">
           <div class="video-main">
             <div class="iframe-wrap">
               <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1jYVBzHEpt&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
@@ -880,7 +897,6 @@
     rows.forEach(row => {
       const iframe = row.querySelector('iframe');
       if(row.dataset.cat === cat) {
-        // 只有当前分类，并且iframe还没加载过，才赋值src加载
         if(iframe && !iframe.src) {
           iframe.src = iframe.dataset.src;
         }
@@ -889,29 +905,26 @@
         row.style.display = 'none';
       }
     })
+    panelSubtitle.textContent = categoryMap[cat].sub;
   }
 
   navItems.forEach(item => {
-    item.addEventListener('click', () => {
-      navItems.forEach(i => i.classList.remove('active'));
+    item.addEventListener('click', ()=>{
+      navItems.forEach(i=>i.classList.remove('active'));
       item.classList.add('active');
-      const cat = item.dataset.cat;
-      panelSubtitle.textContent = categoryMap[cat].sub;
-      loadCategoryVideo(cat);
-    });
-  });
+      loadCategoryVideo(item.dataset.cat);
+    })
+  })
 
-  // 页面初始化，只加载live
   loadCategoryVideo('live');
 
-  // 回顶部
   const backTopBtn = document.getElementById('backTop');
-  window.addEventListener('scroll', () => {
+  window.addEventListener('scroll', ()=>{
     backTopBtn.classList.toggle('show', window.scrollY > 300);
-  });
-  backTopBtn.onclick = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  })
+  backTopBtn.onclick = ()=>{
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
 </script>
 
 </body>
