@@ -177,6 +177,7 @@
     background: #ede8f7;
     border-radius: 12px;
     overflow: hidden;
+    max-width: 480px; /* 大屏限制播放器最大宽度 */
   }
 
   .iframe-wrap iframe {
@@ -310,14 +311,15 @@
       gap:12px;
       padding:12px;
     }
+    .iframe-wrap{
+      border-radius:10px;
+      max-width: 100%; /* 手机取消最大宽度限制，铺满卡片 */
+    }
     .video-title{
       font-size:15px;
     }
     .video-date, .video-desc{
       font-size:12px;
-    }
-    .iframe-wrap{
-      border-radius:10px;
     }
     .back-top{
       width:34px;
