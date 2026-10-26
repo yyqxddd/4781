@@ -276,19 +276,21 @@
 }
 .side-nav-list {
   flex-direction: row;
-  flex-wrap: wrap; /* 改成自动换行，不会横向滚动 */
-  gap:4px;
-  justify-content: center; /* 整组居中，左右距离相等 */
+  flex-wrap: nowrap;
+  gap: 4px;
+  justify-content: stretch;
   padding: 6px 0;
-  /* 删除 overflow-x:auto */
 }
 .side-nav-item {
   white-space: nowrap;
-  flex-shrink: 0;
+  /* 重点：自动平分宽度 */
+  flex: 1;
+  flex-shrink: 1;
   width: auto;
-  padding:5px 7px;
+  padding:5px 4px;
   font-size:12px;
   gap:4px;
+  text-align: center;
 }
 .side-nav-item .count{
   font-size:10px;
