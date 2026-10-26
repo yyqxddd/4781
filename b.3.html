@@ -272,9 +272,10 @@
 }
 .side-nav {
   position: static;
-  padding:12px 10px;
+  padding: 12px 0; /* 删掉左右10px，只保留上下padding */
 }
 .side-nav-list {
+  display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   gap: 4px;
@@ -283,13 +284,10 @@
 }
 .side-nav-item {
   white-space: nowrap;
-  /* 重点：自动平分宽度 */
   flex: 1;
   flex-shrink: 1;
-  width: auto;
-  padding:5px 4px;
+  padding:5px 2px;
   font-size:12px;
-  gap:4px;
   text-align: center;
 }
 .side-nav-item .count{
