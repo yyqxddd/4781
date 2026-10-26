@@ -17,6 +17,7 @@
 
   html {
     font-size: calc(16px * var(--scale));
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
@@ -177,7 +178,7 @@
     background: #ede8f7;
     border-radius: 12px;
     overflow: hidden;
-    max-width: 480px; /* 大屏限制播放器最大宽度 */
+    max-width: 480px;
   }
 
   .iframe-wrap iframe {
@@ -330,8 +331,6 @@
     }
 }
 </style>
-</head>
-<body>
 
 <div class="container">
   <a class="back-home" href="index.html">← 返回存档首页</a>
