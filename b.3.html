@@ -268,6 +268,7 @@
 @media (max-width: 720px) {
 .main-layout {
   grid-template-columns: 1fr;
+  padding: 0 16px;
 }
 .side-nav {
   position: static;
@@ -275,18 +276,18 @@
 }
 .side-nav-list {
   flex-direction: row;
-  flex-wrap: nowrap; /* 关掉换行，强制一行 */
-  gap:4px; /* 缩小tab之间间距 */
-  justify-content: center;
+  flex-wrap: wrap; /* 改成自动换行，不会横向滚动 */
+  gap:4px;
+  justify-content: center; /* 整组居中，左右距离相等 */
   padding: 6px 0;
-  overflow-x: auto; /* 超出横向滚动 */
+  /* 删除 overflow-x:auto */
 }
 .side-nav-item {
   white-space: nowrap;
   flex-shrink: 0;
   width: auto;
-  padding:5px 7px; /* 缩小内边距 */
-  font-size:12px; /* 字体再小一号 */
+  padding:5px 7px;
+  font-size:12px;
   gap:4px;
 }
 .side-nav-item .count{
