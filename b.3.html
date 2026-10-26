@@ -266,69 +266,63 @@
   }
 
 @media (max-width: 720px) {
-    .main-layout {
-      grid-template-columns: 1fr;
-    }
-    .side-nav {
-      position: static;
-      padding:12px 10px;
-    }
-    .side-nav-list {
-      flex-direction: row;
-      overflow-x: auto;
-      gap:4px;
-      justify-content: flex-start;
-      padding: 6px 0;
-      scroll-padding-inline: 1rem;
-    }
-    .side-nav-list::before,
-    .side-nav-list::after {
-      content: "";
-      flex: 0 0 calc(50vw - 50%);
-    }
-    .side-nav-item {
-      white-space: nowrap;
-      flex-shrink: 0;
-      width: auto;
-      padding:8px 10px;
-      font-size:13px;
-      gap:6px;
-    }
-    .side-nav-item .count{
-      font-size:11px;
-      padding:1px 6px;
-    }
-    .video-panel{
-      padding:14px;
-    }
-    .panel-subtitle{
-      font-size:12px;
-    }
-    .video-list{
-      gap:14px;
-    }
-    .video-main {
-      grid-template-columns: 1fr;
-      gap:12px;
-      padding:12px;
-    }
-    .iframe-wrap{
-      border-radius:10px;
-      max-width: 100%; 
-    }
-    .video-title{
-      font-size:15px;
-    }
-    .video-date, .video-desc{
-      font-size:12px;
-    }
-    .back-top{
-      width:34px;
-      height:34px;
-      font-size:16px;
-      bottom:14px;
-      right:14px;
-    }
+.main-layout {
+  grid-template-columns: 1fr;
+}
+.side-nav {
+  position: static;
+  padding:12px 10px;
+}
+.side-nav-list {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap:8px;
+  justify-content: center;
+  padding: 6px 0;
+}
+/* ===== 删除原来的 ::before ::after 两段 ===== */
+.side-nav-item {
+  white-space: nowrap;
+  flex-shrink: 0;
+  width: auto;
+  padding:8px 10px;
+  font-size:13px;
+  gap:6px;
+}
+.side-nav-item .count{
+  font-size:11px;
+  padding:1px 6px;
+}
+.video-panel{
+  padding:14px;
+}
+.panel-subtitle{
+  font-size:12px;
+}
+.video-list{
+  gap:14px;
+}
+.video-main {
+  grid-template-columns: 1fr;
+  gap:12px;
+  padding:12px;
+}
+.iframe-wrap{
+  border-radius:10px;
+  max-width: 100%; 
+}
+.video-title{
+  font-size:15px;
+}
+.video-date, .video-desc{
+  font-size:12px;
+}
+.back-top{
+  width:34px;
+  height:34px;
+  font-size:16px;
+  bottom:14px;
+  right:14px;
 }
 </style>
 
