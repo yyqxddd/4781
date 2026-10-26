@@ -268,7 +268,9 @@
 @media (max-width: 720px) {
 .main-layout {
   grid-template-columns: 1fr;
-  padding: 0 16px;
+  padding: 0;
+  max-width: calc(100% - 32px);
+  margin: 0 auto;
 }
 .side-nav {
   position: static;
