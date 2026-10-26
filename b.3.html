@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>高能合集｜诗情画奕的备忘录</title>
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+    background: #f3eef9;
+    color: #333;
+    line-height: 1.7;
+  }
+
+  .container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 30px 16px 60px;
+  }
+
+  .back-home {
+    display: inline-block;
+    text-decoration: none;
+    color: #8b5cf6;
+    margin-bottom: 16px;
+    font-size: 15px;
+  }
+  .back-home:hover {
+    text-decoration: underline;
+  }
+
+  /* 主布局：左侧分类 + 右侧视频列表 */
+  .main-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  /* 左侧分类导航 */
+  .side-nav {
+    background: #f8f5fe;
+    border: 1px solid #e2d9f3;
+    border-radius: 16px;
+    padding: 18px 14px;
+    position: sticky;
+    top: 20px;
+    box-shadow: 0 4px 14px rgba(139, 92, 246, 0.08);
+  }
+
+  .side-nav-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .side-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 14px;
+    border-radius: 10px;
+    color: #555;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+    border: 1px solid transparent;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .side-nav-item:hover {
+    background: #e9e1f8;
+    color: #7c3aed;
+  }
+
+  .side-nav-item.active {
+    background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+    color: #fff;
+    border-color: #8b5cf6;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.35);
+  }
+
+  .side-nav-item .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #c4b5fd;
+  }
+
+  .side-nav-item.active .dot {
+    background: #fff;
+  }
+
+  .side-nav-item .count {
+    margin-left: auto;
+    font-size: 12px;
+    background: rgba(139, 92, 246, 0.12);
+    color: #8b5cf6;
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+
+  .side-nav-item.active .count {
+    background: rgba(255, 255, 255, 0.25);
+    color: #fff;
+  }
+
+  /* 右侧视频区 */
+  .video-panel {
+    background: #f8f5fe;
+    border: 1px solid #e2d9f3;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 14px rgba(139, 92, 246, 0.08);
+  }
+
+  .panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px dashed #ddd4ee;
+  }
+  .panel-subtitle {
+    font-size: 13px;
+    color: #999;
+  }
+
+  /* 视频列表 */
+  .video-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .video-row {
+    background: #f0e9fc;
+    border: 1px solid #ddd4ee;
+    border-radius: 14px;
+    overflow: hidden;
+    transition: 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .video-row:hover {
+    border-color: #c4b5fd;
+    box-shadow: 0 6px 18px rgba(139, 92, 246, 0.12);
+  }
+
+  .video-main {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 18px;
+    padding: 16px;
+  }
+
+  .iframe-wrap {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+    background: #ede8f7;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .iframe-wrap iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .video-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .video-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #222;
+    line-height: 1.5;
+  }
+
+  .video-date {
+    font-size: 13px;
+    color: #8b5cf6;
+  }
+
+  .video-desc {
+    font-size: 13px;
+    color: #777;
+    line-height: 1.6;
+  }
+
+  .video-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .tag {
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: #e9e1f8;
+    color: #8b5cf6;
+  }
+
+  .tag.live { background: #fee2e2; color: #dc2626; }
+  .tag.mc { background: #e0e7ff; color: #4338ca; }
+  .tag.vlog { background: #dcfce7; color: #15803d; }
+  .tag.airport { background: #ffedd5; color: #c2410c; }
+
+  .video-bottom {
+    padding: 0 16px 16px;
+  }
+
+  /* 回顶部 */
+  .back-top {
+    position: fixed;
+    bottom: 18px;
+    right: 18px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #8b5cf6;
+    color: #fff;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(139,92,246,0.25);
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.25s;
+    z-index: 98;
+  }
+  .back-top.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  .back-top:hover {
+    background: #7c3aed;
+  }
+
+  /* ========== 移动端修正 ========== */
+  @media (max-width: 860px) {
+    .main-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .side-nav {
+      position: static;
+    }
+
+    .side-nav-list {
+      flex-direction: row;
+      overflow-x: auto;
+      gap: 6px;
+      justify-content: flex-start;
+      padding: 8px 0;
+      scroll-padding-inline: 1rem;
+    }
+    /* 前后占位，实现tab居中效果，所有tab、圆点完全保留 */
+    .side-nav-list::before,
+    .side-nav-list::after {
+      content: "";
+      flex: 0 0 calc(50vw - 50%);
+    }
+
+    .side-nav-item {
+      white-space: nowrap;
+      flex-shrink: 0;
+      width: auto;
+    }
+
+    .video-main {
+      grid-template-columns: 1fr;
+    }
+
+    .video-info {
+      text-align: left;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a class="back-home" href="index.html">← 返回存档首页</a>
+
+  <div class="main-layout" style="margin-top:16px;">
+
+    <!-- 左侧分类导航 -->
+    <aside class="side-nav">
+      <ul class="side-nav-list">
+        <li class="side-nav-item active" data-cat="live">
+          <span class="dot"></span>
+          <span>🔴 直播</span>
+          <span class="count">14</span>
+        </li>
+        <li class="side-nav-item" data-cat="mc">
+          <span class="dot"></span>
+          <span>🎤 MC</span>
+          <span class="count">7</span>
+        </li>
+        <li class="side-nav-item" data-cat="vlog">
+          <span class="dot"></span>
+          <span>📹 VLOG</span>
+          <span class="count">7</span>
+        </li>
+        <li class="side-nav-item" data-cat="airport">
+          <span class="dot"></span>
+          <span>✈️ 机场</span>
+          <span class="count">9</span>
+        </li>
+      </ul>
+    </aside>
+
+    <section class="video-panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-subtitle" id="panelSubtitle">仅收录部分高能（🌧️1⃣️更甜的直播还有很多）</div>
+        </div>
+      </div>
+
+      <div class="video-list" id="videoList">
+
+        <!-- 直播 1 -->
+        <div class="video-row" data-cat="live">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1XPH7eSEUD&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">周诗雨直播</div>
+              <div class="video-date">2020.01.05</div>
+              <div class="video-desc">暧昧期拉扯</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 直播 2 -->
+        <div class="video-row" data-cat="live">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1Qb4y1H7zF&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">王奕直播</div>
+              <div class="video-date">2022.01.15</div>
+              <div class="video-desc">互相撩拨</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-row" data-cat="live">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1RT4y1m7uF&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">王奕周诗雨直播</div>
+              <div class="video-date">2022.03.10</div>
+              <div class="video-desc">拌嘴、打闹</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-row" data-cat="live">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1Zj411x7xW&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">王奕周诗雨直播</div>
+              <div class="video-desc">互相撒娇</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-row" data-cat="live">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1ra4y1d72M&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">周诗雨直播</div>
+              <div class="video-date">2023.11.24</div>
+              <div class="video-desc">🌧️对1⃣️撒娇</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-row" data-cat="live">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1Kg4y1f72V&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">王奕周诗雨直播</div>
+              <div class="video-date">2023.12.03</div>
+              <div class="video-desc">1.情歌对唱 2.一起装扮圣诞树</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-row" data-cat="live">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1494y1T7VW&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">王奕直播</div>
+              <div class="video-date">2024.01.13</div>
+              <div class="video-desc">秀恩爱</div>
+            </div>
+          </div>
+        </div>
+
+       <div class="video-row" data-cat="live">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1yM4m127ad&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">王奕周诗雨直播</div>
+              <div class="video-date">2024.07.10</div>
+              <div class="video-desc">拿错吸管引发的蝴蝶效应</div>
+            </div>
+          </div>
+        </div>
+
+       <div class="video-row" data-cat="live">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1fDHxenEWu&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">王奕周诗雨直播</div>
+              <div class="video-date">2024.09.02</div>
+              <div class="video-desc">一起搞笑</div>
+            </div>
+          </div>
+        </div>
+
+       <div class="video-row" data-cat="live">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1v3HdebEQ7&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">王奕周诗雨直播</div>
+              <div class="video-date">2024.09.06</div>
+              <div class="video-desc">一起成为rapper</div>
+            </div>
+          </div>
+        </div>
+
+       <div class="video-row" data-cat="live">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1Kq2DYCExL&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">王奕周诗雨直播</div>
+              <div class="video-date">2024.10.11</div>
+              <div class="video-desc">1.🌧️投喂1⃣️ 2.逗对方</div>
+            </div>
+          </div>
+        </div>
+
+       <div class="video-row" data-cat="live">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1WoSeYiEfu&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">王奕周诗雨直播</div>
+              <div class="video-date">2024.10.29</div>
+              <div class="video-desc">1⃣️给🌧️试药</div>
+            </div>
+          </div>
+        </div>
+
+       <div class="video-row" data-cat="live">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1DPKNeTE1G&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">周诗雨直播</div>
+              <div class="video-date">2025.02.14</div>
+              <div class="video-desc">🌧️给1⃣️的情人节礼物</div>
+            </div>
+          </div>
+        </div>
+
+       <div class="video-row" data-cat="live">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1vKAiexEu8&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">周诗雨直播</div>
+              <div class="video-date">2025.02.19</div>
+              <div class="video-desc">1⃣️给🌧️的情人节礼物</div>
+            </div>
+          </div>
+        </div>
+
+       <div class="video-row" data-cat="live">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1ZuPAeMEWZ&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">王奕直播</div>
+              <div class="video-date">2025.02.21</div>
+              <div class="video-desc">1⃣️的两级反转</div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- MC 1 -->
+        <div class="video-row" data-cat="mc" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1C54y147UX&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">Team HII《头号新闻》公演</div>
+              <div class="video-date">2020.12.05</div>
+              <div class="video-desc">“周诗雨，上学也记得想我”</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-row" data-cat="mc" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1Hw411w77h&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">《最佳拍档》第三季决赛</div>
+              <div class="video-date">2023.10.14</div>
+              <div class="video-desc">带着现在的记忆，穿越到初次见面的那天，会对对方说什么</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-row" data-cat="mc" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1U1421d7FB&p=11&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">诗情画奕“予你”巡演·杭州站</div>
+              <div class="video-date">2024.04.19</div>
+              <div class="video-desc">1.最常叫对方的称呼2.最喜欢对方什么地方</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-row" data-cat="mc" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1BJ4m1E7WG&p=16&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">诗情画奕“予你”巡演·上海站</div>
+              <div class="video-date">2024.04.27</div>
+              <div class="video-desc">快问快答</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-row" data-cat="mc" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1T4421U7Dv&p=8&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">诗情画奕“予你”巡演·成都站</div>
+              <div class="video-date">2024.07.12</div>
+              <div class="video-desc">双人默契问答挑战</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-row" data-cat="mc" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1jQzxYrEiA&p=7&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">诗情画奕“双人舞”舞台分享会</div>
+              <div class="video-date">2024.11.30</div>
+              <div class="video-desc">ox默契游戏（已幸福）</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-row" data-cat="mc" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1WT64YsEVu&p=7&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">诗情画奕“予你”巡演·南昌站</div>
+              <div class="video-date">2024.11.28</div>
+              <div class="video-desc">1.生日许的愿望实现了吗2.贴纸游戏</div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- VLOG 1 -->
+        <div class="video-row" data-cat="vlog" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1za4y1a7K4&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">王奕VLOG</div>
+              <div class="video-date">2020.07.21</div>
+              <div class="video-desc">恋爱日常实录</div>
+            </div>
+          </div>
+        </div>
+
+       <div class="video-row" data-cat="vlog" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV19Z4y1T7LM&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">周诗雨VLOG</div>
+              <div class="video-date">2020.07.30</div>
+              <div class="video-desc">恋爱日常实录</div>
+            </div>
+          </div>
+        </div>
+
+       <div class="video-row" data-cat="vlog" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV16e411f7SV&p=1&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">王奕VLOG</div>
+              <div class="video-date">2023.11.25</div>
+              <div class="video-desc">一起去桂林</div>
+            </div>
+          </div>
+        </div>
+
+       <div class="video-row" data-cat="vlog" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1TK421y7mN&p=1&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">王奕VLOG</div>
+              <div class="video-date">2024.02.05</div>
+              <div class="video-desc">一起去匈牙利</div>
+            </div>
+          </div>
+        </div>
+
+       <div class="video-row" data-cat="vlog" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1KvBXB9EK6&p=1&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">双人VLOG</div>
+              <div class="video-date">2025.12.25</div>
+              <div class="video-desc">一起去迪士尼</div>
+            </div>
+          </div>
+        </div>
+
+       <div class="video-row" data-cat="vlog" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1nxfSBRE7d&p=1&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">周诗雨VLOG</div>
+              <div class="video-date">2026.02.25</div>
+              <div class="video-desc">一起去泰国</div>
+            </div>
+          </div>
+        </div>
+
+       <div class="video-row" data-cat="vlog" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1jeTg6LE9N&p=1&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">双人VLOG</div>
+              <div class="video-date">2026.06.28</div>
+              <div class="video-desc">一起去马尔代夫</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 机场 1 -->
+        <div class="video-row" data-cat="airport" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1Ba41157H2&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">广州🛫️上海</div>
+              <div class="video-date">2022.08.22</div>
+              <div class="video-desc">抱抱</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-row" data-cat="airport" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1be4y1y7wE&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">上海🛫️长沙</div>
+              <div class="video-date">2022.09.13</div>
+              <div class="video-desc">贴贴</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-row" data-cat="airport" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV15c411N727&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">上海🛫️郑州</div>
+              <div class="video-date">2023.08.22</div>
+              <div class="video-desc">腻歪</div>
+            </div>
+          </div>
+        </div>
+
+       <div class="video-row" data-cat="airport" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1Du411g7AU&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">上海🛫️广州</div>
+              <div class="video-date">2023.09.22</div>
+              <div class="video-desc">打闹</div>
+            </div>
+          </div>
+        </div>
+
+       <div class="video-row" data-cat="airport" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1xg4y1m7rT&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">成都🛫️上海</div>
+              <div class="video-date">2024.01.15</div>
+              <div class="video-desc">抱抱</div>
+            </div>
+          </div>
+        </div>
+
+       <div class="video-row" data-cat="airport" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1CZ421y7av&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">上海🛫️重庆</div>
+              <div class="video-date">2024.02.28</div>
+              <div class="video-desc">抱抱</div>
+            </div>
+          </div>
+        </div>
+
+       <div class="video-row" data-cat="airport" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1HuHTeiEjK&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">上海🛫️日本</div>
+              <div class="video-date">2024.08.29</div>
+              <div class="video-desc">摸摸</div>
+            </div>
+          </div>
+        </div>
+
+       <div class="video-row" data-cat="airport" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1UbtheaELo&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">北京🛫️上海</div>
+              <div class="video-date">2024.09.17</div>
+              <div class="video-desc">捏脸</div>
+            </div>
+          </div>
+        </div>
+
+       <div class="video-row" data-cat="airport" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1ds1xYDE4j&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">北京🛫️上海</div>
+              <div class="video-date">2024.10.25</div>
+              <div class="video-desc">在队友面前秀恩爱</div>
+            </div>
+          </div>
+        </div>
+
+       <div class="video-row" data-cat="airport" style="display:none;">
+          <div class="video-main">
+            <div class="iframe-wrap">
+              <iframe data-src="https://player.bilibili.com/player.html?bvid=BV1jYVBzHEpt&autoplay=0&danmaku=1" scrolling="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-info">
+              <div class="video-title">武汉🛫️上海</div>
+              <div class="video-date">2025.05.05</div>
+              <div class="video-desc">调情</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<button class="back-top" id="backTop">↑</button>
+
+<script>
+  const navItems = document.querySelectorAll('.side-nav-item');
+  const rows = document.querySelectorAll('.video-row');
+  const panelSubtitle = document.getElementById('panelSubtitle');
+
+  const categoryMap = {
+    live: { sub: '仅收录部分高能（🌧️1⃣️更甜的直播还有很多）' },
+    mc: { sub: '仅收录部分高能（🌧️1⃣️更甜的MC还有很多）' },
+    vlog: { sub: '仅收录部分高能（🌧️1⃣️更甜的VLOG还有很多）' },
+    airport: { sub: '仅收录部分高能（🌧️1⃣️更甜的机场秀还有很多）' }
+  };
+
+  function loadCategoryVideo(cat) {
+    rows.forEach(row => {
+      const iframe = row.querySelector('iframe');
+      if(row.dataset.cat === cat) {
+        // 只有当前分类，并且iframe还没加载过，才赋值src加载
+        if(iframe && !iframe.src) {
+          iframe.src = iframe.dataset.src;
+        }
+        row.style.display = 'flex';
+      } else {
+        row.style.display = 'none';
+      }
+    })
+  }
+
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      navItems.forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      const cat = item.dataset.cat;
+      panelSubtitle.textContent = categoryMap[cat].sub;
+      loadCategoryVideo(cat);
+    });
+  });
+
+  // 页面初始化，只加载live
+  loadCategoryVideo('live');
+
+  // 回顶部
+  const backTopBtn = document.getElementById('backTop');
+  window.addEventListener('scroll', () => {
+    backTopBtn.classList.toggle('show', window.scrollY > 300);
+  });
+  backTopBtn.onclick = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+</script>
+
+</body>
+</html>
