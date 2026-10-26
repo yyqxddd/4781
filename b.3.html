@@ -275,23 +275,23 @@
 }
 .side-nav-list {
   flex-direction: row;
-  flex-wrap: wrap;
-  gap:8px;
+  flex-wrap: nowrap; /* 关掉换行，强制一行 */
+  gap:4px; /* 缩小tab之间间距 */
   justify-content: center;
   padding: 6px 0;
+  overflow-x: auto; /* 超出横向滚动 */
 }
-/* ===== 删除原来的 ::before ::after 两段 ===== */
 .side-nav-item {
   white-space: nowrap;
   flex-shrink: 0;
   width: auto;
-  padding:8px 10px;
-  font-size:13px;
-  gap:6px;
+  padding:5px 7px; /* 缩小内边距 */
+  font-size:12px; /* 字体再小一号 */
+  gap:4px;
 }
 .side-nav-item .count{
-  font-size:11px;
-  padding:1px 6px;
+  font-size:10px;
+  padding:1px 4px;
 }
 .video-panel{
   padding:14px;
@@ -323,6 +323,7 @@
   font-size:16px;
   bottom:14px;
   right:14px;
+}
 }
 </style>
 
