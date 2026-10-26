@@ -5,11 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>高能合集｜诗情画奕的备忘录</title>
 <style>
+  :root {
+    --scale: 1;
+  }
   * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
     -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    font-size: calc(16px * var(--scale));
   }
 
   body {
@@ -256,11 +263,7 @@
     background: #7c3aed;
   }
 
-  /* ========== 手机端：整体缩小一档，就是你要的效果 ========== */
   @media (max-width: 860px) {
-    html {
-      font-size: 14px;
-    }
     .main-layout {
       grid-template-columns: 1fr;
     }
@@ -892,6 +895,19 @@
     vlog: { sub: '仅收录部分高能（🌧️1⃣️更甜的VLOG还有很多）' },
     airport: { sub: '仅收录部分高能（🌧️1⃣️更甜的机场秀还有很多）' }
   };
+
+  function adjustScale() {
+    const w = window.innerWidth;
+    let s = 1;
+    if(w < 400) s = 0.72;
+    else if(w < 480) s = 0.78;
+    else if(w < 600) s = 0.84;
+    else if(w < 860) s = 0.9;
+    else s = 1;
+    document.documentElement.style.setProperty('--scale', s);
+  }
+  adjustScale();
+  window.addEventListener('resize', adjustScale);
 
   function loadCategoryVideo(cat) {
     rows.forEach(row => {
