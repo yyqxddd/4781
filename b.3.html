@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>高能合集｜诗情画奕的备忘录</title>
 <style>
-  :root {
+ :root {
     --scale: 1;
   }
   * {
@@ -27,23 +27,22 @@
     line-height: 1.7;
   }
 
-  .container {
-    max-width: 1120px;
-    margin: 0 auto;
-    padding: 30px 16px 60px;
-  }
+  /* 重点：和样板一致 20px 顶部内边距 */
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 15px 16px 60px; /* 统一顶部15px，不再叠加margin */
+}
 
-  .back-home {
-    display: inline-block;
-    text-decoration: none;
-    color: #8b5cf6;
-    margin-bottom: 16px;
-    font-size: 15px;
-  }
-  .back-home:hover {
-    text-decoration: underline;
-  }
-
+.back-home {
+  display: block;
+  text-decoration: none;
+  color: #8b5cf6;
+  /* 删掉 margin-top:15px; */
+  margin-bottom: 16px;
+  margin-left: 10px;
+  font-size: 15px;
+}
   .main-layout {
     display: grid;
     grid-template-columns: 240px 1fr;
@@ -266,20 +265,31 @@
   }
 
 @media (max-width: 720px) {
+.container {
+  max-width: 100%;
+  padding: 0;
+}
 .main-layout {
   grid-template-columns: 1fr;
-  padding: 0 3px;
+  max-width: calc(100% - 12px);
+  margin: 0 auto;
+}
+.back-home {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top:20px;
+  margin-bottom:20px;
+  max-width: calc(100% - 12px); /* 和main-layout一样左右留6px */
 }
 .side-nav {
   position: static;
-  padding: 12px 0; /* 删掉左右10px，只保留上下padding */
+  padding: 12px 14px;
 }
 .side-nav-list {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   gap: 4px;
-  justify-content: stretch;
   padding: 6px 0;
 }
 .side-nav-item {
@@ -331,7 +341,7 @@
 <div class="container">
   <a class="back-home" href="index.html">← 返回存档首页</a>
 
-  <div class="main-layout" style="margin-top:16px;">
+  <div class="main-layout">
 
     <aside class="side-nav">
       <ul class="side-nav-list">
