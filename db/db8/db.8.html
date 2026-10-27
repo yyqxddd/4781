@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>关于小日记里一些朋友圈的时间线</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #f4f4f4;
+        font-family: "Microsoft Yahei", SimHei, Arial, sans-serif;
+        font-size: 14px;
+        color: #333;
+        max-width: 100%;
+        max-width: 720px;
+        margin: 24px auto;
+        padding: 0 16px;
+    }
+
+    /* 主楼卡片 */
+    .post-card {
+        background: #ffffff;
+        border: 1px solid #e7e7e7;
+        border-radius: 12px;
+        padding: 24px;
+    }
+
+    /* 标题 */
+    .post-title {
+        font-size: 20px;
+        font-weight: bold;
+        line-height: 1.4;
+        margin-bottom: 14px;
+        color: #111;
+    }
+
+    /* 楼主信息：ID 和日期分行 */
+    .post-author {
+        margin-bottom: 14px;
+    }
+
+    .author-name {
+        display: block;
+        color: #225599;
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 2px;
+    }
+
+    .post-date {
+        display: block;
+        color: #999;
+        font-size: 13px;
+    }
+
+    /* 主楼正文 */
+    .post-content {
+        line-height: 1.7;
+        color: #333;
+        font-size: 14px;
+    }
+
+    .post-content p {
+        margin-bottom: 8px;
+    }
+
+    /* ========= 居中加粗小标题（截图同款） ========= */
+    .center-bold-title{
+        font-weight: bold;
+        text-align: center;
+        margin:10px 0 26px;
+        font-size:14px;
+    }
+
+    /* 主楼底部 */
+    .post-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 16px;
+    }
+
+    /* 主楼赞 */
+    .post-like-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background-color: #fdf3e7;
+        border: 1px solid #f1e3c6;
+        border-radius: 8px;
+        color: #c17440;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 6px 14px;
+        cursor: pointer;
+    }
+
+    .post-like-btn .thumb {
+        font-size: 16px;
+    }
+
+    /* 分割线 */
+    .divider {
+        border: none;
+        border-top: 1px solid #e7e7e7;
+        margin: 24px 0;
+    }
+
+    /* 评论区灰色线框 */
+    .reply-section {
+        border: 1px solid #d9d9d9;
+        border-radius: 10px;
+        background: #fff;
+        overflow: hidden;
+    }
+
+   /* 评论区顶部灰色条 */
+    .reply-header-bar {
+        background-color: #eaeaea;
+        padding: 7px 12px;
+    }
+
+    .reply-header-bar span {
+        color: #555555;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    /* 评论列表 */
+    .reply-list {
+        padding: 4px 16px 12px;
+    }
+
+    /* 单条评论 */
+    .reply-item {
+        padding: 14px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .reply-item:last-child {
+        border-bottom: none;
+    }
+
+    /* ID时间浅紫矩形，100%宽度 */
+    .reply-user-tag {
+        display: flex;
+        align-items: center;
+        background-color: #e8e4f7;
+        border-radius: 6px;
+        padding: 4px 10px;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+
+    .reply-user {
+        color: #225599;
+        font-weight: 600;
+        font-size: 13px;
+        margin-right: 8px;
+        white-space: nowrap;
+    }
+
+    .reply-time {
+        color: #999;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+/* 默认：主楼gif 居中 */
+.post-content .gif-block {
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 6px 0 0;
+    padding: 0;
+}
+/* 回复区gif 左对齐（旧尺寸不变） */
+.reply-item .gif-block {
+    max-width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 6px 0 8px;
+    padding: 0;
+}
+
+.gif-block img {
+    display: block;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    cursor: zoom-in;
+    border-radius: 6px;
+    /* 图片加载占位：加载前保留容器空间 */
+    min-height: 120px;
+    background: #f0edfa;
+}
+
+/* 【通用/回复区】原图尺寸：横42%｜竖20%｜正方28% */
+.gif-block img[orientation="landscape"] {
+    max-width: 42%;
+}
+.gif-block img[orientation="portrait"] {
+    max-width: 20%;
+}
+.gif-block img[orientation="square"] {
+    max-width: 28%;
+}
+
+/* 单独覆盖【主楼】：只有横图拉满，竖、正方维持小图 */
+.post-content .gif-block img[orientation="landscape"] {
+    max-width: 100%;
+}
+.post-content .gif-block img[orientation="portrait"] {
+    max-width: 100%;
+}
+.post-content .gif-block img[orientation="square"] {
+    max-width: 100%;
+}
+
+/* 【引用块quote】保留你原来缩小一档，不动！ */
+.quote-block .gif-block {
+    margin: 4px 0 !important;
+}
+.quote-block .gif-block img[orientation="landscape"] {
+    max-width: 38%;
+}
+.quote-block .gif-block img[orientation="portrait"] {
+    max-width: 18%;
+}
+.quote-block .gif-block img[orientation="square"] {
+    max-width: 24%;
+}
+
+/* ========== 引用容器：border‑left写外层，竖线包含图片+全部内容 ========== */
+.quote-block {
+    background-color: #f7f7f7;
+    border-left: 3px solid #999; /*灰色竖线在外层，所有内容都在竖线右侧*/
+    padding: 8px 12px;
+    margin: 8px 0 10px;
+    color: #555;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.quote-inner {
+    overflow: hidden;
+    display: inline; /* 行内，文字和span同行 */
+}
+.quote-inner.collapsed {
+    /* 不再用高度截断，JS直接截断文字 */
+}
+
+.quote-expand-btn {
+    display: inline;
+    color:#8b5cf6;
+    cursor:pointer;
+    user-select:none;
+    margin-left:4px; /* 文字和按钮之间留一点点间距 */
+}
+.quote-expand-btn.hidden{
+    display:none;
+}
+    /* 回复内容 */
+    .reply-content {
+        line-height: 1.75;
+        color: #333;
+        font-size: 14px;
+        white-space: pre-line;
+    }
+
+    .reply-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 10px;
+    }
+
+    /* 评论区赞 */
+    .reply-like-btn {
+        color: #666;
+        font-size: 13px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+    }
+
+    .reply-like-btn:hover {
+        color: #8b5cf6;
+    }
+
+  /* ========== 回顶部按钮样式【新增】 ========== */
+  .back-top{
+    position:fixed;
+    bottom:18px;
+    right:18px;
+    width:33px;
+    height:33px;
+    border-radius:50%;
+    background:#8b5cf6;
+    color:#fff;
+    border:none;
+    font-size:18px;
+    cursor:pointer;
+    box-shadow:0 4px 12px rgba(139,92,246,0.25);
+    opacity:0;
+    visibility:hidden;
+    transition:0.25s;
+    z-index:98;
+  }
+  .back-top.show{
+    opacity:1;
+    visibility:visible;
+  }
+  .back-top:hover{
+    background:#7c3aed;
+  }
+
+    /* 底部分页 */
+    .page-bar {
+        margin-top: 8px;
+        padding: 12px 20px;
+        background: #fff;
+        border: 1px solid #e7e7e7;
+        border-radius: 12px;
+        display: flex;
+        justify-content: center; /* 内容水平居中 */
+        align-items: center;
+        font-size:14px;
+        color: #666;
+    }
+    .page-left{
+        display:flex;
+        gap:12px;
+    }
+
+    .page-bar a {
+        color: #666;
+        text-decoration: none;
+        padding: 4px 8px;
+    }
+
+    .page-bar a:hover {
+        color: #8b5cf6;
+    }
+
+    .page-bar .current {
+        color: #8b5cf6;
+        font-weight: bold;
+    }
+.page-bar button {
+    color: #666;
+    background: transparent;
+    border: none;
+    padding: 2px 6px;
+    font-size:15px;
+    cursor:pointer;
+}
+.page-bar button:hover {
+    color: #8b5cf6;
+}
+.page-bar button:disabled {
+    color:#bbb;
+    cursor:not-allowed;
+}
+.back-nav{
+    display:inline-block;
+    margin-bottom:16px;
+    color:#8b5cf6;
+    text-decoration:none;
+}
+.back-nav:hover{
+    text-decoration:underline;
+}
+.quote-inner a, .reply-content a:hover{
+    color:#8b5cf6;
+}
+/* 原来绿色链接改成紫色 */
+.post-content a{
+    color:#8b5cf6;
+    text-decoration: none;
+}
+.post-content a:hover{
+    color:#7c3aed;
+    text-decoration:underline;
+}
+/* 主楼圆点条目，圆点前空4个全角空格，换行自动缩进对齐 */
+.post-content .dot-item{
+    position:relative;
+    padding-left: 32px; /* 4个全角空格宽度 */
+    margin-bottom:8px;
+}
+.post-content .dot-item::before{
+    content:"•";
+    position:absolute;
+    left:14px; /* 圆点放在4空格区域里面 */
+    top:0;
+}
+@media(max-width:720px){
+    body{
+        margin:12px auto;
+        padding:0 6px;
+    }
+    .post-card{
+        padding:16px;
+    }
+    .reply-item{
+        padding:10px 0;
+    }
+    .divider{
+        margin:16px 0;
+    }
+}
+/* 主楼所有orientation图片统一100% */
+.post-content .gif-block img:not([orientation]){
+    max-width: 100%;
+}
+/* 回复所有orientation图片统一35% */
+.reply-item .gif-block img:not([orientation]) {
+    max-width: 35%;
+}
+/* 引用所有orientation图片统一28% */
+.quote-block .gif-block img:not([orientation]) {
+    max-width: 28%;
+}
+</style>
+</head>
+
+<body>
+<a href="../db.html" class="back-nav">← 返回上一页</a>
+<div class="post-card">
+    <!-- 帖子标题 -->
+    <div class="post-title">关于小日记里一些朋友圈的时间线</div>
+
+    <!-- 楼主信息 -->
+    <div class="post-author">
+        <span class="author-name">楼主</span>
+        <span class="post-date">2024-04-18 22:55:27 福建</span>
+    </div>
+
+<div class="post-content">
+    <p>(不确定有没有联系噢~)</p>
+    <p>(其实没有什么顺序，看到啥理啥)</p>
+    <br>
+
+    <p><b>事件1：</b></p>
+    <div class="gif-block">
+        <img src="db8.1.jpg" loading="lazy" onclick="openImg(this.src)">
+    </div>
+    <br>
+    <p>2021.1.18是迪士尼著名的那个那个 <a href="https://www.bilibili.com/video/BV1hh411y7vM/?spm_id_from=333.999.0.0&vd_source=442760a5e155df69192930dab8c5df14" target="_blank">【诗情画奕】 20210118 错算时间迟赶赴，寒风苦等影孤独。一场误会小插曲，及时解决不多虑。_哔哩哔哩_bilibili</a></p>
+    <br>
+    <p>2021.1.22如图</p>
+    <br>
+    <p>2021.1.23周诗雨直播宣布要搬新房间啦！（当时还住331） <a href="https://www.bilibili.com/video/BV14V411q7A8/?spm_id_from=333.999.0.0&vd_source=442760a5e155df69192930dab8c5df14" target="_blank">【诗情画奕】 20210123 新房间起新生活，做饭温馨期待多；萌妹长大原因有，双向确定最甜柔_哔哩哔哩_bilibili</a></p>
+
+    <div class="gif-block">
+        <img src="db8.2.jpg" loading="lazy" onclick="openImg(this.src)">
+    </div>
+    <br>
+    <p>王奕具体哪一天入住339不太清楚，但是3.12之前就已经开始装修 <a href="https://www.bilibili.com/video/BV1CU4y1p7GB/?spm_id_from=333.999.0.0&vd_source=442760a5e155df69192930dab8c5df14" target="_blank">【诗情画奕】20210312 339装修分工明确|夸夸小周的小王|错寄快递到小周学校_哔哩哔哩_bilibili</a></p>
+    <br>
+    <p>3.19周诗雨从学校返回中心，这一天是两人正式一同入住339！<a href="https://weibo.com/6158559618/4616537706862690" target="_blank">https://weibo.com/6158559618/4616537706862690</a></p>
+    <p>当天还发了绿洲合拍<a href="https://weibo.com/6158559618/4616257753582891" target="_blank">https://weibo.com/6158559618/4616257753582891</a></p>
+    <br>
+    <p>然后22号去厦门拍了水着，30号回上海（其中有著名女儿茶直播！）</p>
+    <br>
+    <p>然后就是4.2日这天难得的休息，一起收拾装扮了339，还做了大餐：<a href="https://weibo.com/6158559618/4621608394426555" target="_blank">https://weibo.com/6158559618/4621608394426555</a></p>
+    <br>
+    <p>4.4日发生了滑稽小事：<a href="https://weibo.com/6158559618/K9pq0hqqi" target="_blank">https://weibo.com/6158559618/K9pq0hqqi</a></p>
+
+    <br>
+    <p><b>事件2：</b></p>
+    <div class="gif-block">
+        <img src="db8.3.jpg" loading="lazy" onclick="openImg(this.src)">
+    </div>
+    <br>
+    <p>注意，是1.18才开始异地的！</p>
+    <p>这一天是刚好转钟到除夕的四十分钟后。</p>
+    <p>哎呀，到底是有多不得劲呀，隔了一个白天，晚上还要特地跑去直播飘屏呢~</p>
+    <p>除夕晚上8点多和十点多的直播： <a href="https://www.bilibili.com/video/BV1bA411d7vi/?spm_id_from=444.41.list.card_archive.click&vd_source=442760a5e155df69192930dab8c5df14" target="_blank">【诗情画奕】20230121 双人直播cut 新年快乐_哔哩哔哩_bilibili</a></p>
+    <p>内容：王奕说某歌手的声音像zsy，王奕去周诗雨直播间飘屏：新年快乐、祝我家庭美满不、我有红包吗、我家里还有孩子</p>
+
+    <div class="gif-block">
+        <img src="db8.4.jpg" loading="lazy" onclick="openImg(this.src)">
+    </div>
+    <br>
+    <p><a href="https://www.bilibili.com/video/BV1od4y1p7t5/?spm_id_from=444.41.list.card_archive.click&vd_source=442760a5e155df69192930dab8c5df14" target="_blank">【诗情画奕】20230125-0126 一一电台cut_哔哩哔哩_bilibili</a></p>
+    <p>电台内容：周诗雨飘屏、选择你行不行、晚上见不着人，白天也见不着人</p>
+
+    <div class="gif-block">
+        <img src="db8.5.jpg" loading="lazy" onclick="openImg(this.src)">
+    </div>
+    <br>
+    <p>意思是，小王电台下播立刻发了这条朋友圈~注意！是立刻马上噢！！！</p>
+    <p>（所以王奕说那我肯定是不如……，是因为周诗雨回消息不及时吗~哈哈哈，这可太含蓄了呀！）</p>
+    <br>
+    <p>紧接着便是1.27，丢丢生日，两个人第一次连麦！</p>
+    <p><a href="https://www.bilibili.com/video/BV1zG4y1Q7TQ/?spm_id_from=444.41.list.card_archive.click&vd_source=442760a5e155df69192930dab8c5df14" target="_blank">【诗情画奕】20230127-0128 小丢生日连麦cut 被你可爱到了|互相要对方撒娇|平时也没少视频聊天_哔哩哔哩_bilibili</a></p>
+
+    <div class="gif-block">
+        <img src="db8.6.jpg" loading="lazy" onclick="openImg(this.src)">
+    </div>
+    <br>
+    <p>家人们，我还是觉得这天很离谱你们造吗！</p>
+    <p>自从春节放假1.18异地后，1.29日王奕单独返回了上海，1.30日王奕还留言了周诗雨抖音，<a href="https://weibo.com/6158559618/MqJpwdbHM" target="_blank">https://weibo.com/6158559618/MqJpwdbHM</a></p>
+    <br>
+    <p>2.2日周诗雨早上返回上海</p>
+    <p>但是下午王奕剧场上班完还说了好几次一个人逛街呢！周诗雨还口袋上麦了呢！晚上咋就一起逛街烛光晚餐拍PV了啊！而且周诗雨晚上还去录音了啊！这天是猜来猜去猜了好多天才知道正确答案的呀！</p>
+    <br>
+    <p>然后2.3日周诗雨又回镇江了……真是神出鬼没的女人！</p>
+
+    <br>
+    <p><b>事件3：</b></p>
+    <div class="gif-block">
+        <img src="db8.7.jpg" loading="lazy" onclick="openImg(this.src)">
+    </div>
+    <br>
+    <p><a href="https://www.bilibili.com/video/BV1oi4y1j7qV/?spm_id_from=333.999.0.0&vd_source=442760a5e155df69192930dab8c5df14" target="_blank">【诗情画奕】 20200101 傻傻的你，傻傻的我，傻傻地守得她和她的恒久。_哔哩哔哩_bilibili</a></p>
+    <p>内容：</p>
+    <p>王奕著名回旋镖发言：“周诗雨？我们只是同事！”←_←</p>
+    <p>周诗雨著名回旋镖发言：“王奕虚啊！她虚啊，她肾虚，她抱不动我！” “排练穿精神小伙紧身裤紧身衣，我对她一点感觉都没有。”“下次我要当男的，王奕你听见了吗？”←_← </p>
+
+    <br>
+    <p><b>事件4：</b></p>
+    <div class="gif-block">
+        <img src="db8.8.jpg" loading="lazy" onclick="openImg(this.src)">
+    </div>
+    <br>
+    <p><a href="https://www.bilibili.com/video/BV1qK4y1a7qt/?spm_id_from=333.999.0.0&vd_source=442760a5e155df69192930dab8c5df14" target="_blank">【诗情画奕】 20200419 在你面前不必在意形象，效果好坏一样都欢笑如常。_哔哩哔哩_bilibili</a></p>
+    <br>
+    <p>这天两人的口袋：</p>
+    <div class="gif-block">
+        <img src="db8.9.jpg" loading="lazy" onclick="openImg(this.src)">
+    </div>
+    <br>
+    <div class="gif-block">
+        <img src="db8.10.jpg" loading="lazy" onclick="openImg(this.src)">
+    </div>
+    <br>
+    <p>当天的电台，好像没什么参考性</p>
+    <p><a href="https://www.bilibili.com/video/BV1Z14y1j7mo/?spm_id_from=333.999.0.0&vd_source=442760a5e155df69192930dab8c5df14" target="_blank">【诗情画奕】20200426 相差两个鞋码的xql_哔哩哔哩_bilibili</a></p>
+    <p><a href="https://www.bilibili.com/video/BV1Wr4y177Mz/?spm_id_from=333.999.0.0&vd_source=442760a5e155df69192930dab8c5df14" target="_blank">【诗情画奕】以前不想用一个杯子 现在：用zsy的杯子接个水_哔哩哔哩_bilibili</a></p>
+
+    <br>
+    <p><b>事件5：</b></p>
+    <div class="gif-block">
+        <img src="db8.11.jpg" loading="lazy" onclick="openImg(this.src)">
+    </div>
+    <br>
+    <p>多么日常且温馨的一条朋友圈！</p>
+    <p>为什么呢？</p>
+    <p>因为2020年12月是伟大的一个月！因为这个月结束上学异地啦！！！感情急剧升温啊！</p>
+    <br>
+    <p>12.5日著名MC周诗雨上学也要记得想我 <a href="https://www.bilibili.com/video/BV1C54y147UX/?spm_id_from=333.999.0.0&vd_source=442760a5e155df69192930dab8c5df14" target="_blank">【诗情画奕】 20201205头号新闻 每天都能听见你，上学也要想念我。昭然若揭众所望，直抒胸臆私心藏。_哔哩哔哩_bilibili</a></p>
+    <br>
+    <p>12.6日著名咸蛋黄 <a href="https://www.bilibili.com/video/BV1nv411b7S5/?spm_id_from=333.999.0.0&vd_source=442760a5e155df69192930dab8c5df14" target="_blank">【诗情画奕】 20201206 偷吃蛋黄惹欲哭，车票涨价主动补。为求斯人添一笑，费尽心思来满足。_哔哩哔哩_bilibili</a></p>
+    <br>
+    <p>12.9日口袋串门咯：<a href="https://weibo.com/6158559618/4580189814659520" target="_blank">https://weibo.com/6158559618/4580189814659520</a></p>
+    <br>
+    <p>12.14日 <a href="https://www.bilibili.com/video/BV1u54y1t78V/?spm_id_from=333.999.0.0&vd_source=442760a5e155df69192930dab8c5df14" target="_blank">【诗情画奕】 20201212 1214 爱吃就点都买单，顾家公主巧打算；为拍美照多习练，怀中焐脚心中暖。_哔哩哔哩_bilibili</a></p>
+    <br>
+    <p>12.18口袋串门：<a href="https://weibo.com/6158559618/Jz1AOAaYa" target="_blank">https://weibo.com/6158559618/Jz1AOAaYa</a></p>
+    <br>
+    <p>12.19日：出街 <a href="https://weibo.com/5568536938/Ms2VC4XIR" target="_blank">https://weibo.com/5568536938/Ms2VC4XIR</a></p>
+    <br>
+    <p>12.22日： <a href="https://www.bilibili.com/video/BV1y64y1o7mp/?spm_id_from=333.999.0.0&vd_source=442760a5e155df69192930dab8c5df14" target="_blank">【诗情画奕】 20201220 1222 误听“套话”作“烫坏”，人参有用就给买；一时批评嘴上挂，总有句句示关怀。_哔哩哔哩_bilibili</a></p>
+    <br>
+    <p>12.24日 <a href="https://www.bilibili.com/video/BV1S64y1o74C/?spm_id_from=333.999.0.0&vd_source=442760a5e155df69192930dab8c5df14" target="_blank">【诗情画奕】 20201224 圣诞节纵是平平淡淡，平安夜共度平平安安_哔哩哔哩_bilibili</a></p>
+    <br>
+    <p>12.25圣诞名场面 <a href="https://www.bilibili.com/video/BV1ay4y1U7uf/?spm_id_from=333.999.0.0&vd_source=442760a5e155df69192930dab8c5df14" target="_blank">【诗情画奕】 20201225 ：心上纯然小王翘首盼小周，心下了然众人对礼送对人。_哔哩哔哩_bilibili</a></p>
+    <br>
+    <p>多么日常且温馨的一个月！</p>
+
+    <br>
+    <p><b>事件6：</b></p>
+    <div class="gif-block">
+        <img src="db8.12.jpg" loading="lazy" onclick="openImg(this.src)">
+    </div>
+    <br>
+    <p>哎呀，又是一个春节异地啦！</p>
+    <br>
+    <p>2.1日是春节哦！周诗雨微博发了校园风合照，并且王奕留言了 <a href="https://weibo.com/6502570880/4732173271696016" target="_blank">https://weibo.com/6502570880/4732173271696016</a> </p>
+    <br>
+    <p>然后2.6日这天！</p>
+    <p>留言抖音：<a href="https://weibo.com/6158559618/LegSKdOON" target="_blank">https://weibo.com/6158559618/LegSKdOON</a></p>
+    <p>周诗雨直播王奕飘屏： <a href="https://www.bilibili.com/video/BV1um4y1Z7eE/?spm_id_from=333.999.0.0&vd_source=442760a5e155df69192930dab8c5df14" target="_blank">【诗情画奕】20220206 给你发消息|几天不见|你的样子我都知道|昨日让我夸你可爱 今日小气鬼_哔哩哔哩_bilibili</a></p>
+    <br>
+    <p>2.7日周诗雨发了一条微博，文案是：什么时候见面</p>
+
+    <br>
+    <p><b>事件7：</b></p>
+    <div class="gif-block">
+        <img src="db8.13.jpg" loading="lazy" onclick="openImg(this.src)">
+    </div>
+    <br>
+    <p>传说中的7.30周年纪念日</p>
+    <p>好！日记也证明了是周年纪念日！</p>
+    <p>2023年7月30日发的朋友圈。</p>
+
+    <div class="gif-block">
+        <img src="db8.14.jpg" loading="lazy" onclick="openImg(this.src)">
+    </div>
+    <br>
+    <p>图5应该是4.10日去拍的夏之回忆PV <a href="https://www.bilibili.com/video/BV1GP411U7JC/?spm_id_from=333.999.0.0&vd_source=442760a5e155df69192930dab8c5df14" target="_blank">【诗情画奕】20230422 最佳拍档第三季 第一轮 第十二场表演 《夏之回忆》舞台＆pv纯享_哔哩哔哩_bilibili</a></p>
+    <br>
+    <p>这一天，挑水人发了条微博，呆呆初亮相，并且评论自己：730是值得庆祝的一天</p>
+    <br>
+    <p>历年730详见： <a href="https://www.douban.com/doubanapp/dispatch?uri=%2Fgroup%2Ftopic%2F284041011%3F_spm_id%3DMTQwODA5MzE4&_i=93085985ab8cc9b&dt_dapp=1" target="_blank">4781历年7月30号发生过的事（更新2020年当天没有异地！！！） (douban.com)</a> </p>
+</div>
+
+    <!-- 主楼右下角赞 -->
+    <div class="post-footer">
+        <button class="post-like-btn">
+            <span>赞(89)</span>
+        </button>
+    </div>
+</div>
+
+<hr class="divider" />
+
+<div class="reply-section">
+    <div class="reply-header-bar">
+        <span>回复</span>
+    </div>
+    <div class="reply-list">
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">楼主</span>
+        <span class="reply-time">2024-04-18 23:08:30 福建</span>
+    </div>
+    <div class="reply-content">放我出来！！！！！</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户1</span>
+        <span class="reply-time">2024-04-19 07:38:04 江苏</span>
+    </div>
+    <div class="reply-content">时间线不能没有你</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户2</span>
+        <span class="reply-time">2024-04-19 08:08:08 湖南</span>
+    </div>
+    <div class="reply-content">好帖，收藏了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户3</span>
+        <span class="reply-time">2024-04-19 08:19:15 江西</span>
+    </div>
+    <div class="reply-content">好帖，又磕到了旧🍬</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户4</span>
+        <span class="reply-time">2024-04-19 08:22:18 湖北</span>
+    </div>
+    <div class="reply-content">真好，yzg不能没有你😘</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户5</span>
+        <span class="reply-time">2024-04-19 08:28:12 甘肃</span>
+    </div>
+    <div class="reply-content">主打一个不能分离</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户6</span>
+        <span class="reply-time">2024-04-19 08:49:48 湖北</span>
+    </div>
+    <div class="reply-content">🐮哇牛</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户7</span>
+        <span class="reply-time">2024-04-19 09:19:29 福建</span>
+    </div>
+    <div class="reply-content">真好真好🤤🤤</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户8</span>
+        <span class="reply-time">2024-04-19 09:25:02 重庆</span>
+    </div>
+    <div class="reply-content">在我们看不见的地方偷偷幸福</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户9</span>
+        <span class="reply-time">2024-04-19 10:02:08 山西</span>
+    </div>
+    <div class="reply-content">好贴，爱了</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户10</span>
+        <span class="reply-time">2024-04-19 10:26:09 江西</span>
+    </div>
+    <div class="reply-content">太牛了，收藏</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户11</span>
+        <span class="reply-time">2024-04-19 11:33:56 福建</span>
+    </div>
+    <div class="reply-content">有你真好</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户12</span>
+        <span class="reply-time">2024-04-19 11:37:01 广东</span>
+    </div>
+    <div class="reply-content">好牛 好贴</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户13</span>
+        <span class="reply-time">2024-04-19 11:39:08 广东</span>
+    </div>
+    <div class="reply-content">好帖dd</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户14</span>
+        <span class="reply-time">2024-04-19 11:44:15 加拿大</span>
+    </div>
+    <div class="reply-content">可算出来了，椰汁糕不能没有你！</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户15</span>
+        <span class="reply-time">2024-04-19 11:46:30 北京</span>
+    </div>
+    <div class="reply-content">好贴，值得加精</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户16</span>
+        <span class="reply-time">2024-04-19 12:11:19 广东</span>
+    </div>
+    <div class="reply-content">牛牛牛，好贴爱看❤️</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户17</span>
+        <span class="reply-time">2024-04-19 12:30:10 辽宁</span>
+    </div>
+    <div class="reply-content">发出来啦</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+
+<div class="reply-item">
+    <div class="reply-user-tag">
+        <span class="reply-user">用户18</span>
+        <span class="reply-time">2024-04-19 12:36:47 广东</span>
+    </div>
+    <div class="reply-content">喜欢收藏了🥰🥰🥰</div>
+    <div class="reply-footer">
+        <button class="reply-like-btn">赞</button>
+    </div>
+</div>
+    </div>
+</div>
+
+<div class="page-bar">
+    <div class="page-left">
+        <button id="prevPageBtn">前页</button>
+        <a href="db.1.1.html" class="current">1</a>
+        <button id="nextPageBtn">后页</button>
+    </div>
+</div>
+  <button class="back-top" id="backTop">↑</button>
+
+<script>
+//网址转链接
+function urlToLink(text){
+  const reg = /(https?:\/\/[^\s，。！；：""'()【】]+)/gi;
+  return text.replace(reg,`<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>`)
+}
+
+//页面加载完毕，自动缓存每个quote原始文字
+document.addEventListener('DOMContentLoaded',function(){
+  document.querySelectorAll('.quote-inner').forEach(item=>{
+    item.dataset.fullText = item.textContent.trim();
+  })
+
+  //初始化折叠状态
+  document.querySelectorAll('.quote-block').forEach(function(block){
+    const inner = block.querySelector('.quote-inner');
+    const btn = block.querySelector('.quote-expand-btn');
+    if(!btn) return;
+    const fullTxt = inner.dataset.fullText;
+    if(fullTxt.length > 50){
+        let shortTxt = fullTxt.slice(0,50);
+        inner.innerHTML = urlToLink(shortTxt);
+        inner.classList.add("collapsed");
+        btn.style.display = "inline";
+    }else{
+        inner.innerHTML = urlToLink(fullTxt);
+        inner.classList.remove("collapsed");
+        btn.style.display = "none";
+    }
+  })
+
+  // 给reply-content评论正文也自动转链接
+  document.querySelectorAll('.reply-content').forEach(el=>{
+    const rawText = el.textContent;
+    el.innerHTML = urlToLink(rawText);
+  })
+})
+
+function toggleQuote(btn){
+  const wrap = btn.previousElementSibling;
+  const fullTxt = wrap.dataset.fullText;
+  if(wrap.classList.contains("collapsed")){
+    wrap.innerHTML = urlToLink(fullTxt);
+    wrap.classList.remove("collapsed");
+    btn.textContent="收起";
+  }else{
+    let shortTxt = fullTxt.slice(0,50);
+    wrap.innerHTML = urlToLink(shortTxt);
+    wrap.classList.add("collapsed");
+    btn.textContent="...";
+  }
+}
+
+//分页控制【修改：只有1页，前后按钮全部置灰】
+const prevPageBtn = document.getElementById('prevPageBtn');
+const nextPageBtn = document.getElementById('nextPageBtn');
+let currentPageNum = 1;
+const totalPageNum = 1;
+
+function updatePageBtnState(){
+    prevPageBtn.disabled = true; //首页，前页永久灰
+    nextPageBtn.disabled = true; //只有一页，后页永久灰
+}
+
+prevPageBtn.onclick = function(){
+    // 只有一页，点击无动作
+}
+nextPageBtn.onclick = function(){
+    // 只有一页，点击无动作
+}
+updatePageBtnState();
+
+// 自动判断横图/竖图/正方形，加载前先锁尺寸，动态加上懒加载
+document.querySelectorAll('.gif-block img').forEach(img => {
+    img.loading = "lazy"; // 动态懒加载，不用改HTML
+
+    // ✅ 改成向上查找父容器，判断属于哪个区域
+    if(img.closest('.post-content')){
+        img.style.maxWidth = "100%";
+    }else if(img.closest('.reply-item')){
+        img.style.maxWidth = "35%";
+    }else if(img.closest('.quote-block')){
+        img.style.maxWidth = "28%";
+    }
+
+    img.onload = function () {
+        this.style.maxWidth = ""; // 清空行内，交给CSS orientation
+        const w = this.naturalWidth;
+        const h = this.naturalHeight;
+        if (w > h) {
+            this.setAttribute('orientation', 'landscape');
+        } else if (h > w) {
+            this.setAttribute('orientation', 'portrait');
+        } else {
+            this.setAttribute('orientation', 'square');
+        }
+    };
+    img.onerror = function(){
+        // 图片加载失败不display:none，保留占位块
+        this.style.opacity = 0.35;
+    }
+});
+
+// 点击放大
+function openImg(src) {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        cursor: zoom-out;
+    `;
+
+    const bigImg = document.createElement('img');
+    bigImg.src = src;
+    bigImg.style.cssText = `
+        max-width: 92vw;
+        max-height: 92vh;
+        border-radius: 6px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    `;
+
+    overlay.appendChild(bigImg);
+    document.body.appendChild(overlay);
+
+    overlay.addEventListener('click', function () {
+        overlay.remove();
+    });
+}
+// ========== 回顶部JS ==========
+const backTopBtn = document.getElementById('backTop');
+window.addEventListener('scroll', ()=>{
+  if(window.scrollY > 300){
+    backTopBtn.classList.add('show');
+  }else{
+    backTopBtn.classList.remove('show');
+  }
+})
+backTopBtn.onclick = ()=>{
+  window.scrollTo({
+    top:0,
+    behavior:'smooth'
+  })
+}
+</script>
+</body>
+</html>
