@@ -41,15 +41,17 @@ body {
   border-bottom:1px solid #e2d9f3;
   margin-bottom:24px;
   gap:0;
-  overflow-x:auto;
+  /* overflow-x:auto; 这里注释掉，均分就不需要横向滚动 */
 }
 .tab-item{
-  padding:10px 20px;
+  flex: 1; /* 重点！自动平分宽度，撑满整行 */
+  padding:10px 8px;
   cursor:pointer;
   border-bottom:3px solid transparent;
   font-size:16px;
   white-space:nowrap;
   border-right:1px solid #ddd4ee;
+  text-align:center; /* 文字居中 */
 }
 .tab-item:last-child{
   border-right:none;
@@ -276,6 +278,12 @@ body {
   width:100%;
 }
 
+#searchInput:focus{
+  border-color:#8b5cf6;
+}
+.timeline-date-group.hide-item{
+  display:none;
+}
 /* 移动端适配 */
 @media (max-width:720px){
   .content-box{
@@ -303,8 +311,13 @@ body {
 </head>
 <body>
 <div class="container">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
   <a href="part10.html" class="back-home">← 返回上一页</a>
-
+  <div style="position:relative;margin-top:-24px;">
+ <input id="searchInput" placeholder="Search.." style="width:140px;padding:6px 32px 6px 10px;border:1px solid #ddd4ee;border-radius:8px;outline:none;">
+    <span id="clearSearch" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;color:#999;font-size:16px;display:none;">×</span>
+  </div>
+</div>
   <div class="tab-bar">
     <div class="tab-item active" onclick="switchTab('tab2018')">2018</div>
     <div class="tab-item" onclick="switchTab('tab2019')">2019</div>
@@ -743,10 +756,10 @@ body {
     <div class="timeline-date-group">
       <div class="timeline-date">2018.08.04</div>
       <div class="timeline-item">
-        <div class="item-title">周诗雨抖音</div>
+        <div class="item-title">周诗雨微博</div>
         <div class="item-row">
           <img class="item-img" src="https://res.cloudinary.com/t64a0qzn/image/upload/v1791624845/20180804.png" onclick="openImg(this.src)">
-          <div class="item-note">1⃣️出镜</div>
+          <div class="item-note">短视频1⃣️出镜</div>
         </div>
       </div>
     </div>
@@ -1764,6 +1777,32 @@ backTopBtn.onclick = ()=>{
     top:0,
     behavior:'smooth'
   })
+}
+const searchInput = document.getElementById('searchInput');
+const clearBtn = document.getElementById('clearSearch');
+
+searchInput.oninput = function(){
+  let kw = this.value.trim().toLowerCase();
+  clearBtn.style.display = kw ? 'block' : 'none';
+
+  document.querySelectorAll('.timeline-date-group').forEach(g=>{
+    let text = g.innerText.toLowerCase();
+    if(!kw || text.includes(kw)){
+      g.classList.remove('hide-item');
+    }else{
+      g.classList.add('hide-item');
+    }
+  })
+}
+// 点击叉号清空
+clearBtn.onclick = function(){
+  searchInput.value = '';
+  clearBtn.style.display = 'none';
+  // 清空后全部恢复显示
+  document.querySelectorAll('.timeline-date-group').forEach(g=>{
+    g.classList.remove('hide-item');
+  })
+  searchInput.focus();
 }
 </script>
 </body>
